@@ -1,0 +1,84 @@
+{
+  "grammar": [
+    {
+      "form": "Bạn có muốn thử một chút + N?",
+      "structure": "Would you like to try some + N?"
+    },
+    {
+      "form": "Bạn có muốn ăn gì không?",
+      "structure": "Do you want to eat anything?"
+    },
+    {
+      "form": "Tôi mất + (time) + để đến + N.",
+      "structure": "It takes me + (time) + to get to the + N."
+    },
+    {
+      "form": "Từ (A) đến (B) dài + (distance).",
+      "structure": "From (A) to (B) is + (distance) long."
+    },
+    {
+      "form": "Tôi cần (bạn) giúp một việc.",
+      "structure": "I need (your) help with something."
+    },
+    {
+      "form": "(Hôm nay) (chúng ta) sẽ đi + N + lúc mấy giờ?",
+      "structure": "What time will (we) go to + N + (today)?"
+    },
+    {
+      "form": "Một trong những (chiếc cốc).",
+      "structure": "One of the cups."
+    },
+    {
+      "form": "Hãy lấy giúp tôi (một chiếc cốc).",
+      "structure": "Please help me get (a cup)."
+    }
+  ],
+  "setting": {
+    "background": "C:/Users/PVD/Downloads/pexels-lucas-pezeta-3934514.jpg",
+    "borderColor": "green",
+    "language": "eng",
+    "themeColor": "#7d988d"
+  },
+  "words": [
+    {
+      "index": 0,
+      "means": [
+        "tung"
+      ],
+      "notes": "",
+      "words": [
+        "tung"
+      ]
+    },
+    {
+      "index": 1,
+      "means": [
+        "rời đi"
+      ],
+      "notes": "",
+      "words": [
+        "leave"
+      ]
+    },
+    {
+      "index": 2,
+      "means": [
+        "đi tắm"
+      ],
+      "notes": "",
+      "words": [
+        "take a shower"
+      ]
+    },
+    {
+      "index": 3,
+      "means": [
+        "đi ra ngoài"
+      ],
+      "notes": "",
+      "words": [
+        "go out"
+      ]
+    }
+  ]
+}
