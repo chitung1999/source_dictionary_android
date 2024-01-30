@@ -1,14 +1,21 @@
+class MeanIteam {
+  String partSpeech = '';
+  String synonyms = '';
+  String antonyms = '';
+  List<String> definitions = [];
+}
+
 class DictionaryItem {
   String word = '';
   String phonetic = '';
   String audio = '';
-  List<Map<String, String>> mean = [];
+  List<MeanIteam> mean = [];
 
   DictionaryItem(this.word, this.phonetic, this.audio, this.mean);
 
   DictionaryItem.fromJson(Map<String, dynamic> json) {
     _resetData();
-    if (json.isNotEmpty) { return; }
+    if (json.isEmpty) { return; }
 
     if (json.containsKey('word') && json['word'].isNotEmpty) {
       word = json['word'];
@@ -25,10 +32,28 @@ class DictionaryItem {
       }
     }
 
+
     if (json.containsKey('meanings') && json['meanings'].isNotEmpty) {
       for(Map<String, dynamic> item in json['meanings']) {
-        Map<String, dynamic> meaning = {};
-        meaning['partOfSpeech'] = item['partOfSpeech'];
+        MeanIteam meanItem = MeanIteam();
+
+        meanItem.partSpeech = item['partOfSpeech'].toString()
+            .replaceRange(0, 1, item['partOfSpeech'].toString()[0].toUpperCase());
+
+        for(String str in item['synonyms']) {
+          meanItem.synonyms +=((meanItem.synonyms.isEmpty ? '' : ', ') + str);
+        }
+
+        for(String str in item['antonyms']) {
+          meanItem.antonyms +=((meanItem.antonyms.isEmpty ? '' : ', ') + str);
+        }
+
+        for(Map<String, dynamic> definition in item['definitions']) {
+          meanItem.definitions.add(definition['definition'].toString());
+          meanItem.definitions.add(definition['example'].toString());
+        }
+
+        mean.add(meanItem);
       }
     }
   }

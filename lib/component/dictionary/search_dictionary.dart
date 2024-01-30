@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:source_dictionary_mobile/component/dictionary/api_service.dart';
 import 'package:source_dictionary_mobile/component/dictionary/dictionary_item.dart';
-
+import 'package:source_dictionary_mobile/component/dictionary/result_dictionary.dart';
 
 class SearchDictionary extends SearchDelegate {
   final DictionaryAPI _dictionaryAPI = DictionaryAPI();
@@ -45,12 +45,9 @@ class SearchDictionary extends SearchDelegate {
       future: _getData(),
       builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          // return const CircularProgressIndicator();
           return const Center(child: CircularProgressIndicator());
         } else {
-          return Container(height: 1000, width: 400,
-              child: Text('${_item!.word}${_item!.phonetic}'));
-            // Text(_phonetic);
+          return ResultDictionary(item: _item);
         }
       },
     );
