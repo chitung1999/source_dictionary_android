@@ -1,15 +1,20 @@
-class MeanIteam {
+class DefinitionItem {
+  String definition = '';
+  String example = '';
+}
+
+class MeanItem {
   String partSpeech = '';
   String synonyms = '';
   String antonyms = '';
-  List<String> definitions = [];
+  List<DefinitionItem> definitions = [];
 }
 
 class DictionaryItem {
   String word = '';
   String phonetic = '';
   String audio = '';
-  List<MeanIteam> mean = [];
+  List<MeanItem> mean = [];
 
   DictionaryItem(this.word, this.phonetic, this.audio, this.mean);
 
@@ -35,22 +40,28 @@ class DictionaryItem {
 
     if (json.containsKey('meanings') && json['meanings'].isNotEmpty) {
       for(Map<String, dynamic> item in json['meanings']) {
-        MeanIteam meanItem = MeanIteam();
+        MeanItem meanItem = MeanItem();
 
         meanItem.partSpeech = item['partOfSpeech'].toString()
             .replaceRange(0, 1, item['partOfSpeech'].toString()[0].toUpperCase());
 
-        for(String str in item['synonyms']) {
-          meanItem.synonyms +=((meanItem.synonyms.isEmpty ? '' : ', ') + str);
+        for(String value in item['synonyms']) {
+          meanItem.synonyms +=((meanItem.synonyms.isEmpty ? '' : ', ') + value);
         }
 
-        for(String str in item['antonyms']) {
-          meanItem.antonyms +=((meanItem.antonyms.isEmpty ? '' : ', ') + str);
+        for(String value in item['antonyms']) {
+          meanItem.antonyms +=((meanItem.antonyms.isEmpty ? '' : ', ') + value);
         }
 
-        for(Map<String, dynamic> definition in item['definitions']) {
-          meanItem.definitions.add(definition['definition'].toString());
-          meanItem.definitions.add(definition['example'].toString());
+        for(Map<String, dynamic> value in item['definitions']) {
+          DefinitionItem definition = DefinitionItem();
+          if(value.containsKey('definition') && value['definition'].isNotEmpty) {
+            definition.definition = value['definition'].toString();
+          }
+          if(value.containsKey('example') && value['example'].isNotEmpty) {
+            definition.example = value['example'].toString();
+          }
+          meanItem.definitions.add(definition);
         }
 
         mean.add(meanItem);
