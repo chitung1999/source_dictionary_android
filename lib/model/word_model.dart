@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
@@ -8,13 +9,18 @@ class WordItem {
 }
 
 class WordModel {
-  Map<String, List<int>> key = <String, List<int>>{};
-  Map<String, List<int>> mean = <String, List<int>>{};
+  SplayTreeMap<String, List<int>> key = SplayTreeMap<String, List<int>>();
+  SplayTreeMap<String, List<int>> mean = SplayTreeMap<String, List<int>>();
   List<WordItem> data = [];
 
-  WordModel() {loadData();}
+  void resetData() {
+    key.clear();
+    mean.clear();
+    data.clear();
+  }
 
   Future<void> loadData() async {
+    resetData();
     final String response = await rootBundle.loadString('data/data.json');
     final jsonResponse = await json.decode(response);
     for(Map<String, dynamic> item in jsonResponse['words']) {
@@ -45,5 +51,4 @@ class WordModel {
       data.add(wordItem);
     }
   }
-
 }
