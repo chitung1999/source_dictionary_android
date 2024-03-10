@@ -15,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   WordModel wordModel = WordModel();
 
   Future<void> loadData() async {
+    print('loadData() is called');
     await wordModel.loadData();
   }
 
@@ -37,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
               IconButton(
                 icon: const Icon(Icons.search, color: Colors.white),
                 onPressed: () {
-                  showSearch(context: context, delegate: SearchData(data: wordModel));
+                  // showSearch(context: context, delegate: SearchData(data: wordModel));
                 },
               )
             ]
