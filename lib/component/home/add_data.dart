@@ -68,28 +68,28 @@ class _AddDialogState extends State<AddData> {
                     for (var item_key in key) item_key,
                     const SizedBox(height: 20),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Mean',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.playlist_add),
-                          onPressed:(){
-                            setState((){
-                              mean.add(
-                                TextField(
-                                  decoration: InputDecoration(
-                                      labelText: 'Mean ${mean.length + 1}',
-                                      floatingLabelBehavior: FloatingLabelBehavior.never
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Mean',
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.playlist_add),
+                            onPressed:(){
+                              setState((){
+                                mean.add(
+                                  TextField(
+                                    decoration: InputDecoration(
+                                        labelText: 'Mean ${mean.length + 1}',
+                                        floatingLabelBehavior: FloatingLabelBehavior.never
+                                    ),
                                   ),
-                                ),
-                              );
-                            });
-                          },
-                        ),
-                      ]
+                                );
+                              });
+                            },
+                          ),
+                        ]
                     ),
                     for (var item_mean in mean) item_mean,
                     const SizedBox(height: 20),
