@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:source_dictionary_mobile/component/dictionary/api_service.dart';
-import 'package:source_dictionary_mobile/component/dictionary/dictionary_item.dart';
-import 'package:source_dictionary_mobile/component/dictionary/result_dictionary.dart';
+import 'api_service.dart';
+import 'dictionary_item.dart';
+import 'search_result.dart';
 
-class SearchDictionary extends SearchDelegate {
-  final DictionaryAPI _dictionaryAPI = DictionaryAPI();
+class SearchPage extends SearchDelegate {
+  final APIService _dictionaryAPI = APIService();
   DictionaryItem? _item;
 
   Future<void> _getData() async {

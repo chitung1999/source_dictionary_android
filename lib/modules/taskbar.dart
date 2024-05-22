@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
-import 'game_screen.dart';
-import 'grammar_screen.dart';
-import 'dictionary_screen.dart';
-import 'setting_screen.dart';
+import 'home/home_screen.dart';
+import 'game/game_screen.dart';
+import 'grammar/grammar_screen.dart';
+import 'dictionary/dictionary_screen.dart';
+import 'setting/setting_screen.dart';
 
 class Taskbar extends StatefulWidget {
   const Taskbar({super.key});

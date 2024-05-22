@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:source_dictionary_mobile/component/home/custom_search.dart';
-import 'package:source_dictionary_mobile/model/word_model.dart';
+import 'search_type.dart';
+import '../../model/word_model.dart';
 
-class  SearchData extends SearchDelegate {
+class  SearchBarCustom extends SearchDelegate {
   final WordModel? data;
   final List<String> _listSearch = [];
   bool _isEng = true;
@@ -11,12 +11,12 @@ class  SearchData extends SearchDelegate {
     _isEng = newValue;
   }
 
-  SearchData({required this.data});
+  SearchBarCustom({required this.data});
 
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
-      CustomButton(onClick: _onClick),
+      SearchType(onClick: _onClick),
       IconButton(
         icon: const Icon(Icons.clear),
         onPressed: () {

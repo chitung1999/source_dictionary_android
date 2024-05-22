@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class ListData extends StatefulWidget {
+class SearchResult extends StatefulWidget {
   final Map<String, List<int>>? data;
-  const ListData({Key? key, this.data}) : super(key: key);
+  const SearchResult({Key? key, this.data}) : super(key: key);
 
   @override
-  State<ListData> createState() => _ListDataState();
+  State<SearchResult> createState() => _SearchResultState();
 }
 
-class _ListDataState extends State<ListData> {
+class _SearchResultState extends State<SearchResult> {
 
   @override
   Widget build(BuildContext context) {

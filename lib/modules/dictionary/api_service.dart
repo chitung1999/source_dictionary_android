@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class DictionaryAPI {
+class APIService {
   static const String apiUrl = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
 
   Future<List> requestAPI(String word) async {

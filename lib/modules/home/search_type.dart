@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class CustomButton extends StatefulWidget {
+class SearchType extends StatefulWidget {
   final Function(bool) onClick;
 
-  const CustomButton({Key? key, required this.onClick}) : super(key: key);
+  const SearchType({Key? key, required this.onClick}) : super(key: key);
 
   @override
-  State<CustomButton> createState() => _CustomButtonState();
+  State<SearchType> createState() => _SearchTypeState();
 }
 
-class _CustomButtonState extends State<CustomButton> {
+class _SearchTypeState extends State<SearchType> {
   bool _isEng = true;
 
   @override

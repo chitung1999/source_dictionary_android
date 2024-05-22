@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'scene/taskbar.dart';
+import 'modules/taskbar.dart';
 
 void main() {
   runApp(const DictionaryApp());

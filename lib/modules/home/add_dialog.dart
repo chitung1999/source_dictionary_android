@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class AddData extends StatefulWidget {
-  const AddData({Key? key}) : super(key: key);
+class AddDialog extends StatefulWidget {
+  const AddDialog({Key? key}) : super(key: key);
 
   @override
   _AddDialogState createState() => _AddDialogState();
 }
 
-class _AddDialogState extends State<AddData> {
+class _AddDialogState extends State<AddDialog> {
   List<TextField> key = [];
   List<TextField> mean = [];
 

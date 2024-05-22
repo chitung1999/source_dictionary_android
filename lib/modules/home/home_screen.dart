@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:source_dictionary_mobile/component/home/add_data.dart';
-import 'package:source_dictionary_mobile/component/home/search_data.dart';
-import 'package:source_dictionary_mobile/component/home/list_data.dart';
-import 'package:source_dictionary_mobile/model/word_model.dart';
+import 'add_dialog.dart';
+import 'search_bar.dart';
+import 'search_result.dart';
+import '../../model/word_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -30,21 +30,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: const Icon(Icons.add, color: Colors.white),
                   onPressed: () {
                     showDialog(context: context, builder: (BuildContext context) {
-                      return const AddData();
+                      return const AddDialog();
                     });
                   }
               ),
               IconButton(
                 icon: const Icon(Icons.search, color: Colors.white),
                 onPressed: () {
-                  showSearch(context: context, delegate: SearchData(data: wordModel));
+                  showSearch(context: context, delegate: SearchBarCustom(data: wordModel));
                 },
               )
             ]
         ),
         body: FutureBuilder<void>(
             future: loadData(),
-            builder: (context, snapshot) {return ListData(data: wordModel.key);}
+            builder: (context, snapshot) {return SearchResult(data: wordModel.key);}
         )
     );
   }

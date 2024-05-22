@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:source_dictionary_mobile/component/dictionary/search_dictionary.dart';
+import 'search_page.dart';
 
 class DictionaryScreen extends StatefulWidget {
   const DictionaryScreen({Key? key}) : super(key: key);
@@ -29,7 +29,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
             onPressed: () {
               showSearch(
                   context: context,
-                  delegate: SearchDictionary()
+                  delegate: SearchPage()
               );
             },
           )
