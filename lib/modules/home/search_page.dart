@@ -5,12 +5,18 @@ class SearchConfig {
   bool isSearch = false;
   String word = '';
   List<int> group = [];
+
+  void reset() {
+    isSearch = false;
+    word = '';
+    group = [];
+  }
 }
 
 class  SearchPage extends SearchDelegate<SearchConfig?> {
   final WordModel? data;
   final List<String> _listSearch = [];
-  late SearchConfig _config;
+  final SearchConfig _config = SearchConfig();
   bool _isEng = true;
 
   SearchPage({required this.data});
@@ -37,7 +43,7 @@ class  SearchPage extends SearchDelegate<SearchConfig?> {
     return IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
-          _config.isSearch = false;
+          _config.reset();
           close(context, _config);
         }
     );
@@ -45,10 +51,15 @@ class  SearchPage extends SearchDelegate<SearchConfig?> {
 
   @override
   Widget buildResults(BuildContext context) {
+    _config.reset();
     _config.isSearch = true;
-    _config.group = _listSearch.isEmpty ? []
-         : (_isEng ? data!.key[_listSearch[0]]! : data!.mean[_listSearch[0]]!);
-    _config.word = _listSearch[0];
+
+    if(_listSearch.isNotEmpty) {
+      _config.group = _listSearch.isEmpty ? []
+          : (_isEng ? data!.key[_listSearch[0]]! : data!.mean[_listSearch[0]]!);
+      _config.word = _listSearch[0];
+    }
+
     close(context, _config);
     return Container();
   }

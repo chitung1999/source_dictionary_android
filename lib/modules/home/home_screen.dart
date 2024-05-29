@@ -14,7 +14,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   WordModel wordModel = WordModel();
-  bool _isShowList = false;
+  SearchConfig _config = SearchConfig();
+  bool _isShowList = true;
 
   Future<void> loadData() async {
     await wordModel.loadData();
@@ -38,10 +39,18 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               IconButton(
                 icon: const Icon(Icons.search, color: Colors.white),
-                onPressed: () {
-                  showSearch(context: context, delegate: SearchPage(data: wordModel));
-                  setState(() { _isShowList = false; });
-                },
+                onPressed: () async {
+                  SearchConfig? config = await showSearch<SearchConfig?>(
+                    context: context,
+                    delegate: SearchPage(data: wordModel)
+                  );
+                  if(config != null && config.isSearch) {
+                    setState(() {
+                      _isShowList = false;
+                      _config = config;
+                    });
+                  }
+                }
               ),
               IconButton(
                 icon: const Icon(Icons.list, color: Colors.white),
@@ -57,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (_isShowList) {
                 return ListPage(data: wordModel.key);
               }
-              return SearchResult();
+              return SearchResult(data: wordModel, config: _config);
             }
         )
     );
