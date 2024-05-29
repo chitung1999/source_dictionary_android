@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'add_dialog.dart';
-import 'search_bar.dart';
+import 'search_page.dart';
 import 'search_result.dart';
-import '../../model/word_model.dart';
+import 'list_page.dart';
+import '../../../models/word_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   WordModel wordModel = WordModel();
+  bool _isShowList = false;
 
   Future<void> loadData() async {
     await wordModel.loadData();
@@ -37,14 +39,26 @@ class _HomeScreenState extends State<HomeScreen> {
               IconButton(
                 icon: const Icon(Icons.search, color: Colors.white),
                 onPressed: () {
-                  showSearch(context: context, delegate: SearchBarCustom(data: wordModel));
+                  showSearch(context: context, delegate: SearchPage(data: wordModel));
+                  setState(() { _isShowList = false; });
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.list, color: Colors.white),
+                onPressed: () {
+                  setState(() { _isShowList = true; });
                 },
               )
             ]
         ),
         body: FutureBuilder<void>(
             future: loadData(),
-            builder: (context, snapshot) {return SearchResult(data: wordModel.key);}
+            builder: (context, snapshot) {
+              if (_isShowList) {
+                return ListPage(data: wordModel.key);
+              }
+              return SearchResult();
+            }
         )
     );
   }

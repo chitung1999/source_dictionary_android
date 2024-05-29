@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'grammar/grammar_screen.dart';
 import 'home/home_screen.dart';
 import 'game/game_screen.dart';
-import 'grammar/grammar_screen.dart';
 import 'dictionary/dictionary_screen.dart';
 import 'setting/setting_screen.dart';
 

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import '../../../models/word_model.dart';
 
 class SearchResult extends StatefulWidget {
-  final Map<String, List<int>>? data;
-  const SearchResult({Key? key, this.data}) : super(key: key);
+
+  const SearchResult({Key? key}) : super(key: key);
 
   @override
   State<SearchResult> createState() => _SearchResultState();
@@ -12,34 +14,52 @@ class _SearchResultState extends State<SearchResult> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text('Count: ${widget.data?.length}',
-                style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            Expanded( child: ListView.builder(
-                itemCount: widget.data?.length,
-                itemBuilder: (context, index) { return Column(children: [
-                  const SizedBox(height: 10),
-                  Container(
-                      width: 230,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.0),
-                          border: Border.all(width: 2, color: Colors.blueGrey)
-                      ),
-                      child: Center( child: Text(
-                          widget.data!.keys.elementAt(index),
-                          style: const TextStyle(fontSize: 20)
-                      ))
-                  )
-                ]);}
-            ))
-          ],
-        )
-    );
+    return const Text('KKK');
+    // return Container(
+    //   padding: const EdgeInsets.all(20.0),
+    //   child: ListView.builder(
+    //     itemCount: resultSearch.length,
+    //     itemBuilder: (context, index) {return Column( children: [
+    //       Container(
+    //         decoration: BoxDecoration(
+    //           borderRadius: BorderRadius.circular(12.0),
+    //           border: Border.all(width: 2, color: Colors.blueGrey)
+    //         ),
+    //         padding: const EdgeInsets.all(10.0),
+    //         child: Column(
+    //           crossAxisAlignment: CrossAxisAlignment.start,
+    //           children: [
+    //             Row(
+    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //               children: [
+    //                 Text(
+    //                   _listSearch[0],
+    //                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+    //                 ),
+    //                 const Row( children: [
+    //                   IconButton(onPressed: null, icon: Icon(Icons.playlist_add)),
+    //                   IconButton(onPressed: null, icon: Icon(Icons.playlist_add)),
+    //                 ])
+    //               ]
+    //             ),
+    //             Text(
+    //               '• words: ${widget.data!.data[resultSearch[index]].keys}',
+    //               style: const TextStyle(fontSize: 20)
+    //             ),
+    //             Text(
+    //               '• means: ${widget.data!.data[resultSearch[index]].means}',
+    //               style: const TextStyle(fontSize: 20)
+    //             ),
+    //             Text(
+    //               '• note: ${widgetdata!.data[resultSearch[index]].note}',
+    //               style: const TextStyle(fontSize: 20)
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //       const SizedBox(height: 20)
+    //     ],);}
+    //   )
+    // );
   }
 }

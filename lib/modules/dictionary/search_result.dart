@@ -16,6 +16,10 @@ class _ResultDictionaryState extends State<ResultDictionary> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.item == null) {
+      return Container();
+    }
+
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
         child: Column( children: [
