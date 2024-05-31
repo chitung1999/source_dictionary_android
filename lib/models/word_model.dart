@@ -10,9 +10,7 @@ class WordItem {
 
 class WordModel {
 
-  WordModel._internal() {
-    loadData();
-  }
+  WordModel._internal();
 
   factory WordModel() {
     return _instance;
@@ -20,13 +18,13 @@ class WordModel {
 
   static final WordModel _instance = WordModel._internal();
 
-  SplayTreeMap<String, List<int>> key = SplayTreeMap<String, List<int>>();
-  SplayTreeMap<String, List<int>> mean = SplayTreeMap<String, List<int>>();
+  SplayTreeMap<String, List<int>> eng = SplayTreeMap<String, List<int>>();
+  SplayTreeMap<String, List<int>> vn = SplayTreeMap<String, List<int>>();
   List<WordItem> data = [];
 
   void reset() {
-    key.clear();
-    mean.clear();
+    eng.clear();
+    vn.clear();
     data.clear();
   }
 
@@ -38,20 +36,20 @@ class WordModel {
       WordItem wordItem = WordItem();
       String keys = '';
       for(String str in item['words']) {
-        if (key.containsKey(str)) {
-          key[str]!.add(item['index']);
+        if (eng.containsKey(str)) {
+          eng[str]!.add(item['index']);
         } else {
-          key[str] = [item['index']];
+          eng[str] = [item['index']];
         }
         keys += ((keys.isEmpty ? '' : ', ') + str);
       }
 
       String means = '';
       for(String str in item['means']) {
-        if (mean.containsKey(str)) {
-          mean[str]!.add(item['index']);
+        if (vn.containsKey(str)) {
+          vn[str]!.add(item['index']);
         } else {
-          mean[str] = [item['index']];
+          vn[str] = [item['index']];
         }
         means += ((means.isEmpty ? '' : ', ') + str);
       }

@@ -3,6 +3,7 @@ import 'add_dialog.dart';
 import 'search_page.dart';
 import 'list_page.dart';
 import 'search_result.dart';
+import '../../models/word_search_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,7 +13,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _isShowList = true;
+  int _currentIndex = 0;
+  final WordSearchModel _wordSearch = WordSearchModel();
+
+  void _searchFromList() {
+    setState(() {
+      _currentIndex = 1;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,23 +41,31 @@ class _HomeScreenState extends State<HomeScreen> {
               IconButton(
                 icon: const Icon(Icons.search, color: Colors.white),
                 onPressed: () async {
-                  await showSearch (
+                  bool? ret = await showSearch<bool?> (
                     context: context,
                     delegate: SearchPage()
                   );
-                  setState(() {_isShowList = false;});
+                  if(ret != null && ret) {
+                    setState(() {_currentIndex = 1;});
+                  }
+
                 }
               ),
               IconButton(
                 icon: const Icon(Icons.list, color: Colors.white),
                 onPressed: () {
-                  setState(() { _isShowList = true; });
+                  setState(() { _currentIndex = 0; });
                 },
               )
             ]
         ),
-        body: _isShowList ? ListPage() : SearchResult(),
-        //body: _isShowList ? ListPage() : SearchResult()
+        body: IndexedStack(
+          index: _currentIndex,
+          children: [
+            ListPage(onClick: _searchFromList),
+            SearchResult(wordSearch: _wordSearch)
+          ]
+        )
     );
   }
 }

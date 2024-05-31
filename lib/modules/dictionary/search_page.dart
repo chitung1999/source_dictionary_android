@@ -35,7 +35,6 @@ class SearchPage extends SearchDelegate {
         }
       },
     );
-    //return Container();
   }
 
   @override
