@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'add_dialog.dart';
 import 'search_page.dart';
-import 'list_page.dart';
 import 'search_result.dart';
+import 'list_page.dart';
+import '../../../models/word_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,6 +13,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  WordModel wordModel = WordModel();
+  SearchConfig _config = SearchConfig();
   bool _isShowList = true;
 
   @override
@@ -33,11 +36,16 @@ class _HomeScreenState extends State<HomeScreen> {
               IconButton(
                 icon: const Icon(Icons.search, color: Colors.white),
                 onPressed: () async {
-                  await showSearch (
+                  SearchConfig? config = await showSearch<SearchConfig?>(
                     context: context,
-                    delegate: SearchPage()
+                    delegate: SearchPage(data: wordModel)
                   );
-                  setState(() {_isShowList = false;});
+                  if(config != null && config.isSearch) {
+                    setState(() {
+                      _isShowList = false;
+                      _config = config;
+                    });
+                  }
                 }
               ),
               IconButton(
@@ -48,8 +56,26 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ]
         ),
-        body: _isShowList ? ListPage() : SearchResult(),
-        //body: _isShowList ? ListPage() : SearchResult()
+        body: FutureBuilder<void>(
+            future: loadData(),
+            builder: (context, snapshot) {
+              if (_isShowList) {
+                return ListPage(data: wordModel.key, onClick: _onClickFromList);
+              }
+              return SearchResult(data: wordModel, config: _config);
+            }
+        )
     );
+  }
+
+  Future<void> loadData() async {
+    await wordModel.loadData();
+  }
+
+  void _onClickFromList(SearchConfig config) {
+    setState(() {
+      _isShowList = false;
+      _config = config;
+    });
   }
 }

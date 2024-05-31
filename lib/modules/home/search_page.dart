@@ -1,25 +1,12 @@
 import 'package:flutter/material.dart';
+import '../../../models/word_search_model.dart';
 import '../../../models/word_model.dart';
 
-class SearchConfig {
-  bool isSearch = false;
-  String word = '';
-  List<int> group = [];
-
-  void reset() {
-    isSearch = false;
-    word = '';
-    group = [];
-  }
-}
-
-class  SearchPage extends SearchDelegate<SearchConfig?> {
-  final WordModel? data;
-  final List<String> _listSearch = [];
-  final SearchConfig _config = SearchConfig();
+class  SearchPage extends SearchDelegate {
+  final WordSearchModel _wordSearch = WordSearchModel();
+  final WordModel _word = WordModel();
   bool _isEng = true;
-
-  SearchPage({required this.data});
+  final List<String> _listSearch = [];
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -43,31 +30,31 @@ class  SearchPage extends SearchDelegate<SearchConfig?> {
     return IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
-          _config.reset();
-          close(context, _config);
+          close(context, null);
         }
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    _config.reset();
-    _config.isSearch = true;
-
+    _wordSearch.reset();
     if(_listSearch.isNotEmpty) {
-      _config.group = _listSearch.isEmpty ? []
-          : (_isEng ? data!.key[_listSearch[0]]! : data!.mean[_listSearch[0]]!);
-      _config.word = _listSearch[0];
+      _wordSearch.query = _listSearch[0];
+
+      List<int>? group = _isEng ? _word.key[_listSearch[0]] : _word.mean[_listSearch[0]];
+      for(int i = 0; i < group!.length; i++) {
+        _wordSearch.data.add(_word.data[i]);
+      }
     }
 
-    close(context, _config);
+    close(context, null);
     return Container();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     _listSearch.clear();
-    for(String item in (_isEng ? data!.key.keys : data!.mean.keys)) {
+    for(String item in (_isEng ? _word.key.keys : _word.mean.keys)) {
       if(item.toLowerCase().contains(query.toLowerCase())){
         _listSearch.add(item);
       }

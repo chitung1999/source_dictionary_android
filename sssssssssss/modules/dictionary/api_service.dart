@@ -9,9 +9,7 @@ class APIService {
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
-      List <dynamic> dataEmpty = [];
-      return dataEmpty;
-      //throw Exception('Failed to load data. Status Code: ${response.statusCode}');
+      throw Exception('Failed to load data. Status Code: ${response.statusCode}');
     }
   }
 }

@@ -9,29 +9,18 @@ class WordItem {
 }
 
 class WordModel {
-
-  WordModel._internal() {
-    loadData();
-  }
-
-  factory WordModel() {
-    return _instance;
-  }
-
-  static final WordModel _instance = WordModel._internal();
-
   SplayTreeMap<String, List<int>> key = SplayTreeMap<String, List<int>>();
   SplayTreeMap<String, List<int>> mean = SplayTreeMap<String, List<int>>();
   List<WordItem> data = [];
 
-  void reset() {
+  void resetData() {
     key.clear();
     mean.clear();
     data.clear();
   }
 
   Future<void> loadData() async {
-    reset();
+    resetData();
     final String response = await rootBundle.loadString('data/data.json');
     final jsonResponse = await json.decode(response);
     for(Map<String, dynamic> item in jsonResponse['words']) {

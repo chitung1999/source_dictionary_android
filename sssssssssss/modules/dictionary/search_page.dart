@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'api_service.dart';
-import '../../models/dictionary_model.dart';
+import 'dictionary_item.dart';
 
-class SearchPage extends SearchDelegate {
-  DictionaryModel dictionary = DictionaryModel();
+class SearchPage extends SearchDelegate<DictionaryItem?> {
+  DictionaryItem? _item;
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -25,17 +25,17 @@ class SearchPage extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: _getData(context),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+    return FutureBuilder(
+      future: _getData(),
+      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else {
+          close(context, _item);
           return Container();
         }
       },
     );
-    //return Container();
   }
 
   @override
@@ -43,19 +43,15 @@ class SearchPage extends SearchDelegate {
     return Container();
   }
 
-  Future<bool> _getData(BuildContext context) async {
+  Future<void> _getData() async {
     APIService dictionaryAPI = APIService();
 
     if (query.isNotEmpty) {
       final List<dynamic> data = await dictionaryAPI.requestAPI(query);
       if (data.isNotEmpty) {
-        dictionary.loadData(data[0]);
-      }
-      else {
-        dictionary.resetData();
+        _item = DictionaryItem.fromJson(data[0]);
+        query = '';
       }
     }
-    close(context, null);
-    return true;
   }
 }

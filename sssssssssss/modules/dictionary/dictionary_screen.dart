@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'search_page.dart';
+import 'dictionary_item.dart';
 import 'search_result.dart';
 
 class DictionaryScreen extends StatefulWidget {
@@ -10,6 +11,7 @@ class DictionaryScreen extends StatefulWidget {
 }
 
 class _DictionaryScreenState extends State<DictionaryScreen> {
+  DictionaryItem? _item;
 
   @override
   Widget build(BuildContext context) {
@@ -18,19 +20,26 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
         backgroundColor: Colors.blueGrey,
         title: const Text(
           'Dictionary',
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)
+          style: TextStyle(
+              fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
+            icon: const Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
             onPressed: () async {
-              await showSearch (context: context, delegate: SearchPage());
-              setState(() {});
+              final DictionaryItem? item = await showSearch<DictionaryItem?>(
+                  context: context,
+                  delegate: SearchPage()
+              );
+              setState(() { _item = item!; });
             },
           )
         ],
       ),
-      body: ResultDictionary(),
+      body: ResultDictionary(item: _item),
     );
   }
 }
