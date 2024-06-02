@@ -15,7 +15,7 @@ class  SearchPage extends SearchDelegate<bool?> {
         return TextButton(
           style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
           child: Text((_wordSearch.isEng ? 'EN' : 'VN')),
-          onPressed: () { setState(() { _wordSearch.isEng = !_wordSearch.isEng; }); },
+          onPressed: () { setState(() { _wordSearch.isEng = !_wordSearch.isEng; query = ''; }); },
         );
       }),
       IconButton(

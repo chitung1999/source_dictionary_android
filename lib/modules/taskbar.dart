@@ -6,7 +6,9 @@ import 'dictionary/dictionary_screen.dart';
 import 'setting/setting_screen.dart';
 
 class Taskbar extends StatefulWidget {
-  const Taskbar({super.key});
+  const Taskbar({super.key, required this.onChangedTheme});
+
+  final Function(bool) onChangedTheme;
 
   @override
   _TaskbarState createState() => _TaskbarState();
@@ -15,20 +17,18 @@ class Taskbar extends StatefulWidget {
 class _TaskbarState extends State<Taskbar> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const GrammarScreen(),
-    const DictionaryScreen(),
-    const GameScreen(),
-    const SettingScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: _screens,
+        children: [
+          const HomeScreen(),
+          const GrammarScreen(),
+          const DictionaryScreen(),
+          const GameScreen(),
+          SettingScreen(onChangedTheme: widget.onChangedTheme),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

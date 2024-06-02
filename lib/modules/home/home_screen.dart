@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _searchFromList() {
     setState(() {
-      _currentIndex = 1;
+      _currentIndex = 0;
     });
   }
 
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     delegate: SearchPage()
                   );
                   if(ret != null && ret) {
-                    setState(() {_currentIndex = 1;});
+                    setState(() {_currentIndex = 0;});
                   }
 
                 }
@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
               IconButton(
                 icon: const Icon(Icons.list, color: Colors.white),
                 onPressed: () {
-                  setState(() { _currentIndex = 0; });
+                  setState(() { _currentIndex = 1; });
                 },
               )
             ]
@@ -62,8 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
         body: IndexedStack(
           index: _currentIndex,
           children: [
-            ListPage(onClick: _searchFromList),
-            SearchResult(wordSearch: _wordSearch)
+            SearchResult(wordSearch: _wordSearch),
+            ListPage(onClick: _searchFromList)
           ]
         )
     );

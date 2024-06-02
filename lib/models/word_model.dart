@@ -29,6 +29,7 @@ class WordModel {
   }
 
   Future<void> loadData() async {
+    print("TTTTTTTTTTTTTT");
     reset();
     final String response = await rootBundle.loadString('data/data.json');
     final jsonResponse = await json.decode(response);
