@@ -28,8 +28,16 @@ class WordModel {
     data.clear();
   }
 
+  void addWord(List<String> keys, List<String> means, String note) {
+    if (eng.containsKey(keys[0])) {
+      eng[keys[0]]!.add(1);
+    } else {
+      eng[keys[0]] = [1];
+    }
+    //loadData();
+  }
+
   Future<void> loadData() async {
-    print("TTTTTTTTTTTTTT");
     reset();
     final String response = await rootBundle.loadString('data/data.json');
     final jsonResponse = await json.decode(response);

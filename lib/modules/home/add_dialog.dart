@@ -10,21 +10,22 @@ class AddDialog extends StatefulWidget {
 
 class _AddDialogState extends State<AddDialog> {
   final WordModel _word = WordModel();
+
   List<TextEditingController> key = [];
   List<TextEditingController> mean = [];
   TextEditingController note = TextEditingController();
 
-  void addWord() {
-    List<String> addKey = key.map((controller) => controller.text).toList();
-    List<String> addMean = mean.map((controller) => controller.text).toList();
+  bool addWord() {
+    List<String> addKey = key.map((controller) => controller.text).where((text) => text.isNotEmpty).toList();
+    List<String> addMean = mean.map((controller) => controller.text).where((text) => text.isNotEmpty).toList();
     String addNote = note.text;
-    reaData(addKey, addMean, addNote);
-  }
 
-  void reaData(List<String> addKey, List<String> addMean, String addNote) {
-    print(addKey);
-    print(addMean);
-    print(addNote);
+    if(addKey.isEmpty || addMean.isEmpty) {
+      return false;
+    }
+
+    _word.addWord(addKey, addMean, addNote);
+    return true;
   }
 
   @override
@@ -131,15 +132,15 @@ class _AddDialogState extends State<AddDialog> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded( child: ElevatedButton(
-                  onPressed: (){ Navigator.of(context).pop();},
+                  onPressed: (){Navigator.of(context).pop(0);},
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
                   child: const Text('Cancel', style: TextStyle(color: Colors.black)),
                 )),
                 const SizedBox(width: 16),
                 Expanded( child: ElevatedButton(
                   onPressed: () {
-                    addWord();
-                    Navigator.of(context).pop();
+                    bool ret = addWord();
+                    Navigator.of(context).pop(ret ? 2: 1);
                   },
                   style: ElevatedButton.styleFrom( backgroundColor: Colors.blueAccent),
                   child: const Text('OK', style: TextStyle(color: Colors.black)),

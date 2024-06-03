@@ -4,6 +4,7 @@ import 'search_page.dart';
 import 'list_page.dart';
 import 'search_result.dart';
 import '../../models/word_search_model.dart';
+import '../../component/NotifyDialog.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final WordSearchModel _wordSearch = WordSearchModel();
 
-  void _searchFromList() {
+  void _showSearchResult() {
     setState(() {
       _currentIndex = 0;
     });
@@ -32,10 +33,18 @@ class _HomeScreenState extends State<HomeScreen> {
             actions: [
               IconButton(
                   icon: const Icon(Icons.add, color: Colors.white),
-                  onPressed: () {
-                    showDialog(context: context, builder: (BuildContext context) {
+                  onPressed: () async {
+                    int ret = await showDialog(context: context, builder: (BuildContext context) {
                       return const AddDialog();
                     });
+                    if(ret != 0 && mounted) {
+                      await showDialog(
+                           context: context, builder: (BuildContext context) {
+                        return NotifyDialog(message: (ret == 1 ?
+                          'Key or Mean is empty!' : 'Add word successfully!'));
+                      });
+                    }
+                    _showSearchResult();
                   }
               ),
               IconButton(
@@ -46,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     delegate: SearchPage()
                   );
                   if(ret != null && ret) {
-                    setState(() {_currentIndex = 0;});
+                    _showSearchResult();
                   }
 
                 }
@@ -63,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
           index: _currentIndex,
           children: [
             SearchResult(wordSearch: _wordSearch),
-            ListPage(onClick: _searchFromList)
+            ListPage(onClick: _showSearchResult)
           ]
         )
     );
