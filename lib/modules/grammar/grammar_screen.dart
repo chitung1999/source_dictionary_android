@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../models/word_model.dart';
 
 class GrammarScreen extends StatelessWidget {
   const GrammarScreen({super.key});
@@ -20,6 +21,8 @@ class GrammarScreen extends StatelessWidget {
               color: Colors.white,
             ),
             onPressed: () {
+              WordModel word = WordModel();
+              word.writeJson();
             },
           )
         ],

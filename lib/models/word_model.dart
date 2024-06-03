@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 class WordItem {
   String keys = '';
@@ -29,12 +31,36 @@ class WordModel {
   }
 
   void addWord(List<String> keys, List<String> means, String note) {
-    if (eng.containsKey(keys[0])) {
-      eng[keys[0]]!.add(1);
-    } else {
-      eng[keys[0]] = [1];
-    }
+    // if (eng.containsKey(keys[0])) {
+    //   eng[keys[0]]!.add(1);
+    // } else {
+    //   eng[keys[0]] = [1];
+    // }
+
     //loadData();
+  }
+
+
+  Future<void> writeJson() async {
+    // Lấy thư mục tài liệu của ứng dụng
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/my_data.json';
+
+    // Dữ liệu JSON để ghi
+    final Map<String, dynamic> jsonData = {
+      'name': 'John Doe',
+      'age': 30,
+      'email': 'john.doe@example.com'
+    };
+
+    // Chuyển đổi Map thành chuỗi JSON
+    final jsonString = jsonEncode(jsonData);
+
+    // Tạo tệp và ghi chuỗi JSON vào tệp
+    final file = File(filePath);
+    await file.writeAsString(jsonString);
+
+    print('JSON data has been written to $filePath');
   }
 
   Future<void> loadData() async {

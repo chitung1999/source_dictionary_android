@@ -3,7 +3,6 @@ import 'api_service.dart';
 import '../../models/dictionary_model.dart';
 
 class SearchPage extends SearchDelegate {
-  DictionaryModel dictionary = DictionaryModel();
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -44,6 +43,7 @@ class SearchPage extends SearchDelegate {
 
   Future<bool> _getData(BuildContext context) async {
     APIService dictionaryAPI = APIService();
+    DictionaryModel dictionary = DictionaryModel();
 
     if (query.isNotEmpty) {
       final List<dynamic> data = await dictionaryAPI.requestAPI(query);

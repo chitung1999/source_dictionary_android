@@ -3,8 +3,6 @@ import 'add_dialog.dart';
 import 'search_page.dart';
 import 'list_page.dart';
 import 'search_result.dart';
-import '../../models/word_search_model.dart';
-import '../../component/NotifyDialog.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,7 +13,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-  final WordSearchModel _wordSearch = WordSearchModel();
 
   void _showSearchResult() {
     setState(() {
@@ -34,30 +31,19 @@ class _HomeScreenState extends State<HomeScreen> {
               IconButton(
                   icon: const Icon(Icons.add, color: Colors.white),
                   onPressed: () async {
-                    int ret = await showDialog(context: context, builder: (BuildContext context) {
+                    await showDialog(context: context, builder: (BuildContext context) {
                       return const AddDialog();
                     });
-                    if(ret != 0 && mounted) {
-                      await showDialog(
-                           context: context, builder: (BuildContext context) {
-                        return NotifyDialog(message: (ret == 1 ?
-                          'Key or Mean is empty!' : 'Add word successfully!'));
-                      });
-                    }
-                    _showSearchResult();
                   }
               ),
               IconButton(
                 icon: const Icon(Icons.search, color: Colors.white),
                 onPressed: () async {
-                  bool? ret = await showSearch<bool?> (
-                    context: context,
-                    delegate: SearchPage()
-                  );
+                  bool? ret = await showSearch<bool?> (context: context, delegate: SearchPage());
+
                   if(ret != null && ret) {
                     _showSearchResult();
                   }
-
                 }
               ),
               IconButton(
@@ -71,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: IndexedStack(
           index: _currentIndex,
           children: [
-            SearchResult(wordSearch: _wordSearch),
+            SearchResult(),
             ListPage(onClick: _showSearchResult)
           ]
         )

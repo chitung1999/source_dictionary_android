@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/word_model.dart';
+import '../../component/NotifyDialog.dart';
 
 class AddDialog extends StatefulWidget {
   const AddDialog({Key? key}) : super(key: key);
@@ -9,13 +10,13 @@ class AddDialog extends StatefulWidget {
 }
 
 class _AddDialogState extends State<AddDialog> {
-  final WordModel _word = WordModel();
 
   List<TextEditingController> key = [];
   List<TextEditingController> mean = [];
   TextEditingController note = TextEditingController();
 
   bool addWord() {
+    final WordModel word = WordModel();
     List<String> addKey = key.map((controller) => controller.text).where((text) => text.isNotEmpty).toList();
     List<String> addMean = mean.map((controller) => controller.text).where((text) => text.isNotEmpty).toList();
     String addNote = note.text;
@@ -24,7 +25,7 @@ class _AddDialogState extends State<AddDialog> {
       return false;
     }
 
-    _word.addWord(addKey, addMean, addNote);
+    word.addWord(addKey, addMean, addNote);
     return true;
   }
 
@@ -132,15 +133,20 @@ class _AddDialogState extends State<AddDialog> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded( child: ElevatedButton(
-                  onPressed: (){Navigator.of(context).pop(0);},
+                  onPressed: (){Navigator.of(context).pop();},
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
                   child: const Text('Cancel', style: TextStyle(color: Colors.black)),
                 )),
                 const SizedBox(width: 16),
                 Expanded( child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     bool ret = addWord();
-                    Navigator.of(context).pop(ret ? 2: 1);
+                    Navigator.of(context).pop();
+                    await showDialog(
+                      context: context, builder: (BuildContext context) {
+                        return NotifyDialog(message: (ret ?
+                        'Add word successfully!' : 'Key or Mean is empty!'));
+                    });
                   },
                   style: ElevatedButton.styleFrom( backgroundColor: Colors.blueAccent),
                   child: const Text('OK', style: TextStyle(color: Colors.black)),
