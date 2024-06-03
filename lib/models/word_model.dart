@@ -29,70 +29,79 @@ class WordModel {
     vn.clear();
     data.clear();
   }
+  Future<void> addWord(List<String> keys, List<String> means, String note) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/data.json');
+      final stringData = await file.readAsString();
+      final Map<String, dynamic> jsonData = jsonDecode(stringData);
 
-  void addWord(List<String> keys, List<String> means, String note) {
-    // if (eng.containsKey(keys[0])) {
-    //   eng[keys[0]]!.add(1);
-    // } else {
-    //   eng[keys[0]] = [1];
-    // }
+      final Map<String, dynamic> newData = {
+        "index": jsonData["words"].length,
+        "words": keys,
+        "means": means,
+        "notes": note
+      };
 
-    //loadData();
+      jsonData["words"].add(newData);
+      final stringInput = jsonEncode(jsonData);
+      await file.writeAsString(stringInput);
+      loadData();
+    } catch(e) {}
   }
 
+  Future<void> uploadDataToServer() async {
+    //implement yet
+  }
 
-  Future<void> writeJson() async {
-    // Lấy thư mục tài liệu của ứng dụng
-    final directory = await getApplicationDocumentsDirectory();
-    final filePath = '${directory.path}/my_data.json';
+  Future<void> getDataFromServer() async {
+    try {
+      final String dataSever = await rootBundle.loadString('data/data.json');
 
-    // Dữ liệu JSON để ghi
-    final Map<String, dynamic> jsonData = {
-      'name': 'John Doe',
-      'age': 30,
-      'email': 'john.doe@example.com'
-    };
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/data.json');
+      await file.writeAsString(dataSever);
 
-    // Chuyển đổi Map thành chuỗi JSON
-    final jsonString = jsonEncode(jsonData);
-
-    // Tạo tệp và ghi chuỗi JSON vào tệp
-    final file = File(filePath);
-    await file.writeAsString(jsonString);
-
-    print('JSON data has been written to $filePath');
+      loadData();
+    } catch (e) {}
   }
 
   Future<void> loadData() async {
-    reset();
-    final String response = await rootBundle.loadString('data/data.json');
-    final jsonResponse = await json.decode(response);
-    for(Map<String, dynamic> item in jsonResponse['words']) {
-      WordItem wordItem = WordItem();
-      String keys = '';
-      for(String str in item['words']) {
-        if (eng.containsKey(str)) {
-          eng[str]!.add(item['index']);
-        } else {
-          eng[str] = [item['index']];
-        }
-        keys += ((keys.isEmpty ? '' : ', ') + str);
-      }
+    try {
+      reset();
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/data.json');
+      final stringData = await file.readAsString();
+      final Map<String, dynamic> jsonData = jsonDecode(stringData);
 
-      String means = '';
-      for(String str in item['means']) {
-        if (vn.containsKey(str)) {
-          vn[str]!.add(item['index']);
-        } else {
-          vn[str] = [item['index']];
+      for (Map<String, dynamic> item in jsonData['words']) {
+        WordItem wordItem = WordItem();
+        String keys = '';
+        for (String str in item['words']) {
+          if (eng.containsKey(str)) {
+            eng[str]!.add(item['index']);
+          } else {
+            eng[str] = [item['index']];
+          }
+          keys += ((keys.isEmpty ? '' : ', ') + str);
         }
-        means += ((means.isEmpty ? '' : ', ') + str);
-      }
 
-      wordItem.keys = keys;
-      wordItem.means = means;
-      wordItem.note = item['notes'].toString();
-      data.add(wordItem);
+        String means = '';
+        for (String str in item['means']) {
+          if (vn.containsKey(str)) {
+            vn[str]!.add(item['index']);
+          } else {
+            vn[str] = [item['index']];
+          }
+          means += ((means.isEmpty ? '' : ', ') + str);
+        }
+
+        wordItem.keys = keys;
+        wordItem.means = means;
+        wordItem.note = item['notes'].toString();
+        data.add(wordItem);
+      }
     }
+    catch(e) {}
   }
 }

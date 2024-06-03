@@ -22,7 +22,7 @@ class GrammarScreen extends StatelessWidget {
             ),
             onPressed: () {
               WordModel word = WordModel();
-              word.writeJson();
+              word.getDataFromServer();
             },
           )
         ],
