@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/word_model.dart';
+import '../../models/word_search_model.dart';
 import '../../models/word_modify_model.dart';
 import '../../component/NotifyDialog.dart';
 
@@ -11,11 +12,12 @@ class AddDialog extends StatefulWidget {
 }
 
 class _AddDialogState extends State<AddDialog> {
+  WordModifyModel wordModify = WordModifyModel();
   List<TextEditingController> key = [];
   List<TextEditingController> mean = [];
   TextEditingController note = TextEditingController();
 
-  bool addWord() {
+  bool changeGroup() {
     final WordModel word = WordModel();
     List<String> addKey = key.map((controller) => controller.text).where((text) => text.isNotEmpty).toList();
     List<String> addMean = mean.map((controller) => controller.text).where((text) => text.isNotEmpty).toList();
@@ -25,15 +27,31 @@ class _AddDialogState extends State<AddDialog> {
       return false;
     }
 
-    word.addWord(addKey, addMean, addNote);
+    for(var item in addKey) {
+      if(item.contains(',')) {
+        return false;
+      }
+    }
+    for(var item in addMean) {
+      if(item.contains(',')) {
+        return false;
+      }
+    }
+
+    if(wordModify.type == ModifyType.add) {
+      word.addGroup(addKey, addMean, addNote);
+    } else {
+      final WordSearchModel wordSearch = WordSearchModel();
+      wordSearch.modify(addKey, addMean, addNote, wordModify.index);
+      word.modifyGroup(addKey, addMean, addNote, wordModify.query, wordModify.isEng, wordModify.index);
+    }
+
     return true;
   }
 
   @override
   void initState() {
     super.initState();
-    WordModifyModel wordModify = WordModifyModel();
-
     int count = (wordModify.keys.length > 4 ? wordModify.keys.length : 4);
     for (int i = 0; i < count; i++) {
       key.add(TextEditingController());
@@ -155,13 +173,17 @@ class _AddDialogState extends State<AddDialog> {
                 const SizedBox(width: 16),
                 Expanded( child: ElevatedButton(
                   onPressed: () async {
-                    bool ret = addWord();
+                    bool ret = changeGroup();
                     Navigator.of(context).pop();
                     await showDialog(
                       context: context, builder: (BuildContext context) {
-                        return NotifyDialog(message: (ret ?
-                        'Add word successfully!' : 'Key or Mean is empty!'));
-                    });
+                        return NotifyDialog(
+                          message: (ret ? (wordModify.type == ModifyType.add ?
+                          'Add words successfully!' : 'Modify words successfully!') :
+                          'Error: Key or Mean cannot be empty and contain special characters!')
+                        );
+                      }
+                    );
                   },
                   style: ElevatedButton.styleFrom( backgroundColor: Colors.blueAccent),
                   child: const Text('OK', style: TextStyle(color: Colors.black)),

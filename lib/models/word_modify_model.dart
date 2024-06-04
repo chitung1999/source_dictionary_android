@@ -1,5 +1,3 @@
-import 'word_model.dart';
-
 enum ModifyType {
   add,
   modify,
@@ -10,6 +8,8 @@ class WordModifyModel {
   late List<String> keys;
   late List<String> means;
   late String note;
+  late String query;
+  late bool isEng;
   late int index;
 
   WordModifyModel._internal() {
@@ -27,15 +27,19 @@ class WordModifyModel {
     keys = [];
     means = [];
     note = '';
+    query = '';
+    isEng = true;
     index = 0;
   }
 
-  void modify(String mKeys, String mMeans, mNote, mIndex) {
+  void modify(String mKeys, String mMeans, String mNote, String mQuery, bool mIsEng, int mIndex) {
     reset();
     type = ModifyType.modify;
-    keys.add(mKeys);
-    means.add(mMeans);
+    keys = mKeys.split(',').map((e) => e.trim()).toList();
+    means = mMeans.split(',').map((e) => e.trim()).toList();
     note = mNote;
+    query = mQuery;
+    isEng = mIsEng;
     index = mIndex;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'add_dialog.dart';
 import '../../../models/word_search_model.dart';
+import '../../../models/word_model.dart';
 import '../../../models/word_modify_model.dart';
 
 class SearchResult extends StatefulWidget {
@@ -46,12 +47,22 @@ class _SearchResultState extends State<SearchResult> {
                         onPressed: () async {
                           await showDialog(context: context, builder: (BuildContext context) {
                             WordModifyModel wordModify = WordModifyModel();
-                            wordModify.modify(wordSearch.data[index].keys, wordSearch.data[index].means, wordSearch.data[index].note, index);
+                            wordModify.modify(wordSearch.data[index].keys, wordSearch.data[index].means,
+                                wordSearch.data[index].note, wordSearch.query, wordSearch.isEng, index);
                             return const AddDialog();
                           });
+                          setState(() {});
                         }
                       ),
-                      IconButton(onPressed: null, icon: Icon(Icons.remove)),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () async {
+                          WordModel word = WordModel();
+                          word.removeGroup(wordSearch.query, wordSearch.isEng, index);
+                          wordSearch.removeAt(index);
+                          setState(() {});
+                        }
+                      ),
                     ])
                   ]
                 ),

@@ -19,4 +19,22 @@ class WordSearchModel {
     query = '';
     data = [];
   }
+
+  void removeAt(int index) {
+    data.removeAt(index);
+  }
+
+  void modify(List<String> keys, List<String> means, notes, index) {
+    print(keys);
+
+    data[index].keys = '';
+    for(String str in keys) {
+      data[index].keys += ((data[index].keys.isEmpty ? '' : ', ') + str);
+    }
+    data[index].means = '';
+    for(String str in means) {
+      data[index].means += ((data[index].means.isEmpty ? '' : ', ') + str);
+    }
+    data[index].note = notes;
+  }
 }

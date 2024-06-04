@@ -30,7 +30,7 @@ class WordModel {
     data.clear();
   }
 
-  Future<void> addWord(List<String> keys, List<String> means, String note) async {
+  Future<void> addGroup(List<String> keys, List<String> means, String note) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/data.json');
@@ -51,12 +51,53 @@ class WordModel {
     } catch(e) {}
   }
 
+  Future<void> modifyGroup(List<String> keys, List<String> means, String note, String query, bool isEng, int index) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/data.json');
+      final stringData = await file.readAsString();
+      final Map<String, dynamic> jsonData = jsonDecode(stringData);
+
+      final Map<String, dynamic> newData = {
+        "index": jsonData["words"].length,
+        "words": keys,
+        "means": means,
+        "notes": note
+      };
+
+      List<int>? group = isEng ? eng[query] : vn[query];
+
+
+      jsonData["words"][group?[index]] = newData;
+      final stringInput = jsonEncode(jsonData);
+      await file.writeAsString(stringInput);
+      loadData();
+    } catch(e) {}
+  }
+
+  Future<void> removeGroup(String query, bool isEng, int index) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/data.json');
+      final stringData = await file.readAsString();
+      final Map<String, dynamic> jsonData = jsonDecode(stringData);
+
+      List<int>? group = isEng ? eng[query] : vn[query];
+
+      jsonData["words"].removeAt(group?[index]);
+      final stringInput = jsonEncode(jsonData);
+      await file.writeAsString(stringInput);
+      loadData();
+    } catch(e) {}
+  }
+
   Future<void> uploadDataToServer() async {
     //implement yet
   }
 
   Future<void> getDataFromServer() async {
     try {
+      //implement yet
       final String dataSever = await rootBundle.loadString('data/data.json');
 
       final directory = await getApplicationDocumentsDirectory();
@@ -75,14 +116,15 @@ class WordModel {
       final stringData = await file.readAsString();
       final Map<String, dynamic> jsonData = jsonDecode(stringData);
 
+      int index = 0;
       for (Map<String, dynamic> item in jsonData['words']) {
         WordItem wordItem = WordItem();
         String keys = '';
         for (String str in item['words']) {
           if (eng.containsKey(str)) {
-            eng[str]!.add(item['index']);
+            eng[str]!.add(index);
           } else {
-            eng[str] = [item['index']];
+            eng[str] = [index];
           }
           keys += ((keys.isEmpty ? '' : ', ') + str);
         }
@@ -90,9 +132,9 @@ class WordModel {
         String means = '';
         for (String str in item['means']) {
           if (vn.containsKey(str)) {
-            vn[str]!.add(item['index']);
+            vn[str]!.add(index);
           } else {
-            vn[str] = [item['index']];
+            vn[str] = [index];
           }
           means += ((means.isEmpty ? '' : ', ') + str);
         }
@@ -101,6 +143,7 @@ class WordModel {
         wordItem.means = means;
         wordItem.note = item['notes'].toString();
         data.add(wordItem);
+        index++;
       }
     }
     catch(e) {}
