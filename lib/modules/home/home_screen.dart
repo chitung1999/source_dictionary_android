@@ -3,6 +3,7 @@ import 'add_dialog.dart';
 import 'search_page.dart';
 import 'list_page.dart';
 import 'search_result.dart';
+import '../../models/word_modify_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -32,6 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: const Icon(Icons.add, color: Colors.white),
                   onPressed: () async {
                     await showDialog(context: context, builder: (BuildContext context) {
+                      WordModifyModel wordModify = WordModifyModel();
+                      wordModify.reset();
                       return const AddDialog();
                     });
                   }

@@ -29,6 +29,7 @@ class WordModel {
     vn.clear();
     data.clear();
   }
+
   Future<void> addWord(List<String> keys, List<String> means, String note) async {
     try {
       final directory = await getApplicationDocumentsDirectory();

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'add_dialog.dart';
 import '../../../models/word_search_model.dart';
+import '../../../models/word_modify_model.dart';
 
 class SearchResult extends StatefulWidget {
   const SearchResult({Key? key}) : super(key: key);
@@ -38,9 +40,18 @@ class _SearchResultState extends State<SearchResult> {
                         wordSearch.query,
                       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
                     ),
-                    const Row( children: [
-                      IconButton(onPressed: null, icon: Icon(Icons.playlist_add)),
-                      IconButton(onPressed: null, icon: Icon(Icons.playlist_add)),
+                    Row( children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () async {
+                          await showDialog(context: context, builder: (BuildContext context) {
+                            WordModifyModel wordModify = WordModifyModel();
+                            wordModify.modify(wordSearch.data[index].keys, wordSearch.data[index].means, wordSearch.data[index].note, index);
+                            return const AddDialog();
+                          });
+                        }
+                      ),
+                      IconButton(onPressed: null, icon: Icon(Icons.remove)),
                     ])
                   ]
                 ),

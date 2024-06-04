@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/word_model.dart';
+import '../../models/word_modify_model.dart';
 import '../../component/NotifyDialog.dart';
 
 class AddDialog extends StatefulWidget {
@@ -10,7 +11,6 @@ class AddDialog extends StatefulWidget {
 }
 
 class _AddDialogState extends State<AddDialog> {
-
   List<TextEditingController> key = [];
   List<TextEditingController> mean = [];
   TextEditingController note = TextEditingController();
@@ -32,10 +32,25 @@ class _AddDialogState extends State<AddDialog> {
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < 4; i++) {
+    WordModifyModel wordModify = WordModifyModel();
+
+    int count = (wordModify.keys.length > 4 ? wordModify.keys.length : 4);
+    for (int i = 0; i < count; i++) {
       key.add(TextEditingController());
-      mean.add(TextEditingController());
+      if(i < wordModify.keys.length) {
+        key[i].text = wordModify.keys[i];
+      }
     }
+
+    count = (wordModify.means.length > 4 ? wordModify.means.length : 4);
+    for (int i = 0; i < count; i++) {
+      mean.add(TextEditingController());
+      if(i < wordModify.means.length) {
+        mean[i].text = wordModify.means[i];
+      }
+    }
+
+    note.text = wordModify.note;
   }
 
   @override
