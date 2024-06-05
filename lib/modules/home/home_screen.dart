@@ -24,46 +24,43 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: Colors.blueGrey,
-            title: const Text('Dictionary', style: TextStyle(
-                fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)),
-            actions: [
-              IconButton(
-                  icon: const Icon(Icons.add, color: Colors.white),
-                  onPressed: () async {
-                    await showDialog(context: context, builder: (BuildContext context) {
-                      WordModifyModel wordModify = WordModifyModel();
-                      wordModify.reset();
-                      return const AddDialog();
-                    });
-                  }
-              ),
-              IconButton(
-                icon: const Icon(Icons.search, color: Colors.white),
-                onPressed: () async {
-                  bool? ret = await showSearch<bool?> (context: context, delegate: SearchPage());
+      appBar: AppBar(
+        backgroundColor: Colors.blueGrey,
+        title: const Text('Dictionary', style: TextStyle(
+            fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add, color: Colors.white),
+            onPressed: () async {
+              await showDialog(context: context, builder: (BuildContext context) {
+                WordModifyModel wordModify = WordModifyModel();
+                wordModify.reset();
+                return const AddDialog();
+              });
+            }
+          ),
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.white),
+            onPressed: () async {
+              bool? ret = await showSearch<bool?> (context: context, delegate: SearchPage());
 
-                  if(ret != null && ret) {
-                    _showSearchResult();
-                  }
-                }
-              ),
-              IconButton(
-                icon: const Icon(Icons.list, color: Colors.white),
-                onPressed: () {
-                  setState(() { _currentIndex = 1; });
-                },
-              )
-            ]
-        ),
-        body: IndexedStack(
-          index: _currentIndex,
-          children: [
-            SearchResult(),
-            ListPage(onClick: _showSearchResult)
-          ]
-        )
+              if(ret != null && ret) {
+                _showSearchResult();
+              }
+            }
+          ),
+          IconButton(
+            icon: const Icon(Icons.list, color: Colors.white),
+            onPressed: () {
+              setState(() { _currentIndex = 1; });
+            },
+          )
+        ]
+      ),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [SearchResult(), ListPage(onClick: _showSearchResult)]
+      )
     );
   }
 }

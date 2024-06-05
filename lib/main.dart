@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'modules/taskbar.dart';
-import 'models/word_model.dart';
+import 'models/database.dart';
 
 void main() {
-  runApp(DictionaryApp());
+  runApp(const DictionaryApp());
 }
 
 class DictionaryApp extends StatefulWidget {
@@ -14,15 +14,18 @@ class DictionaryApp extends StatefulWidget {
 }
 
 class _DictionaryAppState extends State<DictionaryApp> {
+
   bool isThemeLight = true;
 
-  void _onChangedTheme(bool value) {
+  void _onChangedTheme(bool value) async {
     setState(() {isThemeLight = value;});
   }
 
-  void _loadData() {
-    final WordModel word = WordModel();
-    word.loadData();
+  void _loadData() async {
+    final Database data = Database();
+    await data.initialize();
+    //await config.getData();
+   // setState(() {isThemeLight = (config.theme == ThemeApp.light ? true : false);});
   }
 
   @override

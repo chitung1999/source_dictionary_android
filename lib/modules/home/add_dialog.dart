@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../models/word_model.dart';
+import '../../models/database.dart';
 import '../../models/word_search_model.dart';
 import '../../models/word_modify_model.dart';
 import '../../component/NotifyDialog.dart';
@@ -17,8 +17,8 @@ class _AddDialogState extends State<AddDialog> {
   List<TextEditingController> mean = [];
   TextEditingController note = TextEditingController();
 
-  bool changeGroup() {
-    final WordModel word = WordModel();
+  Future<bool> changeGroup() async {
+    final Database database = Database();
     List<String> addKey = key.map((controller) => controller.text).where((text) => text.isNotEmpty).toList();
     List<String> addMean = mean.map((controller) => controller.text).where((text) => text.isNotEmpty).toList();
     String addNote = note.text;
@@ -39,11 +39,11 @@ class _AddDialogState extends State<AddDialog> {
     }
 
     if(wordModify.type == ModifyType.add) {
-      word.addGroup(addKey, addMean, addNote);
+      await database.addGroup(addKey, addMean, addNote);
     } else {
       final WordSearchModel wordSearch = WordSearchModel();
       wordSearch.modify(addKey, addMean, addNote, wordModify.index);
-      word.modifyGroup(addKey, addMean, addNote, wordModify.query, wordModify.isEng, wordModify.index);
+      await database.modifyGroup(addKey, addMean, addNote, wordModify.query, wordModify.isEng, wordModify.index);
     }
 
     return true;
@@ -113,10 +113,7 @@ class _AddDialogState extends State<AddDialog> {
               for (int i = 0; i < key.length; i++)
                 TextField(
                 controller: key[i],
-                decoration: InputDecoration(
-                  labelText: 'Key ${i + 1}',
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                ),
+                decoration: InputDecoration(hintText: 'Key ${i + 1}'),
               ),
 
               const SizedBox(height: 20),
@@ -141,10 +138,7 @@ class _AddDialogState extends State<AddDialog> {
               for (int i = 0; i < mean.length; i++)
                 TextField(
                   controller: mean[i],
-                  decoration: InputDecoration(
-                    labelText: 'Mean ${i + 1}',
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                  ),
+                  decoration: InputDecoration(hintText: 'Mean ${i + 1}'),
                 ),
 
               const SizedBox(height: 20),
@@ -154,10 +148,7 @@ class _AddDialogState extends State<AddDialog> {
               ),
               TextField(
                 controller: note,
-                decoration: const InputDecoration(
-                  labelText: 'Note',
-                  floatingLabelBehavior: FloatingLabelBehavior.never
-                )
+                decoration: const InputDecoration(hintText: 'Note')
               )
             ])),
 
@@ -173,8 +164,8 @@ class _AddDialogState extends State<AddDialog> {
                 const SizedBox(width: 16),
                 Expanded( child: ElevatedButton(
                   onPressed: () async {
-                    bool ret = changeGroup();
                     Navigator.of(context).pop();
+                    bool ret = await changeGroup();
                     await showDialog(
                       context: context, builder: (BuildContext context) {
                         return NotifyDialog(

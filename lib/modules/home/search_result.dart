@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'add_dialog.dart';
 import '../../../models/word_search_model.dart';
-import '../../../models/word_model.dart';
+import '../../../models/database.dart';
 import '../../../models/word_modify_model.dart';
 
 class SearchResult extends StatefulWidget {
@@ -16,6 +16,7 @@ class _SearchResultState extends State<SearchResult> {
 
   @override
   Widget build(BuildContext context) {
+    print('AAAAAAAAAAAAAA');
     if(wordSearch.query.isEmpty) {
       return const Center(child: Text('No results found!', style: TextStyle(fontSize: 20, color: Colors.blueGrey)));
     }
@@ -57,8 +58,8 @@ class _SearchResultState extends State<SearchResult> {
                       IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () async {
-                          WordModel word = WordModel();
-                          word.removeGroup(wordSearch.query, wordSearch.isEng, index);
+                          Database database = Database();
+                          await database.removeGroup(wordSearch.query, wordSearch.isEng, index);
                           wordSearch.removeAt(index);
                           setState(() {});
                         }

@@ -33,25 +33,13 @@
       "structure": "Please help me get (a cup)."
     }
   ],
-  "setting": {
-    "background": "C:/Users/PVD/Downloads/pexels-lucas-pezeta-3934514.jpg",
-    "borderColor": "green",
-    "language": "eng",
-    "themeColor": "#7d988d"
+  "config": {
+    "username": "chitung",
+    "password": "123",
+    "theme": 0
   },
   "words": [
     {
-      "index": 0,
-      "means": [
-        "tung"
-      ],
-      "notes": "",
-      "words": [
-        "tung"
-      ]
-    },
-    {
-      "index": 1,
       "means": [
         "rời đi"
       ],
@@ -61,7 +49,6 @@
       ]
     },
     {
-      "index": 2,
       "means": [
         "đi tắm"
       ],
@@ -71,7 +58,6 @@
       ]
     },
     {
-      "index": 3,
       "means": [
         "đi ra ngoài"
       ],
@@ -81,7 +67,6 @@
       ]
     },
     {
-      "index": 4,
       "means": [
         "chỗ ở"
       ],
@@ -89,297 +74,6 @@
       "words": [
         "accommodate",
         "dwelling"
-      ]
-    },
-    {
-      "index": 5,
-      "means": [
-        "hoàn thành"
-      ],
-      "notes": "",
-      "words": [
-        "accomplish",
-        "finalize"
-      ]
-    },
-    {
-      "index": 6,
-      "means": [
-        "giỏi"
-      ],
-      "notes": "",
-      "words": [
-        "accomplished",
-        "skillful",
-        "adept",
-        "proficient"
-      ]
-    },
-    {
-      "index": 7,
-      "means": [
-        "có được",
-        "tiếp thu"
-      ],
-      "notes": "",
-      "words": [
-        "acquire"
-      ]
-    },
-    {
-      "index": 8,
-      "means": [
-        "mua(doanh nghiệp)"
-      ],
-      "notes": "",
-      "words": [
-        "acquire"
-      ]
-    },
-    {
-      "index": 9,
-      "means": [
-        "đủ"
-      ],
-      "notes": "",
-      "words": [
-        "adequate",
-        "sufficient",
-        "enough"
-      ]
-    },
-    {
-      "index": 10,
-      "means": [
-        "yêu thích"
-      ],
-      "notes": "",
-      "words": [
-        "adore"
-      ]
-    },
-    {
-      "index": 11,
-      "means": [
-        "ảnh hưởng"
-      ],
-      "notes": "",
-      "words": [
-        "affect"
-      ]
-    },
-    {
-      "index": 12,
-      "means": [
-        "có thể",
-        "cho"
-      ],
-      "notes": "",
-      "words": [
-        "afford"
-      ]
-    },
-    {
-      "index": 13,
-      "means": [
-        "phải chăng"
-      ],
-      "notes": "",
-      "words": [
-        "affordable",
-        "resonable"
-      ]
-    },
-    {
-      "index": 14,
-      "means": [
-        "sau đó"
-      ],
-      "notes": "",
-      "words": [
-        "afterward"
-      ]
-    },
-    {
-      "index": 15,
-      "means": [
-        "ngược lại"
-      ],
-      "notes": "",
-      "words": [
-        "against"
-      ]
-    },
-    {
-      "index": 16,
-      "means": [
-        "nội dung chương trình"
-      ],
-      "notes": "",
-      "words": [
-        "agenda"
-      ]
-    },
-    {
-      "index": 17,
-      "means": [
-        "máy bay"
-      ],
-      "notes": "",
-      "words": [
-        "aircraft",
-        "plane",
-        "airplane",
-        "aeroplane"
-      ]
-    },
-    {
-      "index": 18,
-      "means": [
-        "nhà giả kim"
-      ],
-      "notes": "",
-      "words": [
-        "alchemist"
-      ]
-    },
-    {
-      "index": 19,
-      "means": [
-        "căn chỉnh"
-      ],
-      "notes": "",
-      "words": [
-        "align"
-      ]
-    },
-    {
-      "index": 20,
-      "means": [
-        "thay thế"
-      ],
-      "notes": "",
-      "words": [
-        "alternative",
-        "replacement",
-        "substitute"
-      ]
-    },
-    {
-      "index": 21,
-      "means": [
-        "phân tích"
-      ],
-      "notes": "",
-      "words": [
-        "analyze"
-      ]
-    },
-    {
-      "index": 22,
-      "means": [
-        "cổ kính"
-      ],
-      "notes": "",
-      "words": [
-        "ancient"
-      ]
-    },
-    {
-      "index": 23,
-      "means": [
-        "chú thích"
-      ],
-      "notes": "",
-      "words": [
-        "annotation"
-      ]
-    },
-    {
-      "index": 24,
-      "means": [
-        "trang phục"
-      ],
-      "notes": "",
-      "words": [
-        "apparel",
-        "garment",
-        "costume",
-        "clothing"
-      ]
-    },
-    {
-      "index": 25,
-      "means": [
-        "hình như"
-      ],
-      "notes": "",
-      "words": [
-        "apparently"
-      ]
-    },
-    {
-      "index": 26,
-      "means": [
-        "thu hút"
-      ],
-      "notes": "",
-      "words": [
-        "appeal to"
-      ]
-    },
-    {
-      "index": 27,
-      "means": [
-        "thỏa hiệp"
-      ],
-      "notes": "",
-      "words": [
-        "appease",
-        "compromise"
-      ]
-    },
-    {
-      "index": 28,
-      "means": [
-        "ngon"
-      ],
-      "notes": "",
-      "words": [
-        "appetizing",
-        "delicious"
-      ]
-    },
-    {
-      "index": 29,
-      "means": [
-        "bổ nhiệm",
-        "chỉ định"
-      ],
-      "notes": "",
-      "words": [
-        "appoint"
-      ]
-    },
-    {
-      "index": 30,
-      "means": [
-        "cảm kích",
-        "đánh giá cao"
-      ],
-      "notes": "",
-      "words": [
-        "appreciate"
-      ]
-    },
-    {
-      "index": 31,
-      "means": [
-        "đang đến gần"
-      ],
-      "notes": "",
-      "words": [
-        "approaching"
       ]
     }
   ]
