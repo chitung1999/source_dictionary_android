@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:source_dictionary_mobile/models/config_app.dart';
 import 'modules/taskbar.dart';
 import 'models/database.dart';
 
@@ -20,24 +21,29 @@ class _DictionaryAppState extends State<DictionaryApp> {
   void _onChangedTheme(bool value) async {
     setState(() {isThemeLight = value;});
   }
-
-  void _loadData() async {
+  //
+  Future<bool>? _loadData() async {
     final Database data = Database();
     await data.initialize();
-    //await config.getData();
-   // setState(() {isThemeLight = (config.theme == ThemeApp.light ? true : false);});
+    ConfigApp config = ConfigApp();
+    isThemeLight = (config.theme == ThemeApp.light ? true : false);
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    _loadData();
 
-    return MaterialApp(
-      home: Taskbar(onChangedTheme: _onChangedTheme,),
-      theme: ThemeData(brightness: Brightness.light),
-      darkTheme: ThemeData( brightness: Brightness.dark),
-      themeMode: isThemeLight ? ThemeMode.light : ThemeMode.dark,
-      debugShowCheckedModeBanner: false,
+    return FutureBuilder<bool>(
+      future: _loadData(),
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        return MaterialApp(
+          home: Taskbar(onChangedTheme: _onChangedTheme,),
+          theme: ThemeData(brightness: Brightness.light),
+          darkTheme: ThemeData( brightness: Brightness.dark),
+          themeMode: isThemeLight ? ThemeMode.light : ThemeMode.dark,
+          debugShowCheckedModeBanner: false,
+        );
+      }
     );
   }
 }

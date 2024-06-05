@@ -14,12 +14,13 @@ class Database {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/dictionary_database.json');
     final data = await file.readAsString();
+    print(file);
     return jsonDecode(data);
   }
 
   Future<void> writeFileLocal(Map<String, dynamic> data) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/dictionary_database.json');
+    final directory = await getExternalStorageDirectory();
+    final file = File('${directory!.path}/dictionary_database.json');
     final str = jsonEncode(data);
     await file.writeAsString(str);
   }
@@ -49,7 +50,7 @@ class Database {
   Future<void> setTheme(bool value) async {
     try {
       Map<String, dynamic> data = await readFileLocal();
-      data['config']['theme'] = value ? 1 : 0;
+      data['config']['theme'] = value;
       _configApp.loadData(data["config"]);
       writeFileLocal(data);
     } catch(e) {}

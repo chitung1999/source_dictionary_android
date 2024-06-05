@@ -16,7 +16,6 @@ class _SearchResultState extends State<SearchResult> {
 
   @override
   Widget build(BuildContext context) {
-    print('AAAAAAAAAAAAAA');
     if(wordSearch.query.isEmpty) {
       return const Center(child: Text('No results found!', style: TextStyle(fontSize: 20, color: Colors.blueGrey)));
     }

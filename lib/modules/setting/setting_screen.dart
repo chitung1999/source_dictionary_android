@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:source_dictionary_mobile/models/config_app.dart';
+import '../../models/database.dart';
 import 'login_dialog.dart';
-import '../../models/config_app.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key, required this.onChangedTheme}) : super(key: key);
@@ -12,24 +13,27 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  //final ConfigApp config = ConfigApp();
+  Database database = Database();
   bool _isLight = true;
 
   void _changedTheme(bool value) async {
     setState(() {
       _isLight = value;
     });
-    //await config.setTheme(value);
     widget.onChangedTheme(value);
+    database.setTheme(value);
   }
 
-  // void _getTheme() async {
-  //   setState(() {_isLight = (config.theme == ThemeApp.light);});
-  // }
+  void _getTheme() {
+    ConfigApp config = ConfigApp();
+    setState(() {
+      _isLight = config.theme == ThemeApp.light;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // _getTheme();
+    _getTheme();
 
     return Scaffold(
         appBar: AppBar(
