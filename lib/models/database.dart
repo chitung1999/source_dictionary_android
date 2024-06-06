@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
@@ -11,27 +10,66 @@ class Database {
   final WordModel _wordModel = WordModel();
 
   Future<Map<String, dynamic>> readFileLocal() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/dictionary_database.json');
-    final data = await file.readAsString();
-    print(file);
-    return jsonDecode(data);
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/dictionary_database.json');
+      final data = await file.readAsString();
+      return jsonDecode(data);
+    } catch(e) {
+      return {};
+    }
   }
 
-  Future<void> writeFileLocal(Map<String, dynamic> data) async {
-    final directory = await getExternalStorageDirectory();
-    final file = File('${directory!.path}/dictionary_database.json');
-    final str = jsonEncode(data);
-    await file.writeAsString(str);
+  Future<bool> writeFileLocal(Map<String, dynamic> data) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/dictionary_database.json');
+      final str = jsonEncode(data);
+      await file.writeAsString(str);
+      return true;
+    } catch(e) {
+      return false;
+    }
   }
 
   Future<void> initialize() async {
     try {
       Map<String, dynamic> data = await readFileLocal();
-
+      if(data.isEmpty) {
+        print('0');
+        data = setDefaultData();
+        print('1');
+        print(data);
+        await writeFileLocal(data);
+        print('2');
+        print(data);
+      }
+      Map<String, dynamic> data2 = await readFileLocal();
+      print('3');
+      print(data2);
+       _wordModel.loadData(data["words"]);
       _configApp.loadData(data["config"]);
-      _wordModel.loadData(data["words"]);
     } catch(e) {}
+  }
+
+  Map<String, dynamic> setDefaultData() {
+    Map<String, dynamic> defaultData = {};
+
+    defaultData["config"]["username"] = 'admin';
+    defaultData["config"]["password"] = '1';
+    defaultData["config"]["theme"] = 0;
+
+    Map<String, dynamic> myMap = {};
+    myMap["keys"] = 'my key';
+    myMap["means"] = 'my mean';
+    myMap["notes"] = 'my note';
+    defaultData["words"].add(myMap);
+
+    myMap = {};
+    myMap["form"] = 'my form';
+    myMap["structure"] = 'my structure';
+    defaultData["grammar"].add(myMap);
+    return defaultData;
   }
 
   //Setting
@@ -62,7 +100,7 @@ class Database {
       Map<String, dynamic> data = await readFileLocal();
 
       final Map<String, dynamic> newGroup = {
-        "words": keys,
+        "keys": keys,
         "means": means,
         "notes": note
       };
@@ -78,7 +116,7 @@ class Database {
       Map<String, dynamic> data = await readFileLocal();
 
       final Map<String, dynamic> newGroup = {
-        "words": keys,
+        "keys": keys,
         "means": means,
         "notes": note
       };

@@ -42,18 +42,15 @@ class SearchPage extends SearchDelegate {
   }
 
   Future<bool> _getData(BuildContext context) async {
-    APIService dictionaryAPI = APIService();
     DictionaryModel dictionary = DictionaryModel();
+    APIService dictionaryAPI = APIService();
 
-    if (query.isNotEmpty) {
-      final List<dynamic> data = await dictionaryAPI.requestAPI(query);
-      if (data.isNotEmpty) {
-        dictionary.loadData(data[0]);
-      }
-      else {
-        dictionary.resetData();
-      }
+    dictionary.resetData();
+    final List<dynamic> data = await dictionaryAPI.requestAPI(query);
+    if (data.isNotEmpty) {
+      dictionary.loadData(data[0]);
     }
+
     close(context, null);
     return true;
   }
