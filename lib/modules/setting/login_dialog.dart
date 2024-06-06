@@ -96,9 +96,9 @@ class _LoginDialogState extends State<LoginDialog> {
                         String msg = '';
                         widget.isDownload ? (await downloadData()) : (await uploadData());
                         await showDialog(
-                            context: context, builder: (BuildContext context) {
-                          return NotifyDialog(message: _msg);
-                        }
+                          context: context, builder: (BuildContext context) {
+                            return NotifyDialog(message: _msg);
+                          }
                         );
                       },
                       style: ElevatedButton.styleFrom( backgroundColor: Colors.blueAccent),

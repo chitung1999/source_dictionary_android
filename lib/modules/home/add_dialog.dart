@@ -165,20 +165,20 @@ class _AddDialogState extends State<AddDialog> {
                 Expanded( child: ElevatedButton(
                   onPressed: () async {
                     Navigator.of(context).pop();
+                    String msg = 'Cannot be deleted when adding new group!';
                     bool ret = true;
                     if(wordModify.type == ModifyType.modify) {
                       ret = await database.removeGroup(wordSearch.query, wordSearch.isEng, wordModify.index);
                       if (ret) {
                         wordSearch.removeAt(wordModify.index);
+                        msg = 'Remove words successfully!';
+                      } else {
+                        msg = 'Fail to remove!';
                       }
                     }
                     await showDialog(
                       context: context, builder: (BuildContext context) {
-                        return NotifyDialog(
-                          message: (wordModify.type == ModifyType.modify ?
-                          (ret ? 'Remove words successfully!' : 'Fail to remove!')
-                          : 'Cannot be deleted when adding new group!')
-                        );
+                        return NotifyDialog(message: msg);
                       }
                     );
                   },
@@ -189,14 +189,15 @@ class _AddDialogState extends State<AddDialog> {
                 Expanded( child: ElevatedButton(
                   onPressed: () async {
                     Navigator.of(context).pop();
+                    String msg = 'Error: Key or Mean cannot be empty and contain special characters!';
                     bool ret = await changeGroup();
+                    if(ret)
+                      msg = wordModify.type == ModifyType.add ? 'Add words successfully!' : 'Modify words successfully!';
+                    else
+                      msg = 'Modify words successfully!';
                     await showDialog(
                       context: context, builder: (BuildContext context) {
-                        return NotifyDialog(
-                          message: (ret ? (wordModify.type == ModifyType.add ?
-                          'Add words successfully!' : 'Modify words successfully!') :
-                          'Error: Key or Mean cannot be empty and contain special characters!')
-                        );
+                        return NotifyDialog(message: msg);
                       }
                     );
                   },
