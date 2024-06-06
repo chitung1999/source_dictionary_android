@@ -158,8 +158,8 @@ class _AddDialogState extends State<AddDialog> {
               children: [
                 Expanded( child: ElevatedButton(
                   onPressed: (){Navigator.of(context).pop();},
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
-                  child: const Text('Cancel', style: TextStyle(color: Colors.black)),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.white30),
+                  child: const Text('Cancel', style: TextStyle(color: Colors.black, fontSize: 13)),
                 )),
                 const SizedBox(width: 16),
                 Expanded( child: ElevatedButton(
@@ -182,8 +182,8 @@ class _AddDialogState extends State<AddDialog> {
                       }
                     );
                   },
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
-                  child: const Text('Delete', style: TextStyle(color: Colors.black)),
+                  style: ElevatedButton.styleFrom(backgroundColor: Color.fromRGBO(255,0,0,0.3)),
+                  child: const Text('Delete', style: TextStyle(color: Colors.black, fontSize: 13)),
                 )),
                 const SizedBox(width: 16),
                 Expanded( child: ElevatedButton(
@@ -201,7 +201,7 @@ class _AddDialogState extends State<AddDialog> {
                       }
                     );
                   },
-                  style: ElevatedButton.styleFrom( backgroundColor: Colors.blueAccent),
+                  style: ElevatedButton.styleFrom( backgroundColor: Colors.blueGrey),
                   child: const Text('OK', style: TextStyle(color: Colors.black)),
                 ))
               ]

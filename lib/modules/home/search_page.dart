@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../models/word_search_model.dart';
 import '../../../models/word_model.dart';
+import '../../models/config_app.dart';
 
 class  SearchPage extends SearchDelegate<bool?> {
   final WordSearchModel _wordSearch = WordSearchModel();
@@ -13,7 +14,6 @@ class  SearchPage extends SearchDelegate<bool?> {
     return [
       StatefulBuilder(builder: (thisLowerContext, StateSetter setState) {
         return TextButton(
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
           child: Text((_wordSearch.isEng ? 'EN' : 'VN')),
           onPressed: () { setState(() { _wordSearch.isEng = !_wordSearch.isEng; query = ''; }); },
         );
@@ -59,7 +59,7 @@ class  SearchPage extends SearchDelegate<bool?> {
   Widget buildSuggestions(BuildContext context) {
     _listSearch.clear();
     for(String item in (_wordSearch.isEng ? _word.eng.keys : _word.vn.keys)) {
-      if(item.toLowerCase().contains(query.toLowerCase())){
+      if(item.toLowerCase().startsWith(query.toLowerCase())){
         _listSearch.add(item);
       }
     }

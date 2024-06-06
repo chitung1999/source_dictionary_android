@@ -12,7 +12,7 @@ class LoginDialog extends StatefulWidget {
   _LoginDialogState createState() => _LoginDialogState();
 }
 
-class _LoginDialogState extends State<LoginDialog> {
+ class _LoginDialogState extends State<LoginDialog> {
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final Database _database = Database();
@@ -86,22 +86,21 @@ class _LoginDialogState extends State<LoginDialog> {
                   children: [
                     Expanded( child: ElevatedButton(
                       onPressed: () async {Navigator.of(context).pop();},
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.white30),
                       child: const Text('Cancel', style: TextStyle(color: Colors.black)),
                     )),
                     const SizedBox(width: 16),
                     Expanded( child: ElevatedButton(
                       onPressed: () async {
                         Navigator.of(context).pop();
-                        String msg = '';
-                        widget.isDownload ? (await downloadData()) : (await uploadData());
-                        await showDialog(
-                          context: context, builder: (BuildContext context) {
-                            return NotifyDialog(message: _msg);
-                          }
-                        );
+                        // widget.isDownload ? (await downloadData()) : (await uploadData());
+                        // await showDialog(
+                        //   context: context, builder: (BuildContext context) {
+                        //     return NotifyDialog(message: _msg);
+                        //   }
+                        // );
                       },
-                      style: ElevatedButton.styleFrom( backgroundColor: Colors.blueAccent),
+                      style: ElevatedButton.styleFrom( backgroundColor: Colors.blueGrey),
                       child: const Text('OK', style: TextStyle(color: Colors.black)),
                     ))
                   ]

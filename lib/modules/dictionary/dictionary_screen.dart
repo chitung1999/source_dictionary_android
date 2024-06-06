@@ -28,13 +28,15 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
         ),
         actions: [
           Container(
-            width: 230,
+            width: 220,
             height: 35,
             child: TextField(
               controller: _queryController,
+              style: TextStyle(color: Colors.black87, fontSize: 17),
               onSubmitted: _onSearch,
               decoration: const InputDecoration(
                 hintText: 'Search',
+                hintStyle: TextStyle(color: Colors.black26),
                 filled: true,
                 fillColor: Colors.white70,
                 contentPadding: EdgeInsets.only(top: 15, left: 15),

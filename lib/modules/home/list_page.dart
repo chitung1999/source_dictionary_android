@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import '../../models/word_model.dart';
 import '../../models/word_search_model.dart';
 
@@ -28,9 +29,10 @@ class _ListPageState extends State<ListPage> {
             style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)
           ),
           const SizedBox(height: 10),
-          Expanded(child: ListView.builder(
-            itemCount: _word.eng.length,
-            itemBuilder: (context, index) {
+          Expanded(child: AlphabetScrollView(
+            list: _word.eng.keys.map((e) => AlphaModel(e)).toList(),
+            itemExtent: 50,
+            itemBuilder: (_, k, id) {
               return Column(children: [
                 const SizedBox(height: 10),
                 GestureDetector(
@@ -42,14 +44,14 @@ class _ListPageState extends State<ListPage> {
                       border: Border.all(width: 2, color: Colors.blueGrey)
                     ),
                     child: Center(child: Text(
-                      _word.eng.keys.elementAt(index),
+                      '$id',
                       style: const TextStyle(fontSize: 20)
                     ))
                   ),
                   onTap: () {
                     _wordSearch.reset();
-                    _wordSearch.query = _word.eng.keys.elementAt(index);
-                    List<int>? group = _word.eng[_word.eng.keys.elementAt(index)];
+                    _wordSearch.query = _word.eng.keys.elementAt(k);
+                    List<int>? group = _word.eng[_word.eng.keys.elementAt(k)];
                     for(int i = 0; i < group!.length; i++) {
                       _wordSearch.data.add(_word.data[group[i]]);
                     }
@@ -57,7 +59,9 @@ class _ListPageState extends State<ListPage> {
                   },
                 )
               ]);
-            }
+            },
+            selectedTextStyle: TextStyle(color: Colors.black87),
+            unselectedTextStyle: TextStyle(color: Colors.black38),
           ))
         ],
       )
