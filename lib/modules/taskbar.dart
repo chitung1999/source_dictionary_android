@@ -8,7 +8,7 @@ import 'setting/setting_screen.dart';
 class Taskbar extends StatefulWidget {
   const Taskbar({super.key, required this.onChangedTheme});
 
-  final Function(bool) onChangedTheme;
+  final Function() onChangedTheme;
 
   @override
   _TaskbarState createState() => _TaskbarState();

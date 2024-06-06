@@ -1,39 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:source_dictionary_mobile/models/config_app.dart';
 import '../../models/database.dart';
+import '../../models/config_app.dart';
 import 'login_dialog.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key, required this.onChangedTheme}) : super(key: key);
 
-  final Function(bool) onChangedTheme;
+  final Function() onChangedTheme;
 
   @override
   _SettingScreenState createState() => _SettingScreenState();
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  Database database = Database();
-  bool _isLight = true;
+  Database _database = Database();
+  ConfigApp _config = ConfigApp();
 
   void _changedTheme(bool value) async {
-    setState(() {
-      _isLight = value;
-    });
-    widget.onChangedTheme(value);
-    database.setTheme(value);
-  }
-
-  void _getTheme() {
-    ConfigApp config = ConfigApp();
-    setState(() {
-      _isLight = config.theme == ThemeApp.light;
-    });
+    bool ret = await _database.setTheme(value);
+    if(ret) {
+      widget.onChangedTheme();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    _getTheme();
 
     return Scaffold(
         appBar: AppBar(
@@ -69,7 +61,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         children: [
                           const Text('Dark', style: TextStyle(fontSize: 15)),
                           const SizedBox(width: 10),
-                          Switch(value: _isLight, onChanged: _changedTheme, activeColor: Colors.blueGrey),
+                          Switch(value: (_config.theme == ThemeApp.light), onChanged: _changedTheme, activeColor: Colors.blueGrey),
                           const SizedBox(width: 10),
                           const Text('Light', style: TextStyle(fontSize: 15)),
                           const SizedBox(width: 20)

@@ -41,29 +41,18 @@ class _SearchResultState extends State<SearchResult> {
                         wordSearch.query,
                       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
                     ),
-                    Row( children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () async {
-                          await showDialog(context: context, builder: (BuildContext context) {
-                            WordModifyModel wordModify = WordModifyModel();
-                            wordModify.modify(wordSearch.data[index].keys, wordSearch.data[index].means,
-                                wordSearch.data[index].note, wordSearch.query, wordSearch.isEng, index);
-                            return const AddDialog();
-                          });
-                          setState(() {});
-                        }
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () async {
-                          Database database = Database();
-                          await database.removeGroup(wordSearch.query, wordSearch.isEng, index);
-                          wordSearch.removeAt(index);
-                          setState(() {});
-                        }
-                      ),
-                    ])
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () async {
+                        await showDialog(context: context, builder: (BuildContext context) {
+                          WordModifyModel wordModify = WordModifyModel();
+                          wordModify.modify(wordSearch.data[index].keys, wordSearch.data[index].means,
+                              wordSearch.data[index].note, wordSearch.query, wordSearch.isEng, index);
+                          return const AddDialog();
+                        });
+                        setState(() {});
+                      }
+                    ),
                   ]
                 ),
                 Text(

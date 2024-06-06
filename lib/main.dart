@@ -15,18 +15,15 @@ class DictionaryApp extends StatefulWidget {
 }
 
 class _DictionaryAppState extends State<DictionaryApp> {
+  ConfigApp config = ConfigApp();
 
-  bool isThemeLight = true;
-
-  void _onChangedTheme(bool value) async {
-    setState(() {isThemeLight = value;});
+  void _onChangedTheme() {
+    setState(() {});
   }
-  //
+
   Future<bool>? _loadData() async {
     final Database data = Database();
     await data.initialize();
-    ConfigApp config = ConfigApp();
-    isThemeLight = (config.theme == ThemeApp.light ? true : false);
     return true;
   }
 
@@ -40,7 +37,7 @@ class _DictionaryAppState extends State<DictionaryApp> {
           home: Taskbar(onChangedTheme: _onChangedTheme,),
           theme: ThemeData(brightness: Brightness.light),
           darkTheme: ThemeData( brightness: Brightness.dark),
-          themeMode: isThemeLight ? ThemeMode.light : ThemeMode.dark,
+          themeMode: config.theme == ThemeApp.light ? ThemeMode.light : ThemeMode.dark,
           debugShowCheckedModeBanner: false,
         );
       }

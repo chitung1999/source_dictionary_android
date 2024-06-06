@@ -30,16 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
             fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add, color: Colors.white),
-            onPressed: () async {
-              await showDialog(context: context, builder: (BuildContext context) {
-                WordModifyModel wordModify = WordModifyModel();
-                wordModify.reset();
-                return const AddDialog();
-              });
-            }
-          ),
-          IconButton(
             icon: const Icon(Icons.search, color: Colors.white),
             onPressed: () async {
               bool? ret = await showSearch<bool?> (context: context, delegate: SearchPage());
@@ -48,6 +38,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 _showSearchResult();
               }
             }
+          ),
+          IconButton(
+              icon: const Icon(Icons.add, color: Colors.white),
+              onPressed: () async {
+                await showDialog(context: context, builder: (BuildContext context) {
+                  WordModifyModel wordModify = WordModifyModel();
+                  wordModify.reset();
+                  return const AddDialog();
+                });
+              }
           ),
           IconButton(
             icon: const Icon(Icons.list, color: Colors.white),

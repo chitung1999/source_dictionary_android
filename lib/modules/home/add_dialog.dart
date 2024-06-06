@@ -12,13 +12,14 @@ class AddDialog extends StatefulWidget {
 }
 
 class _AddDialogState extends State<AddDialog> {
+  final Database database = Database();
+  final WordSearchModel wordSearch = WordSearchModel();
   WordModifyModel wordModify = WordModifyModel();
   List<TextEditingController> key = [];
   List<TextEditingController> mean = [];
   TextEditingController note = TextEditingController();
 
   Future<bool> changeGroup() async {
-    final Database database = Database();
     List<String> addKey = key.map((controller) => controller.text).where((text) => text.isNotEmpty).toList();
     List<String> addMean = mean.map((controller) => controller.text).where((text) => text.isNotEmpty).toList();
     String addNote = note.text;
@@ -41,7 +42,6 @@ class _AddDialogState extends State<AddDialog> {
     if(wordModify.type == ModifyType.add) {
       await database.addGroup(addKey, addMean, addNote);
     } else {
-      final WordSearchModel wordSearch = WordSearchModel();
       wordSearch.modify(addKey, addMean, addNote, wordModify.index);
       await database.modifyGroup(addKey, addMean, addNote, wordModify.query, wordModify.isEng, wordModify.index);
     }
@@ -160,6 +160,30 @@ class _AddDialogState extends State<AddDialog> {
                   onPressed: (){Navigator.of(context).pop();},
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
                   child: const Text('Cancel', style: TextStyle(color: Colors.black)),
+                )),
+                const SizedBox(width: 16),
+                Expanded( child: ElevatedButton(
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                    bool ret = true;
+                    if(wordModify.type == ModifyType.modify) {
+                      ret = await database.removeGroup(wordSearch.query, wordSearch.isEng, wordModify.index);
+                      if (ret) {
+                        wordSearch.removeAt(wordModify.index);
+                      }
+                    }
+                    await showDialog(
+                      context: context, builder: (BuildContext context) {
+                        return NotifyDialog(
+                          message: (wordModify.type == ModifyType.modify ?
+                          (ret ? 'Remove words successfully!' : 'Fail to remove!')
+                          : 'Cannot be deleted when adding new group!')
+                        );
+                      }
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                  child: const Text('Delete', style: TextStyle(color: Colors.black)),
                 )),
                 const SizedBox(width: 16),
                 Expanded( child: ElevatedButton(

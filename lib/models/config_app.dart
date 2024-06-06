@@ -15,6 +15,6 @@ class ConfigApp {
   void loadData(Map<String, dynamic> data) {
     username = data["username"];
     password = data["password"];
-    theme = data["theme"] == 0 ? ThemeApp.light : ThemeApp.dark;
+    theme = data["theme"] == 1 ? ThemeApp.light : ThemeApp.dark;
   }
 }

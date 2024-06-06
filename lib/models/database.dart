@@ -73,13 +73,17 @@ class Database {
     } catch(e) {}
   }
 
-  Future<void> setTheme(bool value) async {
+  Future<bool> setTheme(bool value) async {
     try {
       Map<String, dynamic> data = await readFileLocal();
-      data['config']['theme'] = value;
-      _configApp.loadData(data["config"]);
+      data['config']['theme'] = value ? 1 : 0;
       writeFileLocal(data);
-    } catch(e) {}
+
+      _configApp.loadData(data["config"]);
+      return true;
+    } catch(e) {
+      return false;
+    }
   }
 
   //Home
@@ -116,7 +120,7 @@ class Database {
     } catch(e) {}
   }
 
-  Future<void> removeGroup(String query, bool isEng, int index) async {
+  Future<bool> removeGroup(String query, bool isEng, int index) async {
     try {
       Map<String, dynamic> data = await readFileLocal();
 
@@ -125,7 +129,11 @@ class Database {
       data["words"].removeAt(group?[index]);
       _wordModel.loadData(data["words"]);
       writeFileLocal(data);
-    } catch(e) {}
+
+      return true;
+    } catch(e) {
+      return false;
+    }
   }
 
   Future<bool> uploadDataToServer() async {
