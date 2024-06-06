@@ -16,6 +16,7 @@ class Database {
       final data = await file.readAsString();
       return jsonDecode(data);
     } catch(e) {
+      print('read file to database failed!');
       return {};
     }
   }
@@ -28,6 +29,7 @@ class Database {
       await file.writeAsString(str);
       return true;
     } catch(e) {
+      print('write file to database failed!');
       return false;
     }
   }
@@ -36,40 +38,26 @@ class Database {
     try {
       Map<String, dynamic> data = await readFileLocal();
       if(data.isEmpty) {
-        print('0');
-        data = setDefaultData();
-        print('1');
-        print(data);
+        data = await getDefaultData();
         await writeFileLocal(data);
-        print('2');
-        print(data);
       }
-      Map<String, dynamic> data2 = await readFileLocal();
-      print('3');
-      print(data2);
-       _wordModel.loadData(data["words"]);
+
+      _wordModel.loadData(data["words"]);
       _configApp.loadData(data["config"]);
-    } catch(e) {}
+    } catch(e) {
+      print('Fail to initialize!');
+    }
   }
 
-  Map<String, dynamic> setDefaultData() {
-    Map<String, dynamic> defaultData = {};
-
-    defaultData["config"]["username"] = 'admin';
-    defaultData["config"]["password"] = '1';
-    defaultData["config"]["theme"] = 0;
-
-    Map<String, dynamic> myMap = {};
-    myMap["keys"] = 'my key';
-    myMap["means"] = 'my mean';
-    myMap["notes"] = 'my note';
-    defaultData["words"].add(myMap);
-
-    myMap = {};
-    myMap["form"] = 'my form';
-    myMap["structure"] = 'my structure';
-    defaultData["grammar"].add(myMap);
-    return defaultData;
+  Future<Map<String, dynamic>> getDefaultData() async {
+    try {
+      final String strDefault = await rootBundle.loadString('data/default_data.json');
+      Map<String, dynamic> data = jsonDecode(strDefault);
+      return data;
+    } catch (e) {
+      print('Fail to get default data!');
+      return {};
+    }
   }
 
   //Setting

@@ -1,0 +1,24 @@
+{
+  "grammar": [
+    {
+      "form": "My form",
+      "structure": "My structure"
+    }
+  ],
+  "config": {
+    "username": "admin",
+    "password": "1",
+    "theme": 0
+  },
+  "words": [
+    {
+      "means": [
+        "My mean"
+      ],
+      "notes": "",
+      "keys": [
+        "My key"
+      ]
+    }
+  ]
+}

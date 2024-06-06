@@ -31,6 +31,7 @@ class WordModel {
     int index = 0;
     for (Map<String, dynamic> item in jsonData) {
       WordItem wordItem = WordItem();
+
       String keys = '';
       for (String str in item['keys']) {
         if (eng.containsKey(str)) {
@@ -53,7 +54,7 @@ class WordModel {
 
       wordItem.keys = keys;
       wordItem.means = means;
-      wordItem.note = item['notes'].toString();
+      wordItem.note = item['notes'];
       data.add(wordItem);
       index++;
     }
