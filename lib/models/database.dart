@@ -16,7 +16,7 @@ class Database {
       final data = await file.readAsString();
       return jsonDecode(data);
     } catch(e) {
-      print('read file to database failed!');
+      print('Fail to read file local: $e');
       return {};
     }
   }
@@ -29,12 +29,12 @@ class Database {
       await file.writeAsString(str);
       return true;
     } catch(e) {
-      print('write file to database failed!');
+      print('Fail to write file local: $e');
       return false;
     }
   }
 
-  Future<void> initialize() async {
+  Future<bool> initialize() async {
     try {
       Map<String, dynamic> data = await readFileLocal();
       if(data.isEmpty) {
@@ -44,8 +44,10 @@ class Database {
 
       _wordModel.loadData(data["words"]);
       _configApp.loadData(data["config"]);
+      return true;
     } catch(e) {
-      print('Fail to initialize!');
+      print('Fail to initialize data: $e');
+      return false;
     }
   }
 
@@ -55,22 +57,29 @@ class Database {
       Map<String, dynamic> data = jsonDecode(strDefault);
       return data;
     } catch (e) {
-      print('Fail to get default data!');
+      print('Fail to get default data: $e');
       return {};
     }
   }
 
   //Setting
-  Future<void> setAccount(String u, String p) async {
+  Future<bool> setAccount(String u, String p) async {
     try {
       if(_configApp.username != u || _configApp.password != p) {
         Map<String, dynamic> data = await readFileLocal();
         data['config']['username'] = u;
         data['config']['password'] = p;
+        bool ret = await writeFileLocal(data);
+        if(!ret) {
+          return false;
+        }
         _configApp.loadData(data["config"]);
-        writeFileLocal(data);
       }
-    } catch(e) {}
+      return true;
+    } catch(e) {
+      print('Fail to set account: $e');
+      return false;
+    }
   }
 
   Future<bool> setTheme(bool value) async {
@@ -78,16 +87,20 @@ class Database {
       Map<String, dynamic> data = await readFileLocal();
       data['config']['theme'] = value ? 1 : 0;
       writeFileLocal(data);
-
+      bool ret = await writeFileLocal(data);
+      if(!ret) {
+        return false;
+      }
       _configApp.loadData(data["config"]);
       return true;
     } catch(e) {
+      print('Fail to set theme: $e');
       return false;
     }
   }
 
   //Home
-  Future<void> addGroup(List<String> keys, List<String> means, String note) async {
+  Future<bool> addGroup(List<String> keys, List<String> means, String note) async {
     try {
       Map<String, dynamic> data = await readFileLocal();
 
@@ -98,12 +111,19 @@ class Database {
       };
 
       data["words"].add(newGroup);
+      bool ret = await writeFileLocal(data);
+      if(!ret) {
+        return false;
+      };
       _wordModel.loadData(data["words"]);
-      writeFileLocal(data);
-    } catch(e) {}
+      return true;
+    } catch(e) {
+      print('Fail to add new group: $e');
+      return false;
+    }
   }
 
-  Future<void> modifyGroup(List<String> keys, List<String> means, String note, String query, bool isEng, int index) async {
+  Future<bool> modifyGroup(List<String> keys, List<String> means, String note, String query, bool isEng, int index) async {
     try {
       Map<String, dynamic> data = await readFileLocal();
 
@@ -115,9 +135,16 @@ class Database {
       List<int>? group = isEng ? _wordModel.eng[query] : _wordModel.vn[query];
 
       data["words"][group?[index]] = newGroup;
+      bool ret = await writeFileLocal(data);
+      if(!ret) {
+        return false;
+      };
       _wordModel.loadData(data["words"]);
-      writeFileLocal(data);
-    } catch(e) {}
+      return true;
+    } catch(e) {
+      print('Fail to modify group: $e');
+      return false;
+    }
   }
 
   Future<bool> removeGroup(String query, bool isEng, int index) async {
@@ -127,28 +154,39 @@ class Database {
       List<int>? group = isEng ? _wordModel.eng[query] : _wordModel.vn[query];
 
       data["words"].removeAt(group?[index]);
+      bool ret = await writeFileLocal(data);
+      if(!ret) {
+        return false;
+      };
       _wordModel.loadData(data["words"]);
-      writeFileLocal(data);
-
       return true;
     } catch(e) {
+      print('Fail to remove group: $e');
       return false;
     }
   }
 
   Future<bool> uploadDataToServer() async {
     //implement yet
-    return true;
+    try {
+      return true;
+    } catch(e) {
+      return false;
+    }
   }
 
   Future<bool> getDataFromServer() async {
     try {
       final String dataSever = await rootBundle.loadString('data/data.json');
       Map<String, dynamic> data = jsonDecode(dataSever);
+      bool ret = await writeFileLocal(data);
+      if(!ret) {
+        return false;
+      };
       _wordModel.loadData(data["words"]);
-      writeFileLocal(data);
       return true;
     } catch (e) {
+      print('Fail to get data from sever: $e');
       return false;
     }
   }
