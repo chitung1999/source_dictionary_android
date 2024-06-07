@@ -4,10 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'config_app.dart';
 import 'word_model.dart';
+import 'grammar_model.dart';
 
 class Database {
   final ConfigApp _configApp = ConfigApp();
   final WordModel _wordModel = WordModel();
+  final GrammarModel _grammarModel = GrammarModel();
 
   Future<Map<String, dynamic>> readFileLocal() async {
     try {
@@ -44,6 +46,7 @@ class Database {
 
       _wordModel.loadData(data["words"]);
       _configApp.loadData(data["config"]);
+      _grammarModel.loadData(data["grammar"]);
       return true;
     } catch(e) {
       print('Fail to initialize data: $e');
@@ -162,6 +165,68 @@ class Database {
       return true;
     } catch(e) {
       print('Fail to remove group: $e');
+      return false;
+    }
+  }
+
+  //Grammar
+  Future<bool> addGrammar(String form, String structure) async {
+    try {
+      Map<String, dynamic> data = await readFileLocal();
+
+      final Map<String, dynamic> newGrammar = {
+        "form": form,
+        "structure": structure
+      };
+
+      data["grammar"].add(newGrammar);
+      bool ret = await writeFileLocal(data);
+      if(!ret) {
+        return false;
+      };
+      _grammarModel.loadData(data["grammar"]);
+      return true;
+    } catch(e) {
+      print('Fail to add new grammar: $e');
+      return false;
+    }
+  }
+
+  Future<bool> modifyGrammar(String form, String structure, int index) async {
+    try {
+      Map<String, dynamic> data = await readFileLocal();
+
+      final Map<String, dynamic> newGrammar = {
+        "form": form,
+        "structure": structure
+      };
+
+      data["grammar"][index] = newGrammar;
+      bool ret = await writeFileLocal(data);
+      if(!ret) {
+        return false;
+      };
+      _grammarModel.loadData(data["grammar"]);
+      return true;
+    } catch(e) {
+      print('Fail to modify grammar: $e');
+      return false;
+    }
+  }
+
+  Future<bool> removeGrammar(int index) async {
+    try {
+      Map<String, dynamic> data = await readFileLocal();
+
+      data["grammar"].removeAt(index);
+      bool ret = await writeFileLocal(data);
+      if(!ret) {
+        return false;
+      };
+      _grammarModel.loadData(data["grammar"]);
+      return true;
+    } catch(e) {
+      print('Fail to remove grammar: $e');
       return false;
     }
   }

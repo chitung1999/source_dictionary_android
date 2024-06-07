@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import '../../models/word_model.dart';
 import '../../models/word_search_model.dart';
+import '../../models/config_app.dart';
 
 class ListPage extends StatefulWidget {
   final Function() onClick;
@@ -15,6 +16,7 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   final WordSearchModel _wordSearch = WordSearchModel();
   final WordModel _word = WordModel();
+  final ConfigApp _config = ConfigApp();
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +62,8 @@ class _ListPageState extends State<ListPage> {
                 )
               ]);
             },
-            selectedTextStyle: TextStyle(color: Colors.black87),
-            unselectedTextStyle: TextStyle(color: Colors.black38),
+            selectedTextStyle: TextStyle(color: _config.theme == ThemeApp.light ? Colors.black87 : Colors.white),
+            unselectedTextStyle: TextStyle(color: _config.theme == ThemeApp.light ? Colors.black38 :Colors.white38),
           ))
         ],
       )

@@ -35,7 +35,7 @@ class _DictionaryAppState extends State<DictionaryApp> {
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         return MaterialApp(
           home: Taskbar(onChangedTheme: _onChangedTheme,),
-          theme: ThemeData(brightness: Brightness.light),
+          theme: ThemeData(brightness: Brightness.light, fontFamily: 'Roboto'),
           darkTheme: ThemeData( brightness: Brightness.dark),
           themeMode: config.theme == ThemeApp.light ? ThemeMode.light : ThemeMode.dark,
           debugShowCheckedModeBanner: false,

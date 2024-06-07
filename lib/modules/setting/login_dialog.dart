@@ -92,7 +92,7 @@ class LoginDialog extends StatefulWidget {
                     const SizedBox(width: 16),
                     Expanded( child: ElevatedButton(
                       onPressed: () async {
-                        Navigator.of(context).pop();
+                        // Navigator.of(context).pop();
                         // widget.isDownload ? (await downloadData()) : (await uploadData());
                         // await showDialog(
                         //   context: context, builder: (BuildContext context) {

@@ -20,10 +20,6 @@ class WordSearchModel {
     data = [];
   }
 
-  void removeAt(int index) {
-    data.removeAt(index);
-  }
-
   void modify(List<String> keys, List<String> means, notes, index) {
     print(keys);
 

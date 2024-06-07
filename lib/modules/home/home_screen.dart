@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'add_dialog.dart';
+import 'manage_dialog.dart';
 import 'search_page.dart';
 import 'list_page.dart';
 import 'search_result.dart';
@@ -45,8 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 await showDialog(context: context, builder: (BuildContext context) {
                   WordModifyModel wordModify = WordModifyModel();
                   wordModify.reset();
-                  return const AddDialog();
+                  return const ManageDialog();
                 });
+                setState(() {_currentIndex = 1;});
               }
           ),
           IconButton(

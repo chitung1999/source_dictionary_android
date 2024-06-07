@@ -28,7 +28,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
         ),
         actions: [
           Container(
-            width: 220,
+            width: 180,
             height: 35,
             child: TextField(
               controller: _queryController,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'add_dialog.dart';
+import 'manage_dialog.dart';
 import '../../../models/word_search_model.dart';
-import '../../../models/database.dart';
 import '../../../models/word_modify_model.dart';
 
 class SearchResult extends StatefulWidget {
@@ -38,7 +37,7 @@ class _SearchResultState extends State<SearchResult> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                        wordSearch.query,
+                      wordSearch.query,
                       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
                     ),
                     IconButton(
@@ -48,7 +47,7 @@ class _SearchResultState extends State<SearchResult> {
                           WordModifyModel wordModify = WordModifyModel();
                           wordModify.modify(wordSearch.data[index].keys, wordSearch.data[index].means,
                               wordSearch.data[index].note, wordSearch.query, wordSearch.isEng, index);
-                          return const AddDialog();
+                          return const ManageDialog();
                         });
                         setState(() {});
                       }

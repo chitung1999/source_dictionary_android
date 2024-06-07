@@ -24,7 +24,7 @@ class _TaskbarState extends State<Taskbar> {
         index: _currentIndex,
         children: [
           const HomeScreen(),
-          const GrammarScreen(),
+          GrammarScreen(),
           const DictionaryScreen(),
           const GameScreen(),
           SettingScreen(onChangedTheme: widget.onChangedTheme),
