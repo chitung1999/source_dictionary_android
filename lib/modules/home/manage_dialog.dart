@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../../models/database.dart';
 import '../../models/word_search_model.dart';
 import '../../models/word_modify_model.dart';
-import '../../component/NotifyDialog.dart';
+import '../../component/notify_dialog.dart';
+import '../../component/text_button_app.dart';
 
 class ManageDialog extends StatefulWidget {
   const ManageDialog({Key? key}) : super(key: key);
@@ -86,128 +87,128 @@ class _ManageDialogState extends State<ManageDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-        insetPadding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
-        child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
-            child: Column(
-              children: [
-                Expanded(child: ListView( children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Key',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.playlist_add),
-                        onPressed:(){
-                          setState((){
-                            key.add(TextEditingController());
-                          });
-                        },
-                      ),
-                    ]
-                  ),
-
-                  for (int i = 0; i < key.length; i++)
-                    TextField(
-                      controller: key[i],
-                      decoration: InputDecoration(hintText: 'Key ${i + 1}'),
-                    ),
-
-                  const SizedBox(height: 20),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Mean',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.playlist_add),
-                          onPressed:(){
-                            setState((){
-                              mean.add(TextEditingController());
-                            });
-                          },
-                        ),
-                      ]
-                  ),
-
-                  for (int i = 0; i < mean.length; i++)
-                    TextField(
-                      controller: mean[i],
-                      decoration: InputDecoration(hintText: 'Mean ${i + 1}'),
-                    ),
-
-                  const SizedBox(height: 20),
+      insetPadding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
+        child: Column(
+          children: [
+            Expanded(child: ListView( children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                   const Text(
-                      'Note',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+                    'Key',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  TextField(
-                      controller: note,
-                      decoration: const InputDecoration(hintText: 'Note')
+                  IconButton(
+                    icon: const Icon(Icons.playlist_add),
+                    onPressed:(){
+                      setState((){
+                        key.add(TextEditingController());
+                      });
+                    },
                   ),
-                  const SizedBox(height: 20),
-                  if(wordModify.type == ModifyType.modify) Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        child: Text(('Delete this group')),
-                        onPressed: () async {
-                          String msg = 'Fail to remove!';
-                          bool ret = true;
-                          ret = await database.removeGroup(wordSearch.query, wordSearch.isEng, wordModify.index);
-                          if (ret) {
-                            wordSearch.data.removeAt(wordModify.index);
-                            msg = 'Remove words successfully!';
-                          }
-                          Navigator.of(context).pop();
-                          await showDialog(
-                            context: context, builder: (BuildContext context) {
-                              return NotifyDialog(message: msg);
-                            }
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ])),
+                ]
+              ),
 
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              for (int i = 0; i < key.length; i++)
+                TextField(
+                  controller: key[i],
+                  decoration: InputDecoration(hintText: 'Key ${i + 1}'),
+                ),
+
+              const SizedBox(height: 20),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded( child: ElevatedButton(
-                      onPressed: (){Navigator.of(context).pop();},
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.white30),
-                      child: const Text('Cancel', style: TextStyle(color: Colors.black, fontSize: 13)),
-                    )),
-                    const SizedBox(width: 16),
-                    Expanded( child: ElevatedButton(
-                      onPressed: () async {
-                        String msg = 'Error: Key or Mean cannot be empty and contain special characters!';
-                        bool ret = await changeGroup();
-                        if(ret)
-                          msg = wordModify.type == ModifyType.add ? 'Add words successfully!' : 'Modify words successfully!';
-
-                        Navigator.of(context).pop();
-                        await showDialog(
-                          context: context, builder: (BuildContext context) {
-                            return NotifyDialog(message: msg);
-                          }
-                        );
+                    const Text(
+                      'Mean',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.playlist_add),
+                      onPressed:(){
+                        setState((){
+                          mean.add(TextEditingController());
+                        });
                       },
-                      style: ElevatedButton.styleFrom( backgroundColor: Colors.blueGrey),
-                      child: const Text('OK', style: TextStyle(color: Colors.black)),
-                    ))
+                    ),
                   ]
+              ),
+
+              for (int i = 0; i < mean.length; i++)
+                TextField(
+                  controller: mean[i],
+                  decoration: InputDecoration(hintText: 'Mean ${i + 1}'),
+                ),
+
+              const SizedBox(height: 20),
+              const Text(
+                  'Note',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+              ),
+              TextField(
+                  controller: note,
+                  decoration: const InputDecoration(hintText: 'Note')
+              ),
+              const SizedBox(height: 20),
+              if(wordModify.type == ModifyType.modify) Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    child: Text(('Delete this group')),
+                    onPressed: () async {
+                      String msg = 'Fail to Delete group!';
+                      bool ret = true;
+                      ret = await database.removeGroup(wordSearch.query, wordSearch.isEng, wordModify.index);
+                      if (ret) {
+                        wordSearch.data.removeAt(wordModify.index);
+                        msg = 'Delete words successfully!';
+                      }
+                      Navigator.of(context).pop();
+                      await showDialog(
+                        context: context, builder: (BuildContext context) {
+                          return NotifyDialog(isSuccess: ret, message: msg);
+                        }
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ])),
+
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButtonApp(
+                  label: 'Cancel',
+                  backgroundColor: Colors.white30,
+                  onPressed: (){Navigator.of(context).pop();},
+                ),
+                const SizedBox(width: 16),
+                TextButtonApp(
+                  label: 'OK',
+                  backgroundColor: Colors.blueGrey,
+                  onPressed: () async {
+                    String msg = 'Key or Mean cannot be empty and contain special characters!';
+                    bool ret = await changeGroup();
+                    if(ret)
+                      msg = wordModify.type == ModifyType.add ? 'Add words successfully!' : 'Modify words successfully!';
+
+                    Navigator.of(context).pop();
+                    await showDialog(
+                      context: context, builder: (BuildContext context) {
+                        return NotifyDialog(isSuccess: ret, message: msg);
+                      }
+                    );
+                  },
                 )
               ]
             )
+          ]
         )
+      )
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../models/word_search_model.dart';
 import '../../../models/word_model.dart';
-import '../../models/config_app.dart';
 
 class  SearchPage extends SearchDelegate<bool?> {
   final WordSearchModel _wordSearch = WordSearchModel();

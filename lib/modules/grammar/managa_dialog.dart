@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/database.dart';
-import '../../component/NotifyDialog.dart';
+import '../../component/notify_dialog.dart';
+import '../../component/text_button_app.dart';
 
 class ManageDialog extends StatefulWidget {
   const ManageDialog({Key? key, required this.form, required this.structure,
@@ -70,7 +71,7 @@ class _ManageDialogState extends State<ManageDialog> {
                 TextButton(
                   child: Text(('Delete this grammar')),
                   onPressed: () async {
-                    String msg = 'Fail to delete!';
+                    String msg = 'Fail to delete grammar!';
                     bool ret = true;
                     ret = await _database.removeGrammar(widget.index);
                     if (ret) {
@@ -79,7 +80,7 @@ class _ManageDialogState extends State<ManageDialog> {
                     Navigator.of(context).pop();
                     await showDialog(
                       context: context, builder: (BuildContext context) {
-                        return NotifyDialog(message: msg);
+                        return NotifyDialog(isSuccess: ret, message: msg);
                       }
                     );
                   },
@@ -90,15 +91,17 @@ class _ManageDialogState extends State<ManageDialog> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded( child: ElevatedButton(
+                TextButtonApp(
+                  label: 'OK',
+                  backgroundColor: Colors.white30,
                   onPressed: (){Navigator.of(context).pop();},
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.white30),
-                  child: const Text('Cancel', style: TextStyle(color: Colors.black, fontSize: 13)),
-                )),
+                ),
                 const SizedBox(width: 16),
-                Expanded( child: ElevatedButton(
+                TextButtonApp(
+                  label: 'OK',
+                  backgroundColor: Colors.blueGrey,
                   onPressed: () async {
-                    String msg = 'Error: Form or Structure cannot be empty!';
+                    String msg = 'Form or Structure cannot be empty!';
                     bool ret = await changeGroup();
                     if(ret)
                       msg = widget.isAdd ? 'Add grammar successfully!' : 'Modify grammar successfully!';
@@ -106,13 +109,11 @@ class _ManageDialogState extends State<ManageDialog> {
                     Navigator.of(context).pop();
                     await showDialog(
                       context: context, builder: (BuildContext context) {
-                        return NotifyDialog(message: msg);
+                        return NotifyDialog(isSuccess: ret, message: msg);
                       }
                     );
                   },
-                  style: ElevatedButton.styleFrom( backgroundColor: Colors.blueGrey),
-                  child: const Text('OK', style: TextStyle(color: Colors.black)),
-                ))
+                )
               ]
             )
           ]

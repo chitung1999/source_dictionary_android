@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../../component/NotifyDialog.dart';
 import '../../models/database.dart';
 import '../../models/config_app.dart';
+import '../../component/text_button_app.dart';
 
 class LoginDialog extends StatefulWidget {
   const LoginDialog({Key? key, required this.isDownload}) : super(key: key);
@@ -52,62 +52,61 @@ class LoginDialog extends StatefulWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog( child: Container(
-        height: 350,
-        padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 40.0),
-        child: Column(
+      height: 350,
+      padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 40.0),
+      child: Column(
+        children: [
+          const Text('Login', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+          const SizedBox(height: 25),
+          TextField(
+            controller: _username,
+            decoration: const InputDecoration(
+                hintText: 'User name',
+                icon: Icon(Icons.person)
+            ),
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _password,
+            obscureText: _isHidePassword,
+            decoration: InputDecoration(
+                hintText: 'Password',
+                icon: const Icon(Icons.lock),
+                suffixIcon: IconButton(
+                    icon: const Icon(Icons.visibility),
+                    onPressed: () {
+                      setState(() {_isHidePassword = !_isHidePassword;});
+                    }
+                )
+            ),
+          ),
+          const SizedBox(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Login', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
-              const SizedBox(height: 25),
-              TextField(
-                controller: _username,
-                decoration: const InputDecoration(
-                    hintText: 'User name',
-                    icon: Icon(Icons.person)
-                ),
+              TextButtonApp(
+                label: 'Cancel',
+                backgroundColor: Colors.white30,
+                onPressed: () async {Navigator.of(context).pop();},
               ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _password,
-                obscureText: _isHidePassword,
-                decoration: InputDecoration(
-                    hintText: 'Password',
-                    icon: const Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                        icon: const Icon(Icons.visibility),
-                        onPressed: () {
-                          setState(() {_isHidePassword = !_isHidePassword;});
-                        }
-                    )
-                ),
-              ),
-              const SizedBox(height: 40),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded( child: ElevatedButton(
-                      onPressed: () async {Navigator.of(context).pop();},
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.white30),
-                      child: const Text('Cancel', style: TextStyle(color: Colors.black)),
-                    )),
-                    const SizedBox(width: 16),
-                    Expanded( child: ElevatedButton(
-                      onPressed: () async {
-                        // Navigator.of(context).pop();
-                        // widget.isDownload ? (await downloadData()) : (await uploadData());
-                        // await showDialog(
-                        //   context: context, builder: (BuildContext context) {
-                        //     return NotifyDialog(message: _msg);
-                        //   }
-                        // );
-                      },
-                      style: ElevatedButton.styleFrom( backgroundColor: Colors.blueGrey),
-                      child: const Text('OK', style: TextStyle(color: Colors.black)),
-                    ))
-                  ]
+              const SizedBox(width: 16),
+              TextButtonApp(
+                label: 'OK',
+                backgroundColor: Colors.blueGrey,
+                onPressed: () async {
+                  // Navigator.of(context).pop();
+                  // widget.isDownload ? (await downloadData()) : (await uploadData());
+                  // await showDialog(
+                  //   context: context, builder: (BuildContext context) {
+                  //     return NotifyDialog(message: _msg);
+                  //   }
+                  // );
+                },
               )
             ]
-        )
-    )
-    );
+          )
+        ]
+      )
+    ));
   }
 }

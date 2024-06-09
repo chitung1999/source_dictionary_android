@@ -36,7 +36,6 @@ class _ListPageState extends State<ListPage> {
             itemExtent: 50,
             itemBuilder: (_, k, id) {
               return Column(children: [
-                const SizedBox(height: 10),
                 GestureDetector(
                   child: Container(
                     width: 230,
@@ -52,8 +51,8 @@ class _ListPageState extends State<ListPage> {
                   ),
                   onTap: () {
                     _wordSearch.reset();
-                    _wordSearch.query = _word.eng.keys.elementAt(k);
-                    List<int>? group = _word.eng[_word.eng.keys.elementAt(k)];
+                    _wordSearch.query = id;
+                    List<int>? group = _word.eng[id];
                     for(int i = 0; i < group!.length; i++) {
                       _wordSearch.data.add(_word.data[group[i]]);
                     }

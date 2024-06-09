@@ -29,14 +29,13 @@ class _DictionaryAppState extends State<DictionaryApp> {
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder<bool>(
       future: _loadData(),
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         return MaterialApp(
           home: Taskbar(onChangedTheme: _onChangedTheme,),
           theme: ThemeData(brightness: Brightness.light, fontFamily: 'Roboto'),
-          darkTheme: ThemeData( brightness: Brightness.dark),
+          darkTheme: ThemeData( brightness: Brightness.dark, fontFamily: 'Roboto'),
           themeMode: config.theme == ThemeApp.light ? ThemeMode.light : ThemeMode.dark,
           debugShowCheckedModeBanner: false,
         );
