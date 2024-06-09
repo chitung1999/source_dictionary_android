@@ -51,7 +51,7 @@ flutter build apk --split-per-abi
 - app-x86_64-release.apk (emulator)
 
 For iOS
-1. Install AltStore on iPhone/iPad
+1. Install AltStoreServer on MacOS and AltStore on iPhone/iPad
 2. Push source code to github
 3. Github: Repo -> Actions -> Dart -> Configure
 ```bash
@@ -99,4 +99,5 @@ jobs:
 ```
 4. Github: Repo -> Setting -> Actions -> General -> Workflow permissions -> Read and write permissions
 5. Github: Repo -> Code -> Releases -> Download file .ipa and copy to iphone
+6. Connect iphone with AltStore(MacOS)
 6. In Iphone: AltStore -> My Apps -> add this file .ipa
