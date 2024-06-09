@@ -20,7 +20,7 @@ words.
 ### Change app name
 - Android: ../adroid/app/src/main/AndroidManifest.xml
 ```bash
- -> android:label="MY_APP_NAME"
+android:label="MY_APP_NAME"
 ```
 - iOS: ../ios/Runner/Info.plist
 ```bash
@@ -40,14 +40,14 @@ flutter_icons:
   image_path: ".png" <- icon path
 ```
 ### Build release
-####For Android
+1. For Android
 Run command:
 ```bash
 flutter build apk --split-per-abi
 ```
 Go to ..\build\app\outputs\flutter-apk
-- app-armeabi-v7a-release.apk <- android 32 bit
-- app-arm64-v8a-release.apk <- android 64 bit
-- app-x86_64-release.apk <- emulator
+- app-armeabi-v7a-release.apk (android 32 bit)
+- app-arm64-v8a-release.apk (android 64 bit)
+- app-x86_64-release.apk (emulator)
 
-####For iOS
+2. For iOS
