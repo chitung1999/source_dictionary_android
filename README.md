@@ -40,14 +40,63 @@ flutter_icons:
   image_path: ".png" <- icon path
 ```
 ### Build release
-1. For Android
-Run command:
+For Android
+1. Run command:
 ```bash
 flutter build apk --split-per-abi
 ```
-Go to ..\build\app\outputs\flutter-apk
+2. Go to ..\build\app\outputs\flutter-apk
 - app-armeabi-v7a-release.apk (android 32 bit)
 - app-arm64-v8a-release.apk (android 64 bit)
 - app-x86_64-release.apk (emulator)
 
-2. For iOS
+For iOS
+1. Install AltStore on iPhone/iPad
+2. Push source code to github
+3. Github: Repo -> Actions -> Dart -> Configure
+```bash
+name: iOS-ipa-build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    name: 🎉 iOS Build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+      - run: flutter pub get
+      
+
+      - run: pod repo update
+        working-directory: ios
+
+      - run: flutter build ios --release --no-codesign
+
+      - run: mkdir Payload
+        working-directory: build/ios/iphoneos
+
+      - run: mv Runner.app/ Payload
+        working-directory: build/ios/iphoneos
+
+      - name: Zip output
+        run: zip -qq -r -9 ${{ github.event.repository.name }}.ipa Payload
+        working-directory: build/ios/iphoneos
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/ios/iphoneos/${{ github.event.repository.name }}.ipa
+          tag: ${{ github.run_number }}
+          overwrite: true
+```
+4. Github: Repo -> Setting -> Actions -> General -> Workflow permissions -> Read and write permissions
+5. Github: Repo -> Code -> Releases -> Download file .ipa and copy to iphone
+6. In Iphone: AltStore -> My Apps -> add this file .ipa
