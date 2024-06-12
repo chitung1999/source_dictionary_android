@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../../component/notify_dialog.dart';
 import '../../models/database.dart';
 import '../../models/config_app.dart';
 import '../../component/text_button_app.dart';
@@ -20,25 +21,29 @@ class LoginDialog extends StatefulWidget {
   bool _isHidePassword = true;
   String _msg = '';
 
-  Future<void> uploadData() async {
+  Future<bool> uploadData() async {
     bool ret = await _database.uploadDataToServer();
 
     if(ret) {
       _database.setAccount(_username.text, _password.text);
       _msg = 'Upload data to server successfully!';
+      return true;
     } else {
-      _msg = 'Error!';
+      _msg = 'Fail to upload data to server!';
+      return false;
     }
   }
 
-  Future<void> downloadData() async {
+  Future<bool> downloadData() async {
     bool ret = await _database.getDataFromServer();
 
     if(ret) {
       _database.setAccount(_username.text, _password.text);
       _msg = 'Download data to server successfully!';
+      return true;
     } else {
-      _msg = 'Error!';
+      _msg = 'Fail to download data from server!';
+      return false;
     }
   }
 
@@ -94,13 +99,13 @@ class LoginDialog extends StatefulWidget {
                 label: 'OK',
                 backgroundColor: Colors.blueGrey,
                 onPressed: () async {
-                  // Navigator.of(context).pop();
-                  // widget.isDownload ? (await downloadData()) : (await uploadData());
-                  // await showDialog(
-                  //   context: context, builder: (BuildContext context) {
-                  //     return NotifyDialog(message: _msg);
-                  //   }
-                  // );
+                  bool ret = widget.isDownload ? (await downloadData()) : (await uploadData());
+                  Navigator.of(context).pop();
+                  await showDialog(
+                    context: context, builder: (BuildContext context) {
+                      return NotifyDialog(isSuccess: ret, message: _msg);
+                    }
+                  );
                 },
               )
             ]

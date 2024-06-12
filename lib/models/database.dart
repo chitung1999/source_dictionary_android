@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'config_app.dart';
 import 'word_model.dart';
 import 'grammar_model.dart';
+import '../server/mongo_helper.dart';
 
 class Database {
   final ConfigApp _configApp = ConfigApp();
@@ -234,8 +235,12 @@ class Database {
   Future<bool> uploadDataToServer() async {
     //implement yet
     try {
+      MongoHelper mongo = MongoHelper();
+      bool ret = await mongo.upload();
+      if(!ret) return false;
       return true;
     } catch(e) {
+      print('Fail to upload data to server: $e');
       return false;
     }
   }
