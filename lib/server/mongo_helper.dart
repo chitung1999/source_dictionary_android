@@ -19,7 +19,7 @@ class MongoHelper {
       collection = db.collection(COLLECTION_CONTENT);
       return true;
     } catch(e) {
-      print('Fail to connect to mongo: $e');
+      print('Fail to connect to mongoDB: $e');
       return false;
     }
   }
@@ -29,7 +29,7 @@ class MongoHelper {
       await db.close();
       return true;
     } catch(e) {
-      print('Fail to disconnect to mongo: $e');
+      print('Fail to disconnect to mongoDB: $e');
       return false;
     }
   }
@@ -48,8 +48,26 @@ class MongoHelper {
 
       return true;
     } catch(e) {
-      print('Fail to upload data to sever: $e');
+      print('[DICTIONARY][mongo_helper]: Fail to upload data to sever: $e');
       return false;
+    }
+  }
+
+  Future<Map<String, dynamic>> download(String user, String pw) async {
+    try {
+      bool ret = await connect();
+      if(!ret) return {};
+
+      var data = await collection.findOne({"username": user});
+      ret = await disconnect();
+
+      if(data["password"] == pw)
+        return data;
+      else
+        return {"password":""};
+    } catch(e) {
+      print('[DICTIONARY][mongo_helper]: Fail to download data from sever: $e');
+      return {};
     }
   }
 }

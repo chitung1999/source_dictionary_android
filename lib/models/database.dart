@@ -236,8 +236,8 @@ class Database {
     //implement yet
     try {
       MongoHelper mongo = MongoHelper();
-      bool ret = await mongo.upload();
-      if(!ret) return false;
+      //bool ret = await mongo.download();
+      //if(!ret) return false;
       return true;
     } catch(e) {
       print('Fail to upload data to server: $e');
@@ -245,19 +245,29 @@ class Database {
     }
   }
 
-  Future<bool> getDataFromServer() async {
+  Future<String> getDataFromServer(String user, String pw) async {
     try {
-      final String dataSever = await rootBundle.loadString('data/data.json');
-      Map<String, dynamic> data = jsonDecode(dataSever);
-      bool ret = await writeFileLocal(data);
-      if(!ret) {
-        return false;
-      };
-      _wordModel.loadData(data["words"]);
-      return true;
+      MongoHelper mongo = MongoHelper();
+      Map<String, dynamic> dataServer = await mongo.download(user, pw);
+      if(dataServer == {}) return 'Fail to download data from server!';
+      else if (dataServer["password"] == "") return 'Username or password is incorrect. '
+          'If you do not have an account, please contact the administrator for support.';
+      else {
+        Map<String, dynamic> dataLocal = await readFileLocal();
+        dataLocal["words"] = dataServer["words"];
+        dataLocal["grammar"] = dataServer["grammar"];
+        bool ret = await writeFileLocal(dataLocal);
+        if (!ret) {
+          return 'Fail to write data to local!';
+        };
+        _wordModel.loadData(dataLocal["words"]);
+        _grammarModel.loadData(dataLocal['grammar']);
+
+        return 'Download data to server successfully!';
+      }
     } catch (e) {
       print('Fail to get data from sever: $e');
-      return false;
+      return 'Fail to download data from server!';
     }
   }
 }

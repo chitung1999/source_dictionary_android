@@ -35,14 +35,12 @@ class LoginDialog extends StatefulWidget {
   }
 
   Future<bool> downloadData() async {
-    bool ret = await _database.getDataFromServer();
+    _msg = await _database.getDataFromServer(_username.text, _password.text);
 
-    if(ret) {
+    if(_msg == 'Download data to server successfully!') {
       _database.setAccount(_username.text, _password.text);
-      _msg = 'Download data to server successfully!';
       return true;
     } else {
-      _msg = 'Fail to download data from server!';
       return false;
     }
   }
