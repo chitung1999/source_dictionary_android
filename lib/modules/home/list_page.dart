@@ -3,6 +3,7 @@ import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import '../../models/word_model.dart';
 import '../../models/word_search_model.dart';
 import '../../models/config_app.dart';
+import '../../models/enum_app.dart';
 
 class ListPage extends StatefulWidget {
   final Function() onClick;

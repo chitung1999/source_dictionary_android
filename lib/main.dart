@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:source_dictionary_mobile/models/config_app.dart';
 import 'modules/taskbar.dart';
 import 'models/database.dart';
+import '../../models/enum_app.dart';
 
 void main() {
   runApp(const DictionaryApp());

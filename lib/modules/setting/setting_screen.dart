@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/database.dart';
 import '../../models/config_app.dart';
+import '../../models/enum_app.dart';
 import 'login_dialog.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -28,9 +29,14 @@ class _SettingScreenState extends State<SettingScreen> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.blueGrey,
-          title: const Text(
-              'Dictionary',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text(
+                  'Dictionary',
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)
+              ),
+            ],
           )
       ),
       body: Container(
@@ -96,9 +102,13 @@ class _SettingScreenState extends State<SettingScreen> {
                               color: Colors.blueGrey,
                             ),
                             onPressed: () async {
-                              await showDialog(context: context, builder: (BuildContext context) {
-                                return const LoginDialog(isDownload: false);
-                              });
+                              await showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return const LoginDialog(isDownload: false);
+                                }
+                              );
                             },
                           ),
                           const Text('Upload', style: TextStyle(fontSize: 15)),
@@ -114,9 +124,13 @@ class _SettingScreenState extends State<SettingScreen> {
                               color: Colors.blueGrey,
                             ),
                             onPressed: () async {
-                              await showDialog(context: context, builder: (BuildContext context) {
-                                return const LoginDialog(isDownload: true);
-                              });
+                              await showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return const LoginDialog(isDownload: true);
+                                }
+                              );
                             },
                           ),
                           const Text('Download', style: TextStyle(fontSize: 15)),

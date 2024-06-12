@@ -4,6 +4,7 @@ import '../../component/notify_dialog.dart';
 import '../../models/database.dart';
 import '../../models/config_app.dart';
 import '../../component/text_button_app.dart';
+import '../../models/enum_app.dart';
 
 class LoginDialog extends StatefulWidget {
   const LoginDialog({Key? key, required this.isDownload}) : super(key: key);
@@ -19,29 +20,39 @@ class LoginDialog extends StatefulWidget {
   final Database _database = Database();
   final ConfigApp _config = ConfigApp();
   bool _isHidePassword = true;
+  bool _isLoading = false;
   String _msg = '';
 
   Future<bool> uploadData() async {
-    bool ret = await _database.uploadDataToServer();
+    ResultConnect ret = await _database.uploadDataToServer(_username.text, _password.text);
 
-    if(ret) {
-      _database.setAccount(_username.text, _password.text);
-      _msg = 'Upload data to server successfully!';
-      return true;
-    } else {
-      _msg = 'Fail to upload data to server!';
+    if(ret == ResultConnect.error) {
+      _msg = 'Fail to upload data from server!';
       return false;
+    } else if (ret == ResultConnect.invalid) {
+      _msg = 'Username or password is incorrect.\n'
+          'If you do not have an account, please contact the administrator for support.';
+      return false;
+    } else {
+      _msg = 'Upload data to server successfully!';
+      _database.setAccount(_username.text, _password.text);
+      return true;
     }
   }
 
   Future<bool> downloadData() async {
-    _msg = await _database.getDataFromServer(_username.text, _password.text);
-
-    if(_msg == 'Download data to server successfully!') {
+    ResultConnect ret = await _database.getDataFromServer(_username.text, _password.text);
+    if(ret == ResultConnect.error) {
+      _msg = 'Fail to download data from server!';
+      return false;
+    } else if (ret == ResultConnect.invalid) {
+      _msg = 'Username or password is incorrect.\n'
+           'If you do not have an account, please contact the administrator for support.';
+      return false;
+    } else {
+      _msg = 'Download data to server successfully!';
       _database.setAccount(_username.text, _password.text);
       return true;
-    } else {
-      return false;
     }
   }
 
@@ -54,6 +65,9 @@ class LoginDialog extends StatefulWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(_isLoading)
+      return Center(child: CircularProgressIndicator());
+
     return Dialog( child: Container(
       height: 350,
       padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 40.0),
@@ -97,6 +111,7 @@ class LoginDialog extends StatefulWidget {
                 label: 'OK',
                 backgroundColor: Colors.blueGrey,
                 onPressed: () async {
+                  setState(() {_isLoading = true;});
                   bool ret = widget.isDownload ? (await downloadData()) : (await uploadData());
                   Navigator.of(context).pop();
                   await showDialog(

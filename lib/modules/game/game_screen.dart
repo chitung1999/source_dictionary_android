@@ -8,10 +8,15 @@ class GameScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey,
-        title: const Text(
-          'Dictionary',
-          style: TextStyle(
-              fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const Text(
+              'Dictionary',
+              style: TextStyle(
+                  fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ],
         ),
       ),
     );

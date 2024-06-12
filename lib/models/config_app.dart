@@ -1,7 +1,4 @@
-enum ThemeApp {
-  light,
-  dark
-}
+import 'enum_app.dart';
 
 class ConfigApp {
   ConfigApp._internal();
