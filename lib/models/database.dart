@@ -5,8 +5,6 @@ import 'package:path_provider/path_provider.dart';
 import 'config_app.dart';
 import 'word_model.dart';
 import 'grammar_model.dart';
-import 'enum_app.dart';
-import '../server/mongo_helper.dart';
 
 class Database {
   final ConfigApp _configApp = ConfigApp();
@@ -233,42 +231,23 @@ class Database {
     }
   }
 
-  Future<ResultConnect> uploadDataToServer(String user, String pw) async {
+  Future<bool> receiveDataFromServer(var words, var grammar) async {
     try {
-      MongoHelper mongo = MongoHelper();
-      Map<String, dynamic> data = await readFileLocal();
+      Map<String, dynamic> dataLocal = await readFileLocal();
+      dataLocal["words"] = words;
+      dataLocal["grammar"] = grammar;
 
-      ResultConnect ret = await mongo.upload(user, pw, data["grammar"], data["words"]);
-      return ret;
-    } catch(e) {
-      print('Fail to upload data to server: $e');
-      return ResultConnect.error;
-    }
-  }
+      bool ret = await writeFileLocal(dataLocal);
+      if (!ret) {
+        return false;
+      };
+      _wordModel.loadData(dataLocal["words"]);
+      _grammarModel.loadData(dataLocal['grammar']);
 
-  Future<ResultConnect> getDataFromServer(String user, String pw) async {
-    try {
-      MongoHelper mongo = MongoHelper();
-      Map<String, dynamic> dataServer = await mongo.download(user);
-      if(dataServer == {}) return ResultConnect.error;
-      else {
-        if(dataServer["password"] != pw) return ResultConnect.invalid;
-
-        Map<String, dynamic> dataLocal = await readFileLocal();
-        dataLocal["words"] = dataServer["words"];
-        dataLocal["grammar"] = dataServer["grammar"];
-        bool ret = await writeFileLocal(dataLocal);
-        if (!ret) {
-          return ResultConnect.error;;
-        };
-        _wordModel.loadData(dataLocal["words"]);
-        _grammarModel.loadData(dataLocal['grammar']);
-
-        return ResultConnect.success;
-      }
-    } catch (e) {
-      print('Fail to get data from sever: $e');
-      return ResultConnect.error;;
+      return true;
+      } catch (e) {
+      print('Fail to receive data from sever: $e');
+      return false;
     }
   }
 }

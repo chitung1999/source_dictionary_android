@@ -3,8 +3,10 @@ enum ThemeApp {
   dark
 }
 
-enum ResultConnect {
-  success,
-  error,
-  invalid
+enum RESULT {
+  DOWNLOAD_SUCCESS,
+  UPLOAD_SUCCESS,
+  UNKNOWN_ERROR,
+  CONNECT_FAIL,
+  ACCOUNT_INVALID
 }

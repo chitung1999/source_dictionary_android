@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:mongo_dart/mongo_dart.dart';
 import '../models/enum_app.dart';
+import '../models/database.dart';
 
 const MONGO_URL = "mongodb+srv://$USERNAME:$PASSWORD@cluster0.fmrfcsv.mongodb.net/$DATABASE_NAME?retryWrites=true&w=majority&appName=Cluster0";
 const USERNAME = "everyone";
@@ -35,36 +36,43 @@ class MongoHelper {
     }
   }
 
-  Future<ResultConnect> upload(String user, String pw, var grammar, var words) async {
+  Future<RESULT> upload(String user, String pw, var grammar, var words) async {
     try {
       bool ret = await connect();
-      if(!ret) return ResultConnect.error;
+      if(!ret) return RESULT.CONNECT_FAIL;
 
       var data = await collection.findOne({"username": user});
-      if(data == null || data["password"] != pw) return ResultConnect.invalid;
+      if(data == null || data["password"] != pw) return RESULT.ACCOUNT_INVALID;
+
       data["words"] = words;
       data["grammar"] = grammar;
       await collection.updateOne(where.eq('username', user), modify.set('words', words).set('grammar', grammar));
       ret = await disconnect();
 
-      return ResultConnect.success;
+      return RESULT.UPLOAD_SUCCESS;
     } catch(e) {
       print('[DICTIONARY][mongo_helper]: Fail to upload data to sever: $e');
-      return ResultConnect.error;
+      return RESULT.UNKNOWN_ERROR;
     }
   }
 
-  Future<Map<String, dynamic>> download(String user) async {
+  Future<RESULT> download(String user, String pw) async {
     try {
       bool ret = await connect();
-      if(!ret) return {};
+      if(!ret) return RESULT.CONNECT_FAIL;
 
       var data = await collection.findOne({"username": user});
+      if(data == null || data["password"] != pw) return RESULT.ACCOUNT_INVALID;
+
+      Database database = Database();
+      ret = await database.receiveDataFromServer(data["words"], data["grammar"]);
+      if(!ret) return RESULT.UNKNOWN_ERROR;
+
       ret = await disconnect();
-      return data;
+      return RESULT.DOWNLOAD_SUCCESS;
     } catch(e) {
       print('[DICTIONARY][mongo_helper]: Fail to download data from sever: $e');
-      return {};
+      return RESULT.UNKNOWN_ERROR;
     }
   }
 }

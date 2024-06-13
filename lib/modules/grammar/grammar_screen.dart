@@ -77,55 +77,58 @@ class _GrammarScreenState extends State<GrammarScreen> {
           )
         ],
       ),
-      body: Container(
-        padding: const EdgeInsets.all(25.0),
-        child:  ListView.builder(
-          itemCount: _data.length,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12.0),
-                    border: Border.all(width: 2, color: Colors.blueGrey)
-                  ),
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(left: 15, right: 10, top: 20, bottom: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                                _data[index].form,
-                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
-                            ),
-                            Text(
-                                _data[index].structure,
-                                style: TextStyle(fontSize: 17)
-                            ),
-                          ],
+      body: GestureDetector(
+        onTap: () {FocusScope.of(context).unfocus();},
+        child: Container(
+          padding: const EdgeInsets.all(25.0),
+          child:  ListView.builder(
+            itemCount: _data.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: Border.all(width: 2, color: Colors.blueGrey)
+                    ),
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(left: 15, right: 10, top: 20, bottom: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  _data[index].form,
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+                              ),
+                              Text(
+                                  _data[index].structure,
+                                  style: TextStyle(fontSize: 17)
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () async {
-                          await showDialog(context: context, builder: (BuildContext context) {
-                            return ManageDialog(form: _data[index].form, structure: _data[index].structure, index: index, isAdd: false);
-                          });
-                          setState(() {});
-                        }
-                      ),
-                    ],
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () async {
+                            await showDialog(context: context, builder: (BuildContext context) {
+                              return ManageDialog(form: _data[index].form, structure: _data[index].structure, index: index, isAdd: false);
+                            });
+                            setState(() {});
+                          }
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 20)
-              ],
-            );
-          }
-        )
+                  SizedBox(height: 20)
+                ],
+              );
+            }
+          )
+        ),
       ),
     );
   }

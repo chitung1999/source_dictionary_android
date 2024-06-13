@@ -5,6 +5,7 @@ import '../../models/database.dart';
 import '../../models/config_app.dart';
 import '../../component/text_button_app.dart';
 import '../../models/enum_app.dart';
+import '../../server/mongo_helper.dart';
 
 class LoginDialog extends StatefulWidget {
   const LoginDialog({Key? key, required this.isDownload}) : super(key: key);
@@ -24,36 +25,42 @@ class LoginDialog extends StatefulWidget {
   String _msg = '';
 
   Future<bool> uploadData() async {
-    ResultConnect ret = await _database.uploadDataToServer(_username.text, _password.text);
+    MongoHelper mongo = MongoHelper();
+    Map<String, dynamic> data = await _database.readFileLocal();
+    RESULT ret = await mongo.upload(_username.text, _password.text, data["grammar"], data["words"]);
 
-    if(ret == ResultConnect.error) {
-      _msg = 'Fail to upload data from server!';
-      return false;
-    } else if (ret == ResultConnect.invalid) {
-      _msg = 'Username or password is incorrect.\n'
-          'If you do not have an account, please contact the administrator for support.';
-      return false;
-    } else {
+    if(ret == RESULT.UPLOAD_SUCCESS) {
       _msg = 'Upload data to server successfully!';
       _database.setAccount(_username.text, _password.text);
       return true;
+    } else if (ret == RESULT.CONNECT_FAIL) {
+      _msg = 'Unable to connect to the server, please check your internet connection!';
+    } else if (ret == RESULT.ACCOUNT_INVALID) {
+      _msg = 'Username or password is incorrect.'
+          'If you do not have an account, please contact the administrator for support.';
+    } else {
+      _msg = 'Fail to download data from server!';
     }
+    return false;
   }
 
   Future<bool> downloadData() async {
-    ResultConnect ret = await _database.getDataFromServer(_username.text, _password.text);
-    if(ret == ResultConnect.error) {
-      _msg = 'Fail to download data from server!';
-      return false;
-    } else if (ret == ResultConnect.invalid) {
-      _msg = 'Username or password is incorrect.\n'
-           'If you do not have an account, please contact the administrator for support.';
-      return false;
-    } else {
+    MongoHelper mongo = MongoHelper();
+    RESULT ret = await mongo.download(_username.text, _password.text);
+
+    if(ret == RESULT.DOWNLOAD_SUCCESS) {
       _msg = 'Download data to server successfully!';
       _database.setAccount(_username.text, _password.text);
       return true;
+    } else if (ret == RESULT.CONNECT_FAIL) {
+      _msg = 'Unable to connect to the server, please check your internet connection!';
+    } else if (ret == RESULT.ACCOUNT_INVALID) {
+      _msg = 'Username or password is incorrect.'
+          'If you do not have an account, please contact the administrator for support.';
+    } else {
+      _msg = 'Fail to download data from server!';
     }
+    return false;
   }
 
   @override

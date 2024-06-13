@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'text_button_app.dart';
 
 class NotifyDialog extends StatefulWidget {
   const NotifyDialog({Key? key, required this.isSuccess,  required this.message}) : super(key: key);
