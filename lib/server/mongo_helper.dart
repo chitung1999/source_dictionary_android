@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:mongo_dart/mongo_dart.dart';
 import '../models/enum_app.dart';
@@ -15,9 +16,12 @@ class MongoHelper {
 
   Future<bool> connect() async {
     try {
-      db = await Db.create(MONGO_URL);
-      await db.open();
-      inspect(db);
+      db = await Db.create(MONGO_URL).timeout(Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException('Connection to MongoDB timed out');
+      });
+      await db.open().timeout(Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException('Connection to MongoDB timed out');
+      });
       collection = db.collection(COLLECTION_CONTENT);
       return true;
     } catch(e) {

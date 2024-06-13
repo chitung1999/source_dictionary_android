@@ -32,11 +32,11 @@ class WordModifyModel {
     index = 0;
   }
 
-  void modify(String mKeys, String mMeans, String mNote, String mQuery, bool mIsEng, int mIndex) {
+  void modify(List<String> mKeys, List<String> mMeans, String mNote, String mQuery, bool mIsEng, int mIndex) {
     reset();
     type = ModifyType.modify;
-    keys = mKeys.split(',').map((e) => e.trim()).toList();
-    means = mMeans.split(',').map((e) => e.trim()).toList();
+    keys = mKeys;
+    means = mMeans;
     note = mNote;
     query = mQuery;
     isEng = mIsEng;

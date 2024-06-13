@@ -1,9 +1,26 @@
 import 'dart:collection';
 
 class WordItem {
-  String keys = '';
-  String means = '';
+  List<String> keys = [];
+  List<String> means = [];
   String note = '';
+
+
+  String keysToString() {
+    String key = '';
+    for (String str in keys) {
+      key += ((keys.isEmpty ? '' : ', ') + str);
+    }
+    return key;
+  }
+
+  String meansToString() {
+    String mean = '';
+    for (String str in means) {
+      mean += ((means.isEmpty ? '' : ', ') + str);
+    }
+    return mean;
+  }
 }
 
 class WordModel {
@@ -32,28 +49,24 @@ class WordModel {
     for (Map<String, dynamic> item in jsonData) {
       WordItem wordItem = WordItem();
 
-      String keys = '';
       for (String str in item['keys']) {
         if (eng.containsKey(str)) {
           eng[str]!.add(index);
         } else {
           eng[str] = [index];
         }
-        keys += ((keys.isEmpty ? '' : ', ') + str);
+        wordItem.keys.add(str);
       }
 
-      String means = '';
       for (String str in item['means']) {
         if (vn.containsKey(str)) {
           vn[str]!.add(index);
         } else {
           vn[str] = [index];
         }
-        means += ((means.isEmpty ? '' : ', ') + str);
+        wordItem.means.add(str);
       }
 
-      wordItem.keys = keys;
-      wordItem.means = means;
       wordItem.note = item['notes'];
       data.add(wordItem);
       index++;

@@ -55,11 +55,11 @@ class _SearchResultState extends State<SearchResult> {
                   ]
                 ),
                 Text(
-                  '• words: ${wordSearch.data[index].keys}',
+                  '• words: ${wordSearch.data[index].keysToString()}',
                   style: const TextStyle(fontSize: 20)
                 ),
                 Text(
-                  '• means: ${wordSearch.data[index].means}',
+                  '• means: ${wordSearch.data[index].meansToString()}',
                   style: const TextStyle(fontSize: 20)
                 ),
                 Text(
