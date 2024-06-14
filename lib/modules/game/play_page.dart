@@ -44,10 +44,10 @@ class _PlayPageState extends State<PlayPage> {
     _option = [];
     _isAnswered = false;
 
-    int randomNumber = Random().nextInt(_wordModel.data.length - 1);
+    int randomNumber = Random().nextInt(_wordModel.data.length);
     List<String> keys = _wordModel.data[randomNumber].keys;
     List<String> means = _wordModel.data[randomNumber].means;
-    randomNumber = keys.length > 1 ? Random().nextInt(keys.length - 1) : 0;
+    randomNumber = Random().nextInt(keys.length);
     for (int i = 0; i < means.length; i++) {
       _question += means[i];
       _question += (i == means.length - 1) ? ': ' : ', ';
@@ -62,9 +62,9 @@ class _PlayPageState extends State<PlayPage> {
     _option.add(keys[randomNumber]);
     _answer = randomNumber;
     while(_option.length < 4) {
-      randomNumber = Random().nextInt(_wordModel.data.length - 1);
+      randomNumber = Random().nextInt(_wordModel.data.length);
       List<String> keyOption = _wordModel.data[randomNumber].keys;
-      randomNumber = keyOption.length > 1 ? Random().nextInt(keyOption.length - 1) : 0;
+      randomNumber = Random().nextInt(keyOption.length);
       if(!keys.contains(keyOption[randomNumber])) {
         _option.add(keyOption[randomNumber]);
       }
@@ -108,11 +108,12 @@ class _PlayPageState extends State<PlayPage> {
           _iconStatus,
           Container(
             height: 120,
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12.0),
               border: Border.all(width: 2, color: Colors.grey)
             ),
-            child: Center(child: Text(_question, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold))),
+            child: Center(child: Text(_question, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.deepPurple))),
           ),
           Column(
             children: [
@@ -145,7 +146,7 @@ class _PlayPageState extends State<PlayPage> {
                     side: const BorderSide(color: Colors.blueGrey)
                   ),
                   onPressed: () {widget.onPlayingChanged(false);},
-                  child: const Text('End Game', style: TextStyle(fontSize: 20))
+                  child: const Text('End Game', style: TextStyle(fontSize: 20, color: Colors.grey))
                 ),
               ),
               const SizedBox(width: 20),
@@ -160,7 +161,7 @@ class _PlayPageState extends State<PlayPage> {
                       setState(() {_reset();});
                     }
                   },
-                  child: const Text('Next', style: TextStyle(fontSize: 20))
+                  child: Text('Next', style: TextStyle(fontSize: 20, color: _isAnswered ? Colors.deepPurple : Colors.grey))
                 ),
               ),
             ],

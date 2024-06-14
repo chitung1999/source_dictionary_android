@@ -28,7 +28,7 @@ class _NotifyDialogState extends State<NotifyDialog> {
             const SizedBox(height: 5),
             Text(
               widget.message,
-              style: const TextStyle(fontSize: 15, color: Colors.black),
+              style: const TextStyle(fontSize: 15),
               textAlign: TextAlign.center
             ),
             const SizedBox(height: 30),
