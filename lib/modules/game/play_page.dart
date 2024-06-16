@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:source_dictionary_mobile/models/word_model.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class PlayPage extends StatefulWidget {
   const PlayPage({super.key, required this.onPlayingChanged});
@@ -16,9 +17,10 @@ class _PlayPageState extends State<PlayPage> {
   late String _question;
   late List<String> _option;
   late List<Color> _colorBorder;
+  late List<IconData> _iconData;
   late int _answer;
-  int _correct = 0;
-  int _incorrect = 0;
+  late int _correct;
+  late int _incorrect;
   late bool _isAnswered;
 
   void _onAnswered(int index) {
@@ -75,6 +77,9 @@ class _PlayPageState extends State<PlayPage> {
 
   @override
   void initState() {
+    _correct = 0;
+    _incorrect = 0;
+    _iconData = [Symbols.counter_1, Symbols.counter_2, Symbols.counter_3, Symbols.counter_4];
     _reset();
     super.initState();
   }
@@ -107,13 +112,19 @@ class _PlayPageState extends State<PlayPage> {
           ),
           _iconStatus,
           Container(
-            height: 120,
+            width: double.infinity,
+            height: 140,
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12.0),
               border: Border.all(width: 2, color: Colors.grey)
             ),
-            child: Center(child: Text(_question, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.deepPurple))),
+            child: Center(child: Text(
+              _question,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.deepPurple))),
           ),
           Column(
             children: [
@@ -129,8 +140,13 @@ class _PlayPageState extends State<PlayPage> {
                       _onAnswered(i);
                     }
                   },
-                  child: Text(_option[i], style: const TextStyle(
-                      fontSize: 20))
+                  child: Row(
+                    children: [
+                      Icon(_iconData[i], color: Colors.blueGrey, size: 30),
+                      Expanded(child: Center(child: Text(_option[i], style: const TextStyle(fontSize: 20))))
+                    ],
+                  ),
+                  //child: Text(_option[i], style: const TextStyle(fontSize: 20))
                 ),
                 SizedBox(height: 10)
               ]

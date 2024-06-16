@@ -9,7 +9,7 @@ class WordItem {
   String keysToString() {
     String key = '';
     for (String str in keys) {
-      key += ((keys.isEmpty ? '' : ', ') + str);
+      key += ((key.isEmpty ? '' : ', ') + str);
     }
     return key;
   }
@@ -17,7 +17,7 @@ class WordItem {
   String meansToString() {
     String mean = '';
     for (String str in means) {
-      mean += ((means.isEmpty ? '' : ', ') + str);
+      mean += ((mean.isEmpty ? '' : ', ') + str);
     }
     return mean;
   }

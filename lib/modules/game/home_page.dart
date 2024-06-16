@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
+import '../../models/word_model.dart';
+import '../../component/notify_dialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.onPlayingChanged});
@@ -32,7 +34,17 @@ class _HomePageState extends State<HomePage> {
           ),
           onPress: () async {
             await Future.delayed(const Duration(milliseconds: 600));
-            widget.onPlayingChanged(true);
+            WordModel wordModel = WordModel();
+            if(wordModel.data.length < 4) {
+              showDialog(
+                context: context, builder: (BuildContext context) {
+                  return NotifyDialog(isSuccess: false, message: 'You need at least 4 groups of words to play the game!');
+                }
+              );
+            }
+            else {
+              widget.onPlayingChanged(true);
+            }
           }
       ),
     );

@@ -38,6 +38,7 @@ dependencies:
   http: ^1.2.0
   audioplayers: ^5.2.0
   path_provider: ^2.1.2
+  material_symbols_icons: ^4.2762.0
 
 dev_dependencies:
   flutter_test:
