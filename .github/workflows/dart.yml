@@ -37,5 +37,5 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: build/ios/iphoneos/${{ github.event.repository.name }}.ipa
-          tag: v1.${{ github.run_number }}
+          tag: v1.0.${{ github.run_number }}
           overwrite: true
