@@ -45,78 +45,94 @@ class _ManageDialogState extends State<ManageDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        height: 400,
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Form', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            SizedBox(),
-            TextField(
-              controller: _form,
-              decoration: InputDecoration(hintText: 'Form'),
-            ),
-            SizedBox(height: 30),
-            const Text('Structure', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            SizedBox(),
-            TextField(
-              controller: _structure,
-              decoration: InputDecoration(hintText: 'Structure'),
-            ),
-            SizedBox(height: 20),
-            if(!widget.isAdd) Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+        child: IntrinsicHeight(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextButton(
-                  child: Text(('Delete this grammar')),
-                  onPressed: () async {
-                    String msg = 'Fail to delete grammar!';
-                    bool ret = true;
-                    ret = await _database.removeGrammar(widget.index);
-                    if (ret) {
-                      msg = 'Delete grammar successfully!';
-                    }
-                    Navigator.of(context).pop();
-                    await showDialog(
-                      context: context, builder: (BuildContext context) {
-                        return NotifyDialog(isSuccess: ret, message: msg);
+                const Text('Grammar', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 30),
+                TextField(
+                  controller: _form,
+                  minLines: 1,
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                    labelText: 'Form',
+                    hintText: 'Ex: Xin chào + S!',
+                    labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple.shade900),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple.shade900)),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple.shade900))
+                  ),
+                ),
+                const SizedBox(height: 30),
+                TextField(
+                  controller: _structure,
+                  minLines: 1,
+                  maxLines: 4,
+                  decoration: const InputDecoration(
+                    labelText: 'Structure',
+                    hintText: 'Ex: Hello + S!',
+                    labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple)),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple))
+                  ),
+                ),
+              SizedBox(height: 10),
+              if(!widget.isAdd) Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    child: Text(('Delete this grammar')),
+                    onPressed: () async {
+                      String msg = 'Fail to delete grammar!';
+                      bool ret = true;
+                      ret = await _database.removeGrammar(widget.index);
+                      if (ret) {
+                        msg = 'Delete grammar successfully!';
                       }
-                    );
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButtonApp(
-                  label: 'OK',
-                  backgroundColor: Colors.white30,
-                  onPressed: (){Navigator.of(context).pop();},
-                ),
-                const SizedBox(width: 16),
-                TextButtonApp(
-                  label: 'OK',
-                  backgroundColor: Colors.blueGrey,
-                  onPressed: () async {
-                    String msg = 'Form or Structure cannot be empty!';
-                    bool ret = await changeGroup();
-                    if(ret)
-                      msg = widget.isAdd ? 'Add grammar successfully!' : 'Modify grammar successfully!';
+                      Navigator.of(context).pop();
+                      await showDialog(
+                        context: context, builder: (BuildContext context) {
+                          return NotifyDialog(isSuccess: ret, message: msg);
+                        }
+                      );
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButtonApp(
+                    label: 'Cancel',
+                    backgroundColor: Colors.white30,
+                    onPressed: (){Navigator.of(context).pop();},
+                  ),
+                  const SizedBox(width: 16),
+                  TextButtonApp(
+                    label: 'OK',
+                    backgroundColor: Colors.blueGrey,
+                    onPressed: () async {
+                      String msg = 'Form or Structure cannot be empty!';
+                      bool ret = await changeGroup();
+                      if(ret)
+                        msg = widget.isAdd ? 'Add grammar successfully!' : 'Modify grammar successfully!';
 
-                    Navigator.of(context).pop();
-                    await showDialog(
-                      context: context, builder: (BuildContext context) {
-                        return NotifyDialog(isSuccess: ret, message: msg);
-                      }
-                    );
-                  },
-                )
-              ]
-            )
-          ]
+                      Navigator.of(context).pop();
+                      await showDialog(
+                        context: context, builder: (BuildContext context) {
+                          return NotifyDialog(isSuccess: ret, message: msg);
+                        }
+                      );
+                    },
+                  )
+                ]
+              )
+            ]
+          ),
         )
       )
     );

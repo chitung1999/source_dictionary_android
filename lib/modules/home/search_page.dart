@@ -69,13 +69,19 @@ class  SearchPage extends SearchDelegate<bool?> {
             itemCount: _listSearch.length,
             itemBuilder: (context, index) {
               return ListTile(
-                title: Text(_listSearch[index], style: const TextStyle(fontSize: 20),),
+                title: Row(
+                  children: [
+                    Icon(Icons.search),
+                    SizedBox(width: 10),
+                    Text(_listSearch[index], style: const TextStyle(fontSize: 20),),
+                  ],
+                ),
                 onTap: () {
                   _wordSearch.reset();
                   _wordSearch.query = _listSearch[index];
                   List<int>? group = _wordSearch.isEng ? _word.eng[_listSearch[index]] : _word.vn[_listSearch[index]];
                   for(int i = 0; i < group!.length; i++) {
-                  _wordSearch.data.add(_word.data[group[i]]);
+                    _wordSearch.data.add(_word.data[group[i]]);
                   }
                   close(context,true);
                 },

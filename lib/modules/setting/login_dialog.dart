@@ -25,6 +25,11 @@ class LoginDialog extends StatefulWidget {
   String _msg = '';
 
   Future<bool> uploadData() async {
+    if(_username.text.isEmpty || _password.text.isEmpty) {
+      _msg = "Username or Password is empty!";
+      return false;
+    }
+
     MongoHelper mongo = MongoHelper();
     Map<String, dynamic> data = await _database.readFileLocal();
     RESULT ret = await mongo.upload(_username.text, _password.text, data["grammar"], data["words"]);
@@ -45,6 +50,11 @@ class LoginDialog extends StatefulWidget {
   }
 
   Future<bool> downloadData() async {
+    if(_username.text.isEmpty || _password.text.isEmpty) {
+      _msg = "Username or Password is empty!";
+      return false;
+    }
+
     MongoHelper mongo = MongoHelper();
     RESULT ret = await mongo.download(_username.text, _password.text);
 
@@ -77,31 +87,33 @@ class LoginDialog extends StatefulWidget {
 
     return Dialog( child: Container(
       height: 350,
-      padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 40.0),
+      padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 20.0),
       child: Column(
         children: [
           const Text('Login', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
           const SizedBox(height: 25),
           TextField(
             controller: _username,
+            style:TextStyle(fontSize:20),
             decoration: const InputDecoration(
-                hintText: 'User name',
-                icon: Icon(Icons.person)
+              hintText: 'User name',
+              icon: Icon(Icons.person)
             ),
           ),
           const SizedBox(height: 20),
           TextField(
             controller: _password,
             obscureText: _isHidePassword,
+            style:TextStyle(fontSize:20),
             decoration: InputDecoration(
-                hintText: 'Password',
-                icon: const Icon(Icons.lock),
-                suffixIcon: IconButton(
-                    icon: const Icon(Icons.visibility),
-                    onPressed: () {
-                      setState(() {_isHidePassword = !_isHidePassword;});
-                    }
-                )
+              hintText: 'Password',
+              icon: const Icon(Icons.lock),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.visibility),
+                onPressed: () {
+                  setState(() {_isHidePassword = !_isHidePassword;});
+                }
+              )
             ),
           ),
           const SizedBox(height: 40),
