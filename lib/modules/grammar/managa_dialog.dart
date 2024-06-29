@@ -44,96 +44,96 @@ class _ManageDialogState extends State<ManageDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: Container(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
-        child: IntrinsicHeight(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Grammar', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 30),
-                TextField(
-                  controller: _form,
-                  minLines: 1,
-                  maxLines: 4,
-                  decoration: InputDecoration(
-                    labelText: 'Form',
-                    hintText: 'Ex: Xin chào + S!',
-                    labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple.shade900),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple.shade900)),
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple.shade900))
-                  ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Grammar', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 30),
+              TextField(
+                controller: _form,
+                style: TextStyle(fontSize: 20),
+                minLines: 1,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  labelText: 'Form',
+                  hintText: 'Ex: Xin chào + S!',
+                  labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple.shade900),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple.shade900)),
+                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple.shade900))
                 ),
-                const SizedBox(height: 30),
-                TextField(
-                  controller: _structure,
-                  minLines: 1,
-                  maxLines: 4,
-                  decoration: const InputDecoration(
-                    labelText: 'Structure',
-                    hintText: 'Ex: Hello + S!',
-                    labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple)),
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple))
-                  ),
-                ),
-              SizedBox(height: 10),
-              if(!widget.isAdd) Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    child: Text(('Delete this grammar')),
-                    onPressed: () async {
-                      String msg = 'Fail to delete grammar!';
-                      bool ret = true;
-                      ret = await _database.removeGrammar(widget.index);
-                      if (ret) {
-                        msg = 'Delete grammar successfully!';
-                      }
-                      Navigator.of(context).pop();
-                      await showDialog(
-                        context: context, builder: (BuildContext context) {
-                          return NotifyDialog(isSuccess: ret, message: msg);
-                        }
-                      );
-                    },
-                  ),
-                ],
               ),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButtonApp(
-                    label: 'Cancel',
-                    backgroundColor: Colors.white30,
-                    onPressed: (){Navigator.of(context).pop();},
-                  ),
-                  const SizedBox(width: 16),
-                  TextButtonApp(
-                    label: 'OK',
-                    backgroundColor: Colors.blueGrey,
-                    onPressed: () async {
-                      String msg = 'Form or Structure cannot be empty!';
-                      bool ret = await changeGroup();
-                      if(ret)
-                        msg = widget.isAdd ? 'Add grammar successfully!' : 'Modify grammar successfully!';
+              const SizedBox(height: 30),
+              TextField(
+                controller: _structure,
+                style: TextStyle(fontSize: 20),
+                minLines: 1,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                  labelText: 'Structure',
+                  hintText: 'Ex: Hello + S!',
+                  labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple)),
+                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple))
+                ),
+              ),
+            SizedBox(height: 10),
+            if(!widget.isAdd) Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  child: Text(('Delete this grammar')),
+                  onPressed: () async {
+                    String msg = 'Fail to delete grammar!';
+                    bool ret = true;
+                    ret = await _database.removeGrammar(widget.index);
+                    if (ret) {
+                      msg = 'Delete grammar successfully!';
+                    }
+                    Navigator.of(context).pop();
+                    await showDialog(
+                      context: context, builder: (BuildContext context) {
+                        return NotifyDialog(isSuccess: ret, message: msg);
+                      }
+                    );
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButtonApp(
+                  label: 'Cancel',
+                  backgroundColor: Colors.white30,
+                  onPressed: (){Navigator.of(context).pop();},
+                ),
+                const SizedBox(width: 16),
+                TextButtonApp(
+                  label: 'OK',
+                  backgroundColor: Colors.blueGrey,
+                  onPressed: () async {
+                    String msg = 'Form or Structure cannot be empty!';
+                    bool ret = await changeGroup();
+                    if(ret)
+                      msg = widget.isAdd ? 'Add grammar successfully!' : 'Modify grammar successfully!';
 
-                      Navigator.of(context).pop();
-                      await showDialog(
-                        context: context, builder: (BuildContext context) {
-                          return NotifyDialog(isSuccess: ret, message: msg);
-                        }
-                      );
-                    },
-                  )
-                ]
-              )
-            ]
-          ),
-        )
+                    Navigator.of(context).pop();
+                    await showDialog(
+                      context: context, builder: (BuildContext context) {
+                        return NotifyDialog(isSuccess: ret, message: msg);
+                      }
+                    );
+                  },
+                )
+              ]
+            )
+          ]
+        ),
       )
     );
   }

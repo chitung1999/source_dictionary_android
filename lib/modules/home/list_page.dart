@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
+import 'package:source_dictionary_mobile/models/word_action.dart';
 import '../../models/word_model.dart';
-import '../../models/word_search_model.dart';
 import '../../models/config_app.dart';
 import '../../models/enum_app.dart';
 
@@ -15,8 +15,8 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  final WordSearchModel _wordSearch = WordSearchModel();
-  final WordModel _word = WordModel();
+  final WordAction _wordAction = WordAction();
+  final WordModel _wordModel = WordModel();
   final ConfigApp _config = ConfigApp();
 
   @override
@@ -28,12 +28,12 @@ class _ListPageState extends State<ListPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'Count: ${_word.eng.length}',
+            'Count: ${_wordModel.eng.length}',
             style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)
           ),
           const SizedBox(height: 10),
           Expanded(child: AlphabetScrollView(
-            list: _word.eng.keys.map((e) => AlphaModel(e)).toList(),
+            list: _wordModel.eng.keys.map((e) => AlphaModel(e)).toList(),
             itemExtent: 50,
             itemBuilder: (_, k, id) {
               return Column(children: [
@@ -51,11 +51,11 @@ class _ListPageState extends State<ListPage> {
                     ))
                   ),
                   onTap: () {
-                    _wordSearch.reset();
-                    _wordSearch.query = id;
-                    List<int>? group = _word.eng[id];
-                    for(int i = 0; i < group!.length; i++) {
-                      _wordSearch.data.add(_word.data[group[i]]);
+                    _wordAction.query = id;
+                    _wordAction.resultSearch.clear();
+
+                    for(int num in _wordAction.isEng ? _wordModel.eng[_wordAction.query]! : _wordModel.vn[_wordAction.query]!) {
+                      _wordAction.resultSearch[num] = _wordModel.data[num];
                     }
                     widget.onClick();
                   },

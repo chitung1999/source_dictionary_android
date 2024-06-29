@@ -85,65 +85,67 @@ class LoginDialog extends StatefulWidget {
     if(_isLoading)
       return Center(child: CircularProgressIndicator());
 
-    return Dialog( child: Container(
-      height: 350,
-      padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 20.0),
-      child: Column(
-        children: [
-          const Text('Login', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
-          const SizedBox(height: 25),
-          TextField(
-            controller: _username,
-            style:TextStyle(fontSize:20),
-            decoration: const InputDecoration(
-              hintText: 'User name',
-              icon: Icon(Icons.person)
-            ),
-          ),
-          const SizedBox(height: 20),
-          TextField(
-            controller: _password,
-            obscureText: _isHidePassword,
-            style:TextStyle(fontSize:20),
-            decoration: InputDecoration(
-              hintText: 'Password',
-              icon: const Icon(Icons.lock),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.visibility),
-                onPressed: () {
-                  setState(() {_isHidePassword = !_isHidePassword;});
-                }
-              )
-            ),
-          ),
-          const SizedBox(height: 40),
-          Row(
+    return Dialog(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 20.0),
+        child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextButtonApp(
-                label: 'Cancel',
-                backgroundColor: Colors.white30,
-                onPressed: () async {Navigator.of(context).pop();},
+            const Text('Login', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+            const SizedBox(height: 25),
+            TextField(
+              controller: _username,
+              style:TextStyle(fontSize:20),
+              decoration: const InputDecoration(
+                hintText: 'User name',
+                icon: Icon(Icons.person)
               ),
-              const SizedBox(width: 16),
-              TextButtonApp(
-                label: 'OK',
-                backgroundColor: Colors.blueGrey,
-                onPressed: () async {
-                  setState(() {_isLoading = true;});
-                  bool ret = widget.isDownload ? (await downloadData()) : (await uploadData());
-                  Navigator.of(context).pop();
-                  await showDialog(
-                    context: context, builder: (BuildContext context) {
-                      return NotifyDialog(isSuccess: ret, message: _msg);
-                    }
-                  );
-                },
-              )
-            ]
-          )
-        ]
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _password,
+              obscureText: _isHidePassword,
+              style:TextStyle(fontSize:20),
+              decoration: InputDecoration(
+                hintText: 'Password',
+                icon: const Icon(Icons.lock),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.visibility),
+                  onPressed: () {
+                    setState(() {_isHidePassword = !_isHidePassword;});
+                  }
+                )
+              ),
+            ),
+            const SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButtonApp(
+                  label: 'Cancel',
+                  backgroundColor: Colors.white30,
+                  onPressed: () async {Navigator.of(context).pop();},
+                ),
+                const SizedBox(width: 16),
+                TextButtonApp(
+                  label: 'OK',
+                  backgroundColor: Colors.blueGrey,
+                  onPressed: () async {
+                    setState(() {_isLoading = true;});
+                    bool ret = widget.isDownload ? (await downloadData()) : (await uploadData());
+                    Navigator.of(context).pop();
+                    await showDialog(
+                      context: context, builder: (BuildContext context) {
+                        return NotifyDialog(isSuccess: ret, message: _msg);
+                      }
+                    );
+                  },
+                )
+              ]
+            )
+          ]
+        ),
       )
-    ));
+    );
   }
 }

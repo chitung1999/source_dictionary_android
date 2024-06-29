@@ -126,7 +126,7 @@ class Database {
     }
   }
 
-  Future<bool> modifyGroup(List<String> keys, List<String> means, String note, String query, bool isEng, int index) async {
+  Future<bool> modifyGroup(List<String> keys, List<String> means, String note, int index) async {
     try {
       Map<String, dynamic> data = await readFileLocal();
 
@@ -135,9 +135,8 @@ class Database {
         "means": means,
         "notes": note
       };
-      List<int>? group = isEng ? _wordModel.eng[query] : _wordModel.vn[query];
 
-      data["words"][group?[index]] = newGroup;
+      data["words"][index] = newGroup;
       bool ret = await writeFileLocal(data);
       if(!ret) {
         return false;
@@ -150,13 +149,11 @@ class Database {
     }
   }
 
-  Future<bool> removeGroup(String query, bool isEng, int index) async {
+  Future<bool> removeGroup(int index) async {
     try {
       Map<String, dynamic> data = await readFileLocal();
 
-      List<int>? group = isEng ? _wordModel.eng[query] : _wordModel.vn[query];
-
-      data["words"].removeAt(group?[index]);
+      data["words"].removeAt(index);
       bool ret = await writeFileLocal(data);
       if(!ret) {
         return false;

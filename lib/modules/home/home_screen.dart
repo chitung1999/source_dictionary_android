@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:source_dictionary_mobile/models/word_action.dart';
 import 'manage_dialog.dart';
 import 'search_page.dart';
 import 'list_page.dart';
 import 'search_result.dart';
-import '../../models/word_modify_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -43,8 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(Icons.add, color: Colors.white),
               onPressed: () async {
                 await showDialog(context: context, builder: (BuildContext context) {
-                  WordModifyModel wordModify = WordModifyModel();
-                  wordModify.reset();
+                  WordAction _wordAction = WordAction();
+                  _wordAction.isModify = false;
                   return const ManageDialog();
                 });
                 setState(() {_currentIndex = 1;});

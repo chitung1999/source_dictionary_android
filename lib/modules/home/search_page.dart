@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../models/word_search_model.dart';
+import '../../../models/word_action.dart';
 import '../../../models/word_model.dart';
 
 class  SearchPage extends SearchDelegate<bool?> {
-  final WordSearchModel _wordSearch = WordSearchModel();
-  final WordModel _word = WordModel();
+  final WordAction _wordAction = WordAction();
+  final WordModel _wordModel = WordModel();
   final List<String> _listSearch = [];
 
   @override
@@ -13,8 +13,8 @@ class  SearchPage extends SearchDelegate<bool?> {
     return [
       StatefulBuilder(builder: (thisLowerContext, StateSetter setState) {
         return TextButton(
-          child: Text((_wordSearch.isEng ? 'EN' : 'VN')),
-          onPressed: () { setState(() { _wordSearch.isEng = !_wordSearch.isEng; query = ''; }); },
+          child: Text((_wordAction.isEng ? 'EN' : 'VN')),
+          onPressed: () { setState(() { _wordAction.isEng = !_wordAction.isEng; query = ''; }); },
         );
       }),
       IconButton(
@@ -41,13 +41,12 @@ class  SearchPage extends SearchDelegate<bool?> {
 
   @override
   Widget showResults(BuildContext context) {
-    _wordSearch.reset();
-    if(_listSearch.isNotEmpty) {
-      _wordSearch.query = _listSearch[0];
+    _wordAction.resultSearch.clear();
 
-      List<int>? group = _wordSearch.isEng ? _word.eng[_listSearch[0]] : _word.vn[_listSearch[0]];
-      for(int i = 0; i < group!.length; i++) {
-        _wordSearch.data.add(_word.data[group[i]]);
+    if(_listSearch.isNotEmpty) {
+      _wordAction.query = _listSearch[0];
+      for(int num in _wordAction.isEng ? _wordModel.eng[_wordAction.query]! : _wordModel.vn[_wordAction.query]!) {
+        _wordAction.resultSearch[num] = _wordModel.data[num];
       }
     }
     close(context,true);
@@ -57,37 +56,37 @@ class  SearchPage extends SearchDelegate<bool?> {
   @override
   Widget buildSuggestions(BuildContext context) {
     _listSearch.clear();
-    for(String item in (_wordSearch.isEng ? _word.eng.keys : _word.vn.keys)) {
+    for(String item in (_wordAction.isEng ? _wordModel.eng.keys : _wordModel.vn.keys)) {
       if(item.toLowerCase().startsWith(query.toLowerCase())){
         _listSearch.add(item);
       }
     }
 
     return Container(
-        padding: const EdgeInsets.all(20.0),
-        child: ListView.builder(
-            itemCount: _listSearch.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Row(
-                  children: [
-                    Icon(Icons.search),
-                    SizedBox(width: 10),
-                    Text(_listSearch[index], style: const TextStyle(fontSize: 20),),
-                  ],
-                ),
-                onTap: () {
-                  _wordSearch.reset();
-                  _wordSearch.query = _listSearch[index];
-                  List<int>? group = _wordSearch.isEng ? _word.eng[_listSearch[index]] : _word.vn[_listSearch[index]];
-                  for(int i = 0; i < group!.length; i++) {
-                    _wordSearch.data.add(_word.data[group[i]]);
-                  }
-                  close(context,true);
-                },
-              );
-            }
-        )
+      padding: const EdgeInsets.all(20.0),
+      child: ListView.builder(
+        itemCount: _listSearch.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Row(
+              children: [
+                Icon(Icons.search),
+                SizedBox(width: 10),
+                Text(_listSearch[index], style: const TextStyle(fontSize: 20),),
+              ],
+            ),
+            onTap: () {
+              _wordAction.query = _listSearch[index];
+              _wordAction.resultSearch.clear();
+
+              for(int num in _wordAction.isEng ? _wordModel.eng[_wordAction.query]! : _wordModel.vn[_wordAction.query]!) {
+                _wordAction.resultSearch[num] = _wordModel.data[num];
+              }
+              close(context,true);
+            },
+          );
+        }
+      )
     );
   }
 }

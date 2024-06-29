@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:source_dictionary_mobile/models/word_action.dart';
 import 'manage_dialog.dart';
-import '../../../models/word_search_model.dart';
-import '../../../models/word_modify_model.dart';
 
 class SearchResult extends StatefulWidget {
   const SearchResult({Key? key}) : super(key: key);
@@ -11,18 +10,18 @@ class SearchResult extends StatefulWidget {
 }
 
 class _SearchResultState extends State<SearchResult> {
-  final WordSearchModel wordSearch = WordSearchModel();
+  WordAction _wordAction = WordAction();
 
   @override
   Widget build(BuildContext context) {
-    if(wordSearch.query.isEmpty) {
+    if(_wordAction.resultSearch.isEmpty) {
       return const Center(child: Text('No results found!', style: TextStyle(fontSize: 20, color: Colors.blueGrey)));
     }
 
     return Container(
       padding: const EdgeInsets.all(20.0),
       child: ListView.builder(
-        itemCount: wordSearch.data.length,
+        itemCount: _wordAction.resultSearch.length,
         itemBuilder: (context, index) {return Column( children: [
           Container(
             decoration: BoxDecoration(
@@ -37,16 +36,15 @@ class _SearchResultState extends State<SearchResult> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      wordSearch.query,
+                        _wordAction.query,
                       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
                     ),
                     IconButton(
                       icon: const Icon(Icons.edit),
                       onPressed: () async {
                         await showDialog(context: context, builder: (BuildContext context) {
-                          WordModifyModel wordModify = WordModifyModel();
-                          wordModify.modify(wordSearch.data[index].keys, wordSearch.data[index].means,
-                              wordSearch.data[index].note, wordSearch.query, wordSearch.isEng, index);
+                          _wordAction.isModify = true;
+                          _wordAction.indexModify = _wordAction.resultSearch.entries.elementAt(index).key;;
                           return const ManageDialog();
                         });
                         setState(() {});
@@ -55,15 +53,15 @@ class _SearchResultState extends State<SearchResult> {
                   ]
                 ),
                 Text(
-                  '• words: ${wordSearch.data[index].keysToString()}',
+                  '• words: ${_wordAction.resultSearch.entries.elementAt(index).value.keysToString()}',
                   style: const TextStyle(fontSize: 20)
                 ),
                 Text(
-                  '• means: ${wordSearch.data[index].meansToString()}',
+                  '• means: ${_wordAction.resultSearch.entries.elementAt(index).value.meansToString()}',
                   style: const TextStyle(fontSize: 20)
                 ),
                 Text(
-                  '• note: ${wordSearch.data[index].note}',
+                  '• note: ${_wordAction.resultSearch.entries.elementAt(index).value.note}',
                   style: const TextStyle(fontSize: 20)
                 ),
               ],
