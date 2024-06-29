@@ -21,9 +21,9 @@ class _ManageDialogState extends State<ManageDialog> {
   TextEditingController _note = TextEditingController();
 
   Future<bool> changeGroup() async {
-    List<String> keys = _key.text.split(',').map((word) => word.trim().toLowerCase()).toSet().toList();
+    List<String> keys = _key.text.split(',').map((word) => word.trim().toLowerCase()).where((word) => word.isNotEmpty).toSet().toList();
     keys.sort();
-    List<String> means = _mean.text.split(',').map((word) => word.trim().toLowerCase()).toSet().toList();
+    List<String> means = _mean.text.split(',').map((word) => word.trim().toLowerCase()).where((word) => word.isNotEmpty).toSet().toList();
     means.sort();
 
     bool ret;
@@ -150,10 +150,9 @@ class _ManageDialogState extends State<ManageDialog> {
                   label: 'OK',
                   backgroundColor: Colors.blueGrey,
                   onPressed: () async {
-                    RegExp regex = RegExp(r'[^a-zA-Z,\s]');
+                    RegExp regex = RegExp(r'[^a-zA-Z, àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]');
                     if(_key.text.isEmpty || _mean.text.isEmpty
-                        || _key.text.contains('\n') || _mean.text.contains('\n')
-                        || regex.hasMatch(_key.text) || regex.hasMatch(_mean.text)) {
+                        || regex.hasMatch(_key.text.toLowerCase()) || regex.hasMatch(_mean.text.toLowerCase())) {
                       _msg = 'Key or Mean cannot be empty, contain number and special characters. Words separated by (,)!';
                       await showDialog(
                         context: context, builder: (BuildContext context) {

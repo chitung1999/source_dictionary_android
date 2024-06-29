@@ -19,7 +19,8 @@ class _GrammarScreenState extends State<GrammarScreen> {
     } else {
       _data = [];
       for (GrammarItem item in _grammarModel.data) {
-        if (item.form.contains(query) || item.structure.contains(query)) {
+        if (item.form.toLowerCase().contains(query.toLowerCase())
+            || item.structure.toLowerCase().contains(query.toLowerCase())) {
           _data.add(item);
         }
       }
@@ -48,7 +49,7 @@ class _GrammarScreenState extends State<GrammarScreen> {
             height: 35,
             child: TextField(
               style: TextStyle(color: Colors.black87, fontSize: 17),
-              onSubmitted: _onSearch,
+              onChanged: _onSearch,
               decoration: const InputDecoration(
                 hintText: 'Search',
                 hintStyle: TextStyle(color: Colors.black26),
