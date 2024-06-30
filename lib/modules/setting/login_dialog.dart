@@ -96,8 +96,9 @@ class LoginDialog extends StatefulWidget {
             TextField(
               controller: _username,
               style:TextStyle(fontSize:20),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'User name',
+                hintStyle: TextStyle(fontSize: 20, color: Colors.grey.withOpacity(0.3)),
                 icon: Icon(Icons.person)
               ),
             ),
@@ -108,6 +109,7 @@ class LoginDialog extends StatefulWidget {
               style:TextStyle(fontSize:20),
               decoration: InputDecoration(
                 hintText: 'Password',
+                hintStyle: TextStyle(fontSize: 20, color: Colors.grey.withOpacity(0.3)),
                 icon: const Icon(Icons.lock),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.visibility),

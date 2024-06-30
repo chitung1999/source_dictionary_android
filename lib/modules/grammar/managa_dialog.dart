@@ -58,7 +58,8 @@ class _ManageDialogState extends State<ManageDialog> {
                 maxLines: 3,
                 decoration: InputDecoration(
                   labelText: 'Form',
-                  hintText: 'Ex: Xin chào + S!',
+                  hintText: 'ex: Xin chào + S!',
+                  hintStyle: TextStyle(fontSize: 20, color: Colors.grey.withOpacity(0.3)),
                   labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple.shade900),
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple.shade900)),
@@ -71,9 +72,10 @@ class _ManageDialogState extends State<ManageDialog> {
                 style: TextStyle(fontSize: 20),
                 minLines: 1,
                 maxLines: 3,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Structure',
-                  hintText: 'Ex: Hello + S!',
+                  hintText: 'ex: Hello + S!',
+                  hintStyle: TextStyle(fontSize: 20, color: Colors.grey.withOpacity(0.3)),
                   labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple),
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple)),

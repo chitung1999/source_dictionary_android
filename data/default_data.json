@@ -1,8 +1,8 @@
 {
   "grammar": [
     {
-      "form": "My form",
-      "structure": "My structure"
+      "form": "Hello + S!",
+      "structure": "Xin chào + S!"
     }
   ],
   "config": {
@@ -13,11 +13,13 @@
   "words": [
     {
       "means": [
-        "My mean"
+        "happy",
+        "joyful"
       ],
-      "notes": "",
+      "notes": "note something",
       "keys": [
-        "My key"
+        "vui vẻ",
+        "vui mừng"
       ]
     }
   ]

@@ -21,9 +21,13 @@ class _ManageDialogState extends State<ManageDialog> {
   TextEditingController _note = TextEditingController();
 
   Future<bool> changeGroup() async {
-    List<String> keys = _key.text.split(',').map((word) => word.trim().toLowerCase()).where((word) => word.isNotEmpty).toSet().toList();
+    List<String> keys = _key.text.split(',').map((word)
+    => word.trim().replaceAll(RegExp(r'\s+'), ' ').toLowerCase()).where((word)
+    => word.isNotEmpty).toSet().toList();
     keys.sort();
-    List<String> means = _mean.text.split(',').map((word) => word.trim().toLowerCase()).where((word) => word.isNotEmpty).toSet().toList();
+    List<String> means = _mean.text.split(',').map((word)
+    => word.trim().replaceAll(RegExp(r'\s+'), ' ').toLowerCase()).where((word)
+    => word.isNotEmpty).toSet().toList();
     means.sort();
 
     bool ret;
@@ -64,7 +68,7 @@ class _ManageDialogState extends State<ManageDialog> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Synonyms', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+            const Text('Group', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
             const SizedBox(height: 30),
             TextField(
               controller: _key,
@@ -73,11 +77,12 @@ class _ManageDialogState extends State<ManageDialog> {
               maxLines: 3,
               decoration: InputDecoration(
                 labelText: 'Key',
-                hintText: 'Enter words here',
-                labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple.shade900),
+                hintText: 'ex: happy, joyful',
+                hintStyle: TextStyle(fontSize: 20, color: Colors.grey.withOpacity(0.3)),
+                labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple.shade900)),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple.shade900))
+                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple)),
+                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple))
               ),
             ),
             const SizedBox(height: 30),
@@ -86,9 +91,10 @@ class _ManageDialogState extends State<ManageDialog> {
               style: TextStyle(fontSize: 20),
               minLines: 1,
               maxLines: 3,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Mean',
-                hintText: 'Enter means here',
+                hintText: 'ex: vui vẻ, vui mừng',
+                hintStyle: TextStyle(fontSize: 20, color: Colors.grey.withOpacity(0.3)),
                 labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple)),
@@ -101,9 +107,10 @@ class _ManageDialogState extends State<ManageDialog> {
               style: TextStyle(fontSize: 20),
               minLines: 1,
               maxLines: 3,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Note',
-                hintText: 'Enter notes here',
+                hintText: 'ex: note something',
+                hintStyle: TextStyle(fontSize: 20, color: Colors.grey.withOpacity(0.3)),
                 labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple)),

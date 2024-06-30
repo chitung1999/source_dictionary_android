@@ -62,8 +62,8 @@ class _ListPageState extends State<ListPage> {
                 )
               ]);
             },
-            selectedTextStyle: TextStyle(color: _config.theme == ThemeApp.light ? Colors.black87 : Colors.white),
-            unselectedTextStyle: TextStyle(color: _config.theme == ThemeApp.light ? Colors.black38 :Colors.white38),
+            selectedTextStyle: TextStyle(color: Colors.deepPurple),
+            unselectedTextStyle: TextStyle(color: Colors.deepPurple.withOpacity(0.3)),
           ))
         ],
       )

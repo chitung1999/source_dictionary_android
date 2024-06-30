@@ -188,7 +188,7 @@ class _PlayPageState extends State<PlayPage> {
                           setState(() {_reset();});
                         }
                       },
-                      child: Text('Next', style: TextStyle(fontSize: 20, color: _isAnswered ? Colors.deepPurple : Colors.grey))
+                      child: Text('Next', style: TextStyle(fontSize: 20, color: _isAnswered ? Colors.deepPurple : Colors.grey.withOpacity(0.5)))
                     ),
                   ),
                 ],
