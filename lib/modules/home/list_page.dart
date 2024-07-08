@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import 'package:source_dictionary_mobile/models/word_action.dart';
 import '../../models/word_model.dart';
-import '../../models/config_app.dart';
-import '../../models/enum_app.dart';
 
 class ListPage extends StatefulWidget {
   final Function() onClick;
@@ -17,7 +15,6 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   final WordAction _wordAction = WordAction();
   final WordModel _wordModel = WordModel();
-  final ConfigApp _config = ConfigApp();
 
   @override
   Widget build(BuildContext context) {

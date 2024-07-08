@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'config_app.dart';
 import 'word_model.dart';
 import 'grammar_model.dart';
@@ -10,6 +11,12 @@ class Database {
   final ConfigApp _configApp = ConfigApp();
   final WordModel _wordModel = WordModel();
   final GrammarModel _grammarModel = GrammarModel();
+
+  Database._internal();
+  static final Database _instance = Database._internal();
+  factory Database() {
+    return _instance;
+  }
 
   Future<Map<String, dynamic>> readFileLocal() async {
     try {
@@ -244,6 +251,38 @@ class Database {
       return true;
       } catch (e) {
       print('Fail to receive data from sever: $e');
+      return false;
+    }
+  }
+
+  Future<bool> importData(String path) async {
+    try {
+      final file = File(path);
+      final strData = await file.readAsString();
+      Map<String, dynamic> data = jsonDecode(strData);
+
+      bool ret = await receiveDataFromServer(data["words"], data["grammar"]);
+      return ret;
+    } catch (e) {
+      print('Fail to import data from file local: $e');
+      return false;
+    }
+  }
+
+  Future<bool> exportData(String path) async {
+    try {
+      final file = File(path);
+      PermissionStatus status = Platform.isIOS ? await Permission.photos.request() : await Permission.manageExternalStorage.request();
+      if(status != PermissionStatus.granted) {
+        return false;
+      }
+
+      Map<String, dynamic> data = await readFileLocal();
+      final str = jsonEncode(data);
+      await file.writeAsString(str);
+      return true;
+    } catch(e) {
+      print('Fail to export data to file: $e');
       return false;
     }
   }

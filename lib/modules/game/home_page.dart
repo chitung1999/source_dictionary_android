@@ -12,6 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _isSelected = false;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -22,6 +23,7 @@ class _HomePageState extends State<HomePage> {
           borderColor: Colors.blueGrey,
           borderWidth: 2.0,
           borderRadius: 10,
+          isSelected: false,
           selectedTextColor: Colors.white,
           selectedBackgroundColor: Colors.blueGrey,
           transitionType: TransitionType.TOP_CENTER_ROUNDER,
@@ -33,17 +35,22 @@ class _HomePageState extends State<HomePage> {
             color: Colors.blueGrey,
           ),
           onPress: () async {
-            await Future.delayed(const Duration(milliseconds: 600));
-            WordModel wordModel = WordModel();
-            if(wordModel.data.length < 4) {
-              showDialog(
-                context: context, builder: (BuildContext context) {
-                  return NotifyDialog(isSuccess: false, message: 'You need at least 4 groups of words to play the game!');
+            if(!_isSelected) {
+              setState(() {_isSelected = true;});
+              WordModel wordModel = WordModel();
+              if (wordModel.data.length < 4) {
+                showDialog(
+                    context: context, builder: (BuildContext context) {
+                  return NotifyDialog(isSuccess: false,
+                      message: 'You need at least 4 groups of words to play the game!');
                 }
-              );
-            }
-            else {
-              widget.onPlayingChanged(true);
+                );
+              }
+              else {
+                await Future.delayed(const Duration(milliseconds: 600));
+                widget.onPlayingChanged(true);
+              }
+              setState(() {_isSelected = false;});
             }
           }
       ),
