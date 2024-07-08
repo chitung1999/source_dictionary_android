@@ -269,7 +269,7 @@ class Database {
     }
   }
 
-  Future<bool> exportData(String path) async {
+  Future<bool> exportData(String path, String data) async {
     try {
       final file = File(path);
       PermissionStatus status = Platform.isIOS ? await Permission.photos.request() : await Permission.manageExternalStorage.request();
@@ -277,9 +277,7 @@ class Database {
         return false;
       }
 
-      Map<String, dynamic> data = await readFileLocal();
-      final str = jsonEncode(data);
-      await file.writeAsString(str);
+      await file.writeAsString(data);
       return true;
     } catch(e) {
       print('Fail to export data to file: $e');

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import '../../component/notify_dialog.dart';
@@ -155,11 +158,16 @@ class _SettingScreenState extends State<SettingScreen> {
                                     color: Colors.blueGrey,
                                   ),
                                   onPressed: () async {
-                                    String? path = await FilePicker.platform.getDirectoryPath();
+                                    Database dataBase = Database();
+                                    Map<String, dynamic> data = await dataBase.readFileLocal();
+                                    final strData = jsonEncode(data);
+                                    String? path = await FilePicker.platform.saveFile(
+                                      fileName: 'data.json',
+                                      bytes: Uint8List.fromList(utf8.encode(strData))
+                                    );
                                     if (path != null) {
                                       String msg = '';
-                                      Database dataBase = Database();
-                                      bool ret = await dataBase.exportData('$path/data.json');
+                                      bool ret = await dataBase.exportData(path, strData);
                                       msg = ret ? 'Export file successfully!' : 'Fail to export file!';
                                       await showDialog(
                                         context: context,
