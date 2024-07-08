@@ -273,7 +273,7 @@ class Database {
     try {
       final file = File(path);
       PermissionStatus status = Platform.isIOS ? await Permission.photos.request() : await Permission.manageExternalStorage.request();
-      if(status != PermissionStatus.granted) {
+      if(status == PermissionStatus.denied) {
         return false;
       }
 
