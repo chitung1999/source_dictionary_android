@@ -271,14 +271,23 @@ class Database {
 
   Future<bool> exportData(String path, String data) async {
     try {
-      final file = File(path);
-      PermissionStatus status = Platform.isIOS ? await Permission.photos.request() : await Permission.manageExternalStorage.request();
-      if(status == PermissionStatus.denied) {
-        return false;
+      var storageStatus = await Permission.storage.status;
+      var manageStorageStatus = await Permission.manageExternalStorage.status;
+
+      if (!storageStatus.isGranted) {
+        storageStatus = await Permission.storage.request();
+      }
+      if (storageStatus.isDenied || storageStatus.isPermanentlyDenied) {
+        manageStorageStatus = Platform.isIOS ? await Permission.photos.request() :await Permission.manageExternalStorage.request();
       }
 
-      await file.writeAsString(data);
-      return true;
+      if(storageStatus.isGranted || manageStorageStatus.isGranted) {
+        final file = File(path);
+        await file.writeAsString(data);
+        return true;
+      }
+
+      return false;
     } catch(e) {
       print('Fail to export data to file: $e');
       return false;
