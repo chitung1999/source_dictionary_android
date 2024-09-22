@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../component/notify_dialog.dart';
 import '../../models/database.dart';
 import '../../models/config_app.dart';
-import '../../models/enum_app.dart';
+import '../../common/enum.dart';
 import 'login_dialog.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -64,7 +64,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     children: [
                       const Text('Dark', style: TextStyle(fontSize: 15)),
                       const SizedBox(width: 10),
-                      Switch(value: (_config.theme == ThemeApp.light), onChanged: _changedTheme, activeColor: Colors.blueGrey),
+                      Switch(value: (_config.theme == ThemeApp.LIGHT), onChanged: _changedTheme, activeColor: Colors.blueGrey),
                       const SizedBox(width: 10),
                       const Text('Light', style: TextStyle(fontSize: 15)),
                     ],

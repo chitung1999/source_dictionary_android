@@ -6,7 +6,10 @@ import 'list_page.dart';
 import 'search_result.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key, required this.isSearching, required this.query}) : super(key: key);
+
+  final bool isSearching;
+  final String query;
 
   @override
   _HomeScreenState createState() => _HomeScreenState();

@@ -6,11 +6,14 @@ import 'package:permission_handler/permission_handler.dart';
 import 'config_app.dart';
 import 'word_model.dart';
 import 'grammar_model.dart';
+import '../common/enum.dart';
+
+Database database = Database();
 
 class Database {
-  final ConfigApp _configApp = ConfigApp();
-  final WordModel _wordModel = WordModel();
-  final GrammarModel _grammarModel = GrammarModel();
+  final ConfigApp configApp = ConfigApp();
+  final WordModel wordModel = WordModel();
+  final GrammarModel grammarModel = GrammarModel();
 
   Database._internal();
   static final Database _instance = Database._internal();
@@ -43,7 +46,7 @@ class Database {
     }
   }
 
-  Future<bool> initialize() async {
+  Future<StatusApp> initialize() async {
     try {
       Map<String, dynamic> data = await readFileLocal();
       if(data.isEmpty) {
@@ -51,13 +54,13 @@ class Database {
         await writeFileLocal(data);
       }
 
-      _wordModel.loadData(data["words"]);
-      _configApp.loadData(data["config"]);
-      _grammarModel.loadData(data["grammar"]);
-      return true;
+      wordModel.loadData(data["words"]);
+      configApp.loadData(data["config"]);
+      grammarModel.loadData(data["grammar"]);
+      return StatusApp.RUN_APP_SUCCESS;
     } catch(e) {
-      print('Fail to initialize data: $e');
-      return false;
+      print('Fail to initialize app: $e');
+      return StatusApp.RUN_APP_FAIL ;
     }
   }
 
@@ -75,7 +78,7 @@ class Database {
   //Setting
   Future<bool> setAccount(String u, String p) async {
     try {
-      if(_configApp.username != u || _configApp.password != p) {
+      if(configApp.username != u || configApp.password != p) {
         Map<String, dynamic> data = await readFileLocal();
         data['config']['username'] = u;
         data['config']['password'] = p;
@@ -83,7 +86,7 @@ class Database {
         if(!ret) {
           return false;
         }
-        _configApp.loadData(data["config"]);
+        configApp.loadData(data["config"]);
       }
       return true;
     } catch(e) {
@@ -101,7 +104,7 @@ class Database {
       if(!ret) {
         return false;
       }
-      _configApp.loadData(data["config"]);
+      configApp.loadData(data["config"]);
       return true;
     } catch(e) {
       print('Fail to set theme: $e');
@@ -125,7 +128,7 @@ class Database {
       if(!ret) {
         return false;
       };
-      _wordModel.loadData(data["words"]);
+      wordModel.loadData(data["words"]);
       return true;
     } catch(e) {
       print('Fail to add new group: $e');
@@ -148,7 +151,7 @@ class Database {
       if(!ret) {
         return false;
       };
-      _wordModel.loadData(data["words"]);
+      wordModel.loadData(data["words"]);
       return true;
     } catch(e) {
       print('Fail to modify group: $e');
@@ -165,7 +168,7 @@ class Database {
       if(!ret) {
         return false;
       };
-      _wordModel.loadData(data["words"]);
+      wordModel.loadData(data["words"]);
       return true;
     } catch(e) {
       print('Fail to remove group: $e');
@@ -188,7 +191,7 @@ class Database {
       if(!ret) {
         return false;
       };
-      _grammarModel.loadData(data["grammar"]);
+      grammarModel.loadData(data["grammar"]);
       return true;
     } catch(e) {
       print('Fail to add new grammar: $e');
@@ -210,7 +213,7 @@ class Database {
       if(!ret) {
         return false;
       };
-      _grammarModel.loadData(data["grammar"]);
+      grammarModel.loadData(data["grammar"]);
       return true;
     } catch(e) {
       print('Fail to modify grammar: $e');
@@ -227,7 +230,7 @@ class Database {
       if(!ret) {
         return false;
       };
-      _grammarModel.loadData(data["grammar"]);
+      grammarModel.loadData(data["grammar"]);
       return true;
     } catch(e) {
       print('Fail to remove grammar: $e');
@@ -245,11 +248,11 @@ class Database {
       if (!ret) {
         return false;
       };
-      _wordModel.loadData(dataLocal["words"]);
-      _grammarModel.loadData(dataLocal['grammar']);
+      wordModel.loadData(dataLocal["words"]);
+      grammarModel.loadData(dataLocal['grammar']);
 
       return true;
-      } catch (e) {
+    } catch (e) {
       print('Fail to receive data from sever: $e');
       return false;
     }

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:mongo_dart/mongo_dart.dart';
-import '../models/enum_app.dart';
+import '../common/enum.dart';
 import '../models/database.dart';
 
 const MONGO_URL = "mongodb+srv://$USERNAME:$PASSWORD@cluster0.fmrfcsv.mongodb.net/$DATABASE_NAME?retryWrites=true&w=majority&appName=Cluster0";
@@ -39,43 +39,43 @@ class MongoHelper {
     }
   }
 
-  Future<RESULT> upload(String user, String pw, var grammar, var words) async {
+  Future<StatusApp> upload(String user, String pw, var grammar, var words) async {
     try {
       bool ret = await connect();
-      if(!ret) return RESULT.CONNECT_FAIL;
+      if(!ret) return StatusApp.CONNECT_FAIL;
 
       var data = await collection.findOne({"username": user});
-      if(data == null || data["password"] != pw) return RESULT.ACCOUNT_INVALID;
+      if(data == null || data["password"] != pw) return StatusApp.ACCOUNT_INVALID;
 
       data["words"] = words;
       data["grammar"] = grammar;
       await collection.updateOne(where.eq('username', user), modify.set('words', words).set('grammar', grammar));
       ret = await disconnect();
 
-      return RESULT.UPLOAD_SUCCESS;
+      return StatusApp.UPLOAD_SUCCESS;
     } catch(e) {
       print('[DICTIONARY][mongo_helper]: Fail to upload data to sever: $e');
-      return RESULT.UNKNOWN_ERROR;
+      return StatusApp.UNKNOWN_ERROR;
     }
   }
 
-  Future<RESULT> download(String user, String pw) async {
+  Future<StatusApp> download(String user, String pw) async {
     try {
       bool ret = await connect();
-      if(!ret) return RESULT.CONNECT_FAIL;
+      if(!ret) return StatusApp.CONNECT_FAIL;
 
       var data = await collection.findOne({"username": user});
-      if(data == null || data["password"] != pw) return RESULT.ACCOUNT_INVALID;
+      if(data == null || data["password"] != pw) return StatusApp.ACCOUNT_INVALID;
 
       Database database = Database();
       ret = await database.receiveDataFromServer(data["words"], data["grammar"]);
-      if(!ret) return RESULT.UNKNOWN_ERROR;
+      if(!ret) return StatusApp.UNKNOWN_ERROR;
 
       ret = await disconnect();
-      return RESULT.DOWNLOAD_SUCCESS;
+      return StatusApp.DOWNLOAD_SUCCESS;
     } catch(e) {
       print('[DICTIONARY][mongo_helper]: Fail to download data from sever: $e');
-      return RESULT.UNKNOWN_ERROR;
+      return StatusApp.UNKNOWN_ERROR;
     }
   }
 }

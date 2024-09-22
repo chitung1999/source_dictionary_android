@@ -1,4 +1,4 @@
-import 'enum_app.dart';
+import '../common/enum.dart';
 
 class ConfigApp {
   ConfigApp._internal();
@@ -7,11 +7,11 @@ class ConfigApp {
 
   String username = '';
   String password = '';
-  ThemeApp theme = ThemeApp.light;
+  ThemeApp theme = ThemeApp.LIGHT;
 
   void loadData(Map<String, dynamic> data) {
     username = data["username"];
     password = data["password"];
-    theme = data["theme"] == 1 ? ThemeApp.light : ThemeApp.dark;
+    theme = data["theme"] == 1 ? ThemeApp.LIGHT : ThemeApp.DARK;
   }
 }
