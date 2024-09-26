@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart';
+import 'package:lottie/lottie.dart';
 import 'play_page.dart';
 
 class GameScreen extends StatefulWidget {
@@ -12,27 +12,24 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   bool _isPlaying = false;
 
-  void _onPlayingChanged(bool isPlaying) {
-    setState(() {_isPlaying = isPlaying;});
+  Future<void> loadScreen() async {
+    await Future.delayed(Duration(seconds: 2));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blueGrey,
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'Dictionary',
-              style: TextStyle(
-                  fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ],
+    if (_isPlaying)
+      return PlayPage();
+    else
+      return Center(child: SizedBox(
+        width: 250,
+        height: 250,
+        child: GestureDetector(
+          onTap: () async {
+            setState(() {_isPlaying = true;});
+          },
+          child: Lottie.asset('data/game_ani_start.json'),
         ),
-      ),
-      body: _isPlaying ? PlayPage(onPlayingChanged: _onPlayingChanged) : HomePage(onPlayingChanged: _onPlayingChanged)
-    );
+      ));
   }
 }

@@ -1,23 +1,20 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:source_dictionary_mobile/models/word_model.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:lottie/lottie.dart';
+import 'package:source_dictionary_mobile/common/text_box_btn.dart';
+import 'package:source_dictionary_mobile/models/database.dart';
 
 class PlayPage extends StatefulWidget {
-  const PlayPage({super.key, required this.onPlayingChanged});
-  final Function(bool) onPlayingChanged;
-
+  const PlayPage({super.key});
   @override
   State<PlayPage> createState() => _PlayPageState();
 }
 
 class _PlayPageState extends State<PlayPage> {
-  WordModel _wordModel = WordModel();
+  final TextEditingController _controller = TextEditingController();
   late IconData _icon;
-  late String _question;
   late List<String> _option;
-  late List<Color> _colorBorder;
-  late List<IconData> _iconData;
+  late List<Color> _bgColor;
   late int _answer;
   late int _correct;
   late int _incorrect;
@@ -27,45 +24,44 @@ class _PlayPageState extends State<PlayPage> {
     setState(() {
       _isAnswered = true;
       if(_answer == index) {
-        _icon = Icons.check_circle;
+        _icon = Icons.check_circle_outline;
         _correct += 1;
-        _colorBorder[index] = Colors.green;
+        _bgColor[index] = Colors.green[100]!;
       } else {
         _icon = Icons.highlight_off;
         _incorrect += 1;
-        _colorBorder[index] = Colors.redAccent;
-        _colorBorder[_answer] = Colors.green;
+        _bgColor[index] = Colors.red[100]!;
+        _bgColor[_answer] = Colors.green[100]!;
       }
     });
   }
 
   void _reset() {
-    _icon = Icons.hourglass_bottom;
-    _question = '';
-    _colorBorder = [Colors.blueGrey, Colors.blueGrey, Colors.blueGrey, Colors.blueGrey];
+    _controller.text = '';
+    _bgColor = [Colors.white, Colors.white, Colors.white, Colors.white];
     _option = [];
     _isAnswered = false;
 
-    int randomNumber = Random().nextInt(_wordModel.data.length);
-    List<String> keys = _wordModel.data[randomNumber].keys;
-    List<String> means = _wordModel.data[randomNumber].means;
+    int randomNumber = Random().nextInt(database.wordModel.data.length);
+    List<String> keys = database.wordModel.data[randomNumber].keys;
+    List<String> means = database.wordModel.data[randomNumber].means;
     randomNumber = Random().nextInt(keys.length);
     for (int i = 0; i < means.length; i++) {
-      _question += means[i];
-      _question += (i == means.length - 1) ? ': ' : ', ';
+      _controller.text += means[i];
+      _controller.text += (i == means.length - 1) ? ': ' : ', ';
     }
     for (int i = 0; i < keys.length; i++) {
       if(i != randomNumber) {
-        _question += '${keys[i]}, ';
+        _controller.text += '${keys[i]}, ';
       }
     }
-    _question += '...';
+    _controller.text += '...';
 
     _option.add(keys[randomNumber]);
     _answer = randomNumber;
     while(_option.length < 4) {
-      randomNumber = Random().nextInt(_wordModel.data.length);
-      List<String> keyOption = _wordModel.data[randomNumber].keys;
+      randomNumber = Random().nextInt(database.wordModel.data.length);
+      List<String> keyOption = database.wordModel.data[randomNumber].keys;
       randomNumber = Random().nextInt(keyOption.length);
       if(!keys.contains(keyOption[randomNumber])) {
         _option.add(keyOption[randomNumber]);
@@ -79,124 +75,102 @@ class _PlayPageState extends State<PlayPage> {
   void initState() {
     _correct = 0;
     _incorrect = 0;
-    _iconData = [Symbols.counter_1, Symbols.counter_2, Symbols.counter_3, Symbols.counter_4];
     _reset();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        double heightScreen = constraints.maxHeight;
-
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
             children: [
               Row(
                 children: [
                   Container(
-                    width: 70,
-                    child: Center(child: Text('$_correct', style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.green)))
+                    width: 100,
+                    child: Center(child: Text('$_incorrect', style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.redAccent)))
                   ),
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: _correct + _incorrect == 0 ? 1 : _correct / (_correct + _incorrect),
-                      backgroundColor: Colors.redAccent,
-                      color: Colors.green,
-                    ),
-                  ),
+                  Expanded(child: Lottie.asset('data/game_ani_running.json')),
                   Container(
-                    width: 70,
-                    child: Center(child: Text('$_incorrect', style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.redAccent)))
+                    width: 100,
+                    child: Center(child: Text('$_correct', style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.green)))
                   ),
                 ],
               ),
-              Icon(
-                _icon,
-                size: heightScreen / 12,
-                color: _icon == Icons.hourglass_bottom ? Colors.blueGrey
-                    : (_icon == Icons.check_circle ? Colors.green : Colors.redAccent)
-              ),
-              Container(
-                width: double.infinity,
-                height: heightScreen / 5,
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.0),
-                  border: Border.all(width: 2, color: Colors.grey)
-                ),
-                child: Center(child: Text(
-                  _question,
-                  maxLines: 2,
-                  overflow: TextOverflow.fade,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: _question.length > 30 ? 22 : 30, fontWeight: FontWeight.bold, color: Colors.deepPurple)
-                ))
-              ),
-              Column(
-                children: [
-                  for(int i = 0; i < 4; i++)...[
-                    Container(
-                      height: heightScreen / 11,
-                      padding: EdgeInsets.only(top: heightScreen / 60),
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(width: 3, color: _colorBorder[i])
-                        ),
-                        onPressed: () {
-                          if (!_isAnswered) {
-                            _onAnswered(i);
-                          }
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(_iconData[i], color: Colors.blueGrey, size: 30),
-                            Expanded(child: Center(child: Text(_option[i], style: const TextStyle(fontSize: 20))))
-                          ],
-                        ),
-                      ),
-                    ),
-                  ]
-                ]
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                        side: const BorderSide(color: Colors.blueGrey)
-                      ),
-                      onPressed: () {widget.onPlayingChanged(false);},
-                      child: const Text('End Game', style: TextStyle(fontSize: 20, color: Colors.blueGrey))
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                        side: const BorderSide(color: Colors.blueGrey),
-                      ),
-                      onPressed: () {
-                        if (_isAnswered) {
-                          setState(() {_reset();});
-                        }
-                      },
-                      child: Text('Next', style: TextStyle(fontSize: 20, color: _isAnswered ? Colors.deepPurple : Colors.grey.withOpacity(0.5)))
-                    ),
-                  ),
-                ],
-              ),
+              SizedBox(height: height / 8, child: Center(
+                child: _isAnswered ? Icon(_icon, color: (_icon == Icons.check_circle_outline ? Colors.green : Colors.redAccent), size: height/12) :
+                Lottie.asset('data/game_ani_loading.json')
+              )),
             ],
           ),
-        );
-      }
+          TextField(
+            controller: _controller,
+            minLines: 3,
+            maxLines: 3,
+            textAlign: TextAlign.center,
+            textAlignVertical: TextAlignVertical.center,
+            readOnly: true,
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.deepPurple),
+            decoration: InputDecoration(
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple[800]!, width: 2)),
+              focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple[800]!, width: 2))
+            ),
+          ),
+          Column(
+            children: [
+              for(int i = 0; i < 4; i++)...[
+                TextBoxBtn(
+                  title: _option[i],
+                  width: width,
+                  height: height / 14,
+                  radius: 10,
+                  bgColor: _bgColor[i],
+                  textColor: Colors.blueGrey[800]!,
+                  textSize: 20,
+                  onPressed: () {
+                    if (!_isAnswered) {
+                      _onAnswered(i);
+                    }
+                  },
+                ),
+                SizedBox(height: height/100)
+              ]
+            ]
+          ),
+          SizedBox(
+            width: width / 2,
+            height: height/15,
+            child: _isAnswered ? ElevatedButton(
+              onPressed: () {
+                if (_isAnswered) {
+                  setState(() {_reset();});
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: BorderSide(color: Colors.deepPurple),
+                )
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Next', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.deepPurple)),
+                  SizedBox(width: 20),
+                  Lottie.asset('data/game_ani_next.json')
+                ]
+              )
+            ) : null,
+          ),
+        ]
+      )
     );
   }
 }

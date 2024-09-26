@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../../component/notify_dialog.dart';
+import '../../common/action_app.dart';
 import '../../models/database.dart';
 import '../../models/config_app.dart';
-import '../../component/text_button_app.dart';
+import '../../common/text_box_btn.dart';
 import '../../common/enum.dart';
 import '../../server/mongo_helper.dart';
 
@@ -22,12 +22,10 @@ class _LoginDialogState extends State<LoginDialog> {
   final ConfigApp _config = ConfigApp();
   bool _isHidePassword = true;
   bool _isLoading = false;
-  String _msg = '';
 
-  Future<bool> uploadData() async {
+  Future<StatusApp> uploadData() async {
     if(_username.text.isEmpty || _password.text.isEmpty) {
-      _msg = "Username or Password is empty!";
-      return false;
+      return StatusApp.TEXT_EMPTY;
     }
 
     MongoHelper mongo = MongoHelper();
@@ -35,42 +33,23 @@ class _LoginDialogState extends State<LoginDialog> {
     StatusApp ret = await mongo.upload(_username.text, _password.text, data["grammar"], data["words"]);
 
     if(ret == StatusApp.UPLOAD_SUCCESS) {
-      _msg = 'Upload data to server successfully!';
       _database.setAccount(_username.text, _password.text);
-      return true;
-    } else if (ret == StatusApp.CONNECT_FAIL) {
-      _msg = 'Unable to connect to the server, please check your internet connection!';
-    } else if (ret == StatusApp.ACCOUNT_INVALID) {
-      _msg = 'Username or password is incorrect.'
-          'If you do not have an account, please contact the administrator for support.';
-    } else {
-      _msg = 'Fail to download data from server!';
     }
-    return false;
+    return ret;
   }
 
-  Future<bool> downloadData() async {
+  Future<StatusApp> downloadData() async {
     if(_username.text.isEmpty || _password.text.isEmpty) {
-      _msg = "Username or Password is empty!";
-      return false;
+      return StatusApp.TEXT_EMPTY;
     }
 
     MongoHelper mongo = MongoHelper();
     StatusApp ret = await mongo.download(_username.text, _password.text);
 
     if(ret == StatusApp.DOWNLOAD_SUCCESS) {
-      _msg = 'Download data to server successfully!';
       _database.setAccount(_username.text, _password.text);
-      return true;
-    } else if (ret == StatusApp.CONNECT_FAIL) {
-      _msg = 'Unable to connect to the server, please check your internet connection!';
-    } else if (ret == StatusApp.ACCOUNT_INVALID) {
-      _msg = 'Username or password is incorrect.'
-          'If you do not have an account, please contact the administrator for support.';
-    } else {
-      _msg = 'Fail to download data from server!';
     }
-    return false;
+    return ret;
   }
 
   @override
@@ -125,31 +104,39 @@ class _LoginDialogState extends State<LoginDialog> {
                 const SizedBox(height: 20),
                 Text(
                     widget.isDownload ? 'Get data from server!' : 'Push data to server!',
-                    style: TextStyle(fontSize: 17, color: Colors.blueGrey)
+                    style: TextStyle(fontSize: 17, color: Colors.deepPurple)
                 ),
                 const SizedBox(height: 20),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextButtonApp(
-                        label: 'Cancel',
-                        backgroundColor: Colors.white30,
-                        onPressed: () async {Navigator.of(context).pop();},
+                      Expanded (
+                        child: TextBoxBtn(
+                          title: 'Cancel',
+                          radius: 10,
+                          textColor: Colors.blueGrey,
+                          bgColor: Colors.white,
+                          onPressed: () async {Navigator.of(context).pop();},
+                        ),
                       ),
                       const SizedBox(width: 16),
-                      TextButtonApp(
-                        label: 'OK',
-                        backgroundColor: Colors.blueGrey,
-                        onPressed: () async {
-                          setState(() {_isLoading = true;});
-                          bool ret = widget.isDownload ? (await downloadData()) : (await uploadData());
-                          Navigator.of(context).pop();
-                          await showDialog(
-                              context: context, builder: (BuildContext context) {
-                            return NotifyDialog(isSuccess: ret, message: _msg);
-                          }
-                          );
-                        },
+                      Expanded (
+                        child: TextBoxBtn(
+                          title: 'OK',
+                          radius: 10,
+                          bgColor: Colors.blueGrey,
+                          onPressed: () async {
+                            setState(() {_isLoading = true;});
+                            StatusApp ret = widget.isDownload ? (await downloadData()) : (await uploadData());
+                            setState(() {_isLoading = false;});
+                            if(ret == StatusApp.UPLOAD_SUCCESS || ret == StatusApp.DOWNLOAD_SUCCESS) {
+                              ActionApp.showNotify(context, MessageType.SUCCESS, ret);
+                              Navigator.of(context).pop();
+                            } else {
+                              ActionApp.showNotify(context, MessageType.ERROR, ret);
+                            }
+                          },
+                        ),
                       )
                     ]
                 )

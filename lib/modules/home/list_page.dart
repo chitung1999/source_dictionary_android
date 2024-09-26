@@ -1,69 +1,83 @@
 import 'package:flutter/material.dart';
-import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
-import 'package:source_dictionary_mobile/models/word_action.dart';
-import '../../models/word_model.dart';
+import '../../common/text_btn.dart';
+import '../../models/database.dart';
 
 class ListPage extends StatefulWidget {
-  final Function() onClick;
+  final Function() onSelect;
+  final Function() onChangedLanguage;
 
-  const ListPage({Key? key, required this.onClick}) : super(key: key);
+  const ListPage({Key? key, required this.onSelect, required this.onChangedLanguage}) : super(key: key);
 
   @override
   State<ListPage> createState() => _ListPageState();
 }
 
 class _ListPageState extends State<ListPage> {
-  final WordAction _wordAction = WordAction();
-  final WordModel _wordModel = WordModel();
+  bool _isEng = true;
+
+  @override
+  void initState() {
+    _isEng = database.wordModel.query.isEng;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 20.0, horizontal: 30.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'Count: ${_wordModel.eng.length}',
-            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)
-          ),
-          const SizedBox(height: 10),
-          Expanded(child: AlphabetScrollView(
-            list: _wordModel.eng.keys.map((e) => AlphaModel(e)).toList(),
-            itemExtent: 50,
-            itemBuilder: (_, k, id) {
-              return Column(children: [
-                GestureDetector(
-                  child: Container(
-                    width: 230,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.0),
-                      border: Border.all(width: 2, color: Colors.blueGrey)
+    return Column(
+      children: [
+        SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextBtn(
+              onPressed: () {
+                setState(() {_isEng = !_isEng;});
+                database.wordModel.query.isEng = _isEng;
+                widget.onChangedLanguage();
+              },
+              title: _isEng ? 'EN' : 'VN',
+            ),
+            SizedBox(width: 20),
+            SizedBox(
+              width: 120,
+              child: Text(
+                'Count: ${database.wordModel.resultSearch.length}',
+                style: const TextStyle(fontSize: 15, fontStyle: FontStyle.italic)
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Expanded(
+          child: ListView(
+            children: List.generate(
+              database.wordModel.resultSearch.length, (index) => Column(
+                children: [
+                  GestureDetector(
+                    child: Container(
+                      width: 250,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.0),
+                        border: Border.all(width: 2, color: Colors.blueGrey)
+                      ),
+                      child: Center(child: Text(
+                        database.wordModel.resultSearch[index],
+                        style: TextStyle(fontSize: 20, color: Colors.deepPurple[800])
+                      ))
                     ),
-                    child: Center(child: Text(
-                      '$id',
-                      style: const TextStyle(fontSize: 20)
-                    ))
+                    onTap: () {
+                      database.wordModel.query.set(database.wordModel.resultSearch[index], _isEng);
+                      widget.onSelect();
+                    },
                   ),
-                  onTap: () {
-                    _wordAction.query = id;
-                    _wordAction.resultSearch.clear();
-
-                    for(int num in _wordAction.isEng ? _wordModel.eng[_wordAction.query]! : _wordModel.vn[_wordAction.query]!) {
-                      _wordAction.resultSearch[num] = _wordModel.data[num];
-                    }
-                    widget.onClick();
-                  },
-                )
-              ]);
-            },
-            selectedTextStyle: TextStyle(color: Colors.deepPurple),
-            unselectedTextStyle: TextStyle(color: Colors.deepPurple.withOpacity(0.3)),
-          ))
-        ],
-      )
+                  SizedBox(height: 5)
+                ],
+              )
+            ),
+          ),
+        )
+      ],
     );
   }
 }

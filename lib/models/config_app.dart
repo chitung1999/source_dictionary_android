@@ -1,10 +1,6 @@
 import '../common/enum.dart';
 
 class ConfigApp {
-  ConfigApp._internal();
-  factory ConfigApp() {return _instance;}
-  static final ConfigApp _instance = ConfigApp._internal();
-
   String username = '';
   String password = '';
   ThemeApp theme = ThemeApp.LIGHT;

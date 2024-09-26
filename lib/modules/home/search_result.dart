@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:source_dictionary_mobile/models/word_action.dart';
-import 'manage_dialog.dart';
+import '../../common/change_data.dart';
+import '../../models/database.dart';
+import '../../models/word_model.dart';
 
 class SearchResult extends StatefulWidget {
   const SearchResult({Key? key}) : super(key: key);
@@ -10,18 +11,45 @@ class SearchResult extends StatefulWidget {
 }
 
 class _SearchResultState extends State<SearchResult> {
-  WordAction _wordAction = WordAction();
+  List<WordItem> _data = [];
+  List<int> _indexData = [];
+  Query query = Query();
+
+  void _onModifySuccess() {
+    _getData();
+    setState(() {});
+  }
+
+  void _getData() {
+    _data.clear();
+    query = database.wordModel.query;
+    if(query.textSearch.isNotEmpty) {
+      try {
+        _indexData =
+        query.isEng ? database.wordModel.eng[query.textSearch]! : database
+            .wordModel.vn[query.textSearch]!;
+        for (int i in _indexData) {
+          _data.add(database.wordModel.data[i]);
+        }
+      } catch(e) {}
+    }
+  }
+
+  @override
+  void initState() {
+    _getData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    if(_wordAction.resultSearch.isEmpty) {
-      return const Center(child: Text('No results found!', style: TextStyle(fontSize: 20, color: Colors.blueGrey)));
+    if(_data.isEmpty) {
+      return Center(child: Text('0 results', style: TextStyle(fontSize: 25, color: Colors.deepPurple[800])));
     }
-
     return Container(
       padding: const EdgeInsets.all(20.0),
       child: ListView.builder(
-        itemCount: _wordAction.resultSearch.length,
+        itemCount: _data.length,
         itemBuilder: (context, index) {return Column( children: [
           Container(
             decoration: BoxDecoration(
@@ -36,16 +64,15 @@ class _SearchResultState extends State<SearchResult> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                        _wordAction.query,
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+                      '${query.textSearch}',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.deepPurple[800])
                     ),
                     IconButton(
                       icon: const Icon(Icons.edit),
                       onPressed: () async {
                         await showDialog(context: context, builder: (BuildContext context) {
-                          _wordAction.isModify = true;
-                          _wordAction.indexModify = _wordAction.resultSearch.entries.elementAt(index).key;;
-                          return const ManageDialog();
+                          return ChangeData(isHome: true, isAddNew: false,
+                              wordItem: _data[index], index: _indexData[index], onSuccess: _onModifySuccess);
                         });
                         setState(() {});
                       }
@@ -53,16 +80,16 @@ class _SearchResultState extends State<SearchResult> {
                   ]
                 ),
                 Text(
-                  '• words: ${_wordAction.resultSearch.entries.elementAt(index).value.keysToString()}',
-                  style: const TextStyle(fontSize: 20)
+                  '• words: ${_data[index].keysToString()}',
+                  style: TextStyle(fontSize: 20, color: Colors.blueGrey[800])
                 ),
                 Text(
-                  '• means: ${_wordAction.resultSearch.entries.elementAt(index).value.meansToString()}',
-                  style: const TextStyle(fontSize: 20)
+                  '• means: ${_data[index].meansToString()}',
+                  style: TextStyle(fontSize: 20, color: Colors.blueGrey[800])
                 ),
                 Text(
-                  '• note: ${_wordAction.resultSearch.entries.elementAt(index).value.note}',
-                  style: const TextStyle(fontSize: 20)
+                  '• note: ${_data[index].note}',
+                  style: TextStyle(fontSize: 20, color: Colors.blueGrey[800])
                 ),
               ],
             ),

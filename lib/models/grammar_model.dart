@@ -4,13 +4,9 @@ class GrammarItem {
 }
 
 class GrammarModel {
-  GrammarModel._internal();
-  factory GrammarModel() {
-    return _instance;
-  }
-  static final GrammarModel _instance = GrammarModel._internal();
-
   List<GrammarItem> data = [];
+  List<GrammarItem> resultSearch = [];
+  String textTyping = '';
 
   void resetData() {
     data.clear();
@@ -23,6 +19,17 @@ class GrammarModel {
       grammarItem.form = item["form"];
       grammarItem.structure = item["structure"];
       data.add(grammarItem);
+      resultSearch.add(grammarItem);
+    }
+  }
+
+  void search() {
+    resultSearch.clear();
+    for (GrammarItem item in data) {
+      if (textTyping.isEmpty || item.form.toLowerCase().contains(textTyping.toLowerCase())
+          || item.structure.toLowerCase().contains(textTyping.toLowerCase())) {
+        resultSearch.add(item);
+      }
     }
   }
 }

@@ -113,10 +113,9 @@ class Database {
   }
 
   //Home
-  Future<bool> addGroup(List<String> keys, List<String> means, String note) async {
+  Future<StatusApp> addGroup(List<String> keys, List<String> means, String note) async {
     try {
       Map<String, dynamic> data = await readFileLocal();
-
       final Map<String, dynamic> newGroup = {
         "keys": keys,
         "means": means,
@@ -126,17 +125,17 @@ class Database {
       data["words"].add(newGroup);
       bool ret = await writeFileLocal(data);
       if(!ret) {
-        return false;
+        return StatusApp.ERROR;
       };
       wordModel.loadData(data["words"]);
-      return true;
+      return StatusApp.ADD_WORD_SUCCESS;
     } catch(e) {
       print('Fail to add new group: $e');
-      return false;
+      return StatusApp.ERROR;
     }
   }
 
-  Future<bool> modifyGroup(List<String> keys, List<String> means, String note, int index) async {
+  Future<StatusApp> modifyGroup(List<String> keys, List<String> means, String note, int index) async {
     try {
       Map<String, dynamic> data = await readFileLocal();
 
@@ -149,35 +148,35 @@ class Database {
       data["words"][index] = newGroup;
       bool ret = await writeFileLocal(data);
       if(!ret) {
-        return false;
+        return StatusApp.ERROR;
       };
       wordModel.loadData(data["words"]);
-      return true;
+      return StatusApp.ADD_GRAMMAR_SUCCESS;
     } catch(e) {
       print('Fail to modify group: $e');
-      return false;
+      return StatusApp.ERROR;
     }
   }
 
-  Future<bool> removeGroup(int index) async {
+  Future<StatusApp> removeGroup(int index) async {
     try {
       Map<String, dynamic> data = await readFileLocal();
 
       data["words"].removeAt(index);
       bool ret = await writeFileLocal(data);
       if(!ret) {
-        return false;
+        return StatusApp.ERROR;
       };
       wordModel.loadData(data["words"]);
-      return true;
+      return StatusApp.REMOVE_WORD_SUCCESS;
     } catch(e) {
       print('Fail to remove group: $e');
-      return false;
+      return StatusApp.ERROR;
     }
   }
 
   //Grammar
-  Future<bool> addGrammar(String form, String structure) async {
+  Future<StatusApp> addGrammar(String form, String structure) async {
     try {
       Map<String, dynamic> data = await readFileLocal();
 
@@ -189,17 +188,17 @@ class Database {
       data["grammar"].add(newGrammar);
       bool ret = await writeFileLocal(data);
       if(!ret) {
-        return false;
+        return StatusApp.ERROR;
       };
       grammarModel.loadData(data["grammar"]);
-      return true;
+      return StatusApp.ADD_GRAMMAR_SUCCESS;
     } catch(e) {
       print('Fail to add new grammar: $e');
-      return false;
+      return StatusApp.ERROR;
     }
   }
 
-  Future<bool> modifyGrammar(String form, String structure, int index) async {
+  Future<StatusApp> modifyGrammar(String form, String structure, int index) async {
     try {
       Map<String, dynamic> data = await readFileLocal();
 
@@ -211,33 +210,34 @@ class Database {
       data["grammar"][index] = newGrammar;
       bool ret = await writeFileLocal(data);
       if(!ret) {
-        return false;
+        return StatusApp.ERROR;
       };
       grammarModel.loadData(data["grammar"]);
-      return true;
+      return StatusApp.MODIFY_GRAMMAR_SUCCESS;
     } catch(e) {
       print('Fail to modify grammar: $e');
-      return false;
+      return StatusApp.ERROR;
     }
   }
 
-  Future<bool> removeGrammar(int index) async {
+  Future<StatusApp> removeGrammar(int index) async {
     try {
       Map<String, dynamic> data = await readFileLocal();
 
       data["grammar"].removeAt(index);
       bool ret = await writeFileLocal(data);
       if(!ret) {
-        return false;
+        return StatusApp.ERROR;
       };
       grammarModel.loadData(data["grammar"]);
-      return true;
+      return StatusApp.REMOVE_GRAMMAR_SUCCESS;
     } catch(e) {
       print('Fail to remove grammar: $e');
-      return false;
+      return StatusApp.ERROR;
     }
   }
 
+  // Server
   Future<bool> receiveDataFromServer(var words, var grammar) async {
     try {
       Map<String, dynamic> dataLocal = await readFileLocal();
@@ -258,21 +258,21 @@ class Database {
     }
   }
 
-  Future<bool> importData(String path) async {
+  Future<StatusApp> importData(String path) async {
     try {
       final file = File(path);
       final strData = await file.readAsString();
       Map<String, dynamic> data = jsonDecode(strData);
 
       bool ret = await receiveDataFromServer(data["words"], data["grammar"]);
-      return ret;
+      return ret ? StatusApp.IMPORT_SUCCESS : StatusApp.ERROR;
     } catch (e) {
       print('Fail to import data from file local: $e');
-      return false;
+      return StatusApp.ERROR;
     }
   }
 
-  Future<bool> exportData(String path, String data) async {
+  Future<StatusApp> exportData(String path, String data) async {
     try {
       var storageStatus = await Permission.storage.status;
       var manageStorageStatus = await Permission.manageExternalStorage.status;
@@ -287,13 +287,13 @@ class Database {
       if(storageStatus.isGranted || manageStorageStatus.isGranted) {
         final file = File(path);
         await file.writeAsString(data);
-        return true;
+        return StatusApp.EXPORT_SUCCESS;
       }
 
-      return false;
+      return StatusApp.ERROR;
     } catch(e) {
       print('Fail to export data to file: $e');
-      return false;
+      return StatusApp.ERROR;
     }
   }
 }

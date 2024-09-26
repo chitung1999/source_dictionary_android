@@ -23,6 +23,17 @@ class WordItem {
   }
 }
 
+class Query {
+  String textTyping = '';
+  String textSearch = '';
+  bool isEng = true;
+
+  void set(String t, bool i) {
+    textSearch = t;
+    isEng = i;
+  }
+}
+
 class WordModel {
 
   WordModel._internal();
@@ -36,6 +47,8 @@ class WordModel {
   SplayTreeMap<String, List<int>> eng = SplayTreeMap<String, List<int>>();
   SplayTreeMap<String, List<int>> vn = SplayTreeMap<String, List<int>>();
   List<WordItem> data = [];
+  List<String> resultSearch = [];
+  Query query = Query();
 
   void reset() {
     eng.clear();
@@ -70,6 +83,15 @@ class WordModel {
       wordItem.note = item['notes'];
       data.add(wordItem);
       index++;
+    }
+  }
+
+  void search() {
+    resultSearch.clear();
+    for(String item in (query.isEng ? eng.keys : vn.keys)) {
+      if(query.textTyping.isEmpty || item.toLowerCase().startsWith(query.textTyping..toLowerCase())) {
+        resultSearch.add(item);
+      }
     }
   }
 }

@@ -54,7 +54,7 @@ class MongoHelper {
 
       return StatusApp.UPLOAD_SUCCESS;
     } catch(e) {
-      print('[DICTIONARY][mongo_helper]: Fail to upload data to sever: $e');
+      print('Fail to upload data to sever: $e');
       return StatusApp.UNKNOWN_ERROR;
     }
   }
@@ -74,7 +74,7 @@ class MongoHelper {
       ret = await disconnect();
       return StatusApp.DOWNLOAD_SUCCESS;
     } catch(e) {
-      print('[DICTIONARY][mongo_helper]: Fail to download data from sever: $e');
+      print('Fail to download data from sever: $e');
       return StatusApp.UNKNOWN_ERROR;
     }
   }
