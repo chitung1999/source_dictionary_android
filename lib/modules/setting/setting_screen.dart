@@ -94,9 +94,14 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 15.0),
-      child:  Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Dictionary', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)),
+        flexibleSpace: database.configApp.banner,
+      ),
+      body: Container(
+        padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 15.0),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
@@ -109,7 +114,7 @@ class _SettingScreenState extends State<SettingScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Theme', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20, color: Colors.blueGrey[800])),
+                  Text('Theme', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
                   Row(
                     children: [
                       const Text('Dark', style: TextStyle(fontSize: 15)),
@@ -133,12 +138,12 @@ class _SettingScreenState extends State<SettingScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(children: [Text('Data', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20, color: Colors.blueGrey[800]))]),
+                  Row(children: [Text('Data', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20))]),
                   for (int i = 0; i < 4; i++)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('    ${_title[i]}', style: TextStyle(fontSize: 17, color: Colors.blueGrey[800])),
+                        Text('    ${_title[i]}', style: TextStyle(fontSize: 17)),
                         IconButton(
                           icon: Icon(_icon[i], color: Colors.blueGrey, size: 30),
                           onPressed: () async {await onAction(i);},
@@ -150,6 +155,7 @@ class _SettingScreenState extends State<SettingScreen> {
             )
           ],
         )
+      )
     );
   }
 }

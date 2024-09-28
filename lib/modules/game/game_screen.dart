@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import '../../models/database.dart';
 import 'play_page.dart';
 
 class GameScreen extends StatefulWidget {
@@ -18,18 +19,40 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isPlaying)
-      return PlayPage();
-    else
-      return Center(child: SizedBox(
-        width: 250,
-        height: 250,
-        child: GestureDetector(
-          onTap: () async {
-            setState(() {_isPlaying = true;});
-          },
-          child: Lottie.asset('data/game_ani_start.json'),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Dictionary', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)),
+        flexibleSpace: database.configApp.banner,
+        actions: [
+          if(_isPlaying) Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.white60,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.clear, color: Colors.black),
+              onPressed: () {setState(() {_isPlaying = false;});}
+            ),
+          ),
+          SizedBox(width: 20)
+        ],
+      ),
+      body: _isPlaying ? PlayPage() : Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset('data/game_ani_start_thumb.json'),
+            GestureDetector(
+              onTap: () async {
+                setState(() {_isPlaying = true;});
+              },
+              child: Lottie.asset('data/game_ani_start_btn.json'),
+            )
+          ]
         ),
-      ));
+      )
+    );
   }
 }

@@ -5,12 +5,14 @@ class TextBtn extends StatefulWidget {
       {super.key,
         required this.title,
         this.size = 15,
-        this.color = Colors.blueGrey,
+        this.color = Colors.deepPurple,
+        this.isItalic = false,
         required this.onPressed});
 
   final String title;
   final double size;
   final Color color;
+  final bool isItalic;
   final Function() onPressed;
 
   @override
@@ -20,20 +22,19 @@ class TextBtn extends StatefulWidget {
 class _TextBtnState extends State<TextBtn> {
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: ButtonStyle(
-        overlayColor: MaterialStateProperty.all(Colors.transparent),
-        splashFactory: NoSplash.splashFactory,
-      ),
-      onPressed: () {
+    return GestureDetector(
+      onTap: () {
         widget.onPressed();
       },
-      child: Text(widget.title,
-          style: TextStyle(
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold,
-              fontSize: widget.size,
-              color: widget.color)),
+      child: Text(
+        widget.title,
+        style: TextStyle(
+          fontStyle: widget.isItalic ? FontStyle.italic : FontStyle.normal,
+          fontWeight: FontWeight.bold,
+          fontSize: widget.size,
+          color: widget.color
+        )
+      ),
     );
   }
 }

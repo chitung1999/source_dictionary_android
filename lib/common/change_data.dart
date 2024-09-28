@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:source_dictionary_mobile/common/enum.dart';
-import '../common/text_btn.dart';
 import '../common/text_box_btn.dart';
 import '../common/action_app.dart';
 import '../models/database.dart';
@@ -120,26 +119,6 @@ class _ChangeDataState extends State<ChangeData> {
                   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple))
                 ),
               ),
-              SizedBox(height: 10),
-              if(!widget.isAddNew) TextBtn (
-                  title: 'Delete this item',
-                  onPressed: () async {
-                    StatusApp ret;
-                    if(widget.isHome) {
-                      ret = await database.removeGroup(widget.index!);
-                    } else {
-                      ret = await database.removeGrammar(widget.index!);
-                    }
-
-                    if(ret == StatusApp.ERROR) {
-                      ActionApp.showNotify(context, MessageType.ERROR, ret);
-                    } else {
-                      ActionApp.showNotify(context, MessageType.SUCCESS, ret);
-                      if(widget.onSuccess != null){widget.onSuccess!();};
-                      Navigator.of(context).pop();
-                    }
-                  }
-              ),
               SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -167,7 +146,7 @@ class _ChangeDataState extends State<ChangeData> {
                           return;
                         }
                         RegExp regex = RegExp(r'[^a-zA-Z, àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]');
-                        if(regex.hasMatch(_box1.text.toLowerCase()) || regex.hasMatch(_box2.text.toLowerCase())) {
+                        if(widget.isHome && (regex.hasMatch(_box1.text.toLowerCase()) || regex.hasMatch(_box2.text.toLowerCase()))) {
                           ActionApp.showNotify(context, MessageType.ERROR, StatusApp.SPECIAL_CHAR);
                           return;
                         }

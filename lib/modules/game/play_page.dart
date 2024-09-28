@@ -12,7 +12,7 @@ class PlayPage extends StatefulWidget {
 
 class _PlayPageState extends State<PlayPage> {
   final TextEditingController _controller = TextEditingController();
-  late IconData _icon;
+  late String _pathLottie;
   late List<String> _option;
   late List<Color> _bgColor;
   late int _answer;
@@ -24,11 +24,11 @@ class _PlayPageState extends State<PlayPage> {
     setState(() {
       _isAnswered = true;
       if(_answer == index) {
-        _icon = Icons.check_circle_outline;
+        _pathLottie = 'data/game_ani_correct.json';
         _correct += 1;
         _bgColor[index] = Colors.green[100]!;
       } else {
-        _icon = Icons.highlight_off;
+        _pathLottie = 'data/game_ani_incorrect.json';
         _incorrect += 1;
         _bgColor[index] = Colors.red[100]!;
         _bgColor[_answer] = Colors.green[100]!;
@@ -38,6 +38,7 @@ class _PlayPageState extends State<PlayPage> {
 
   void _reset() {
     _controller.text = '';
+    _pathLottie = 'data/game_ani_loading.json';
     _bgColor = [Colors.white, Colors.white, Colors.white, Colors.white];
     _option = [];
     _isAnswered = false;
@@ -91,21 +92,37 @@ class _PlayPageState extends State<PlayPage> {
           Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Container(
-                    width: 100,
-                    child: Center(child: Text('$_incorrect', style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.redAccent)))
+                  Text(
+                    'Incorrect',
+                    style: const TextStyle(fontSize: 15, fontFamily: 'SpicyRice', color: Colors.redAccent)
                   ),
-                  Expanded(child: Lottie.asset('data/game_ani_running.json')),
-                  Container(
-                    width: 100,
-                    child: Center(child: Text('$_correct', style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.green)))
+                  SizedBox(
+                    width: 180,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '$_incorrect',
+                          style: const TextStyle(fontSize: 50, fontFamily: 'SpicyRice', fontWeight: FontWeight.bold, color: Colors.redAccent)
+                        ),
+                        Text(
+                          '$_correct',
+                          style: TextStyle(fontSize: 50, fontFamily: 'SpicyRice', fontWeight: FontWeight.bold, color: Colors.green)
+                        )
+                      ],
+                    )
                   ),
+                  Text(
+                      'Correct',
+                      style: TextStyle(fontSize: 15, fontFamily: 'SpicyRice', color: Colors.green)
+                  )
                 ],
               ),
               SizedBox(height: height / 8, child: Center(
-                child: _isAnswered ? Icon(_icon, color: (_icon == Icons.check_circle_outline ? Colors.green : Colors.redAccent), size: height/12) :
-                Lottie.asset('data/game_ani_loading.json')
+                child: Lottie.asset(_pathLottie)
               )),
             ],
           ),

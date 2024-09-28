@@ -6,6 +6,7 @@ class GrammarItem {
 class GrammarModel {
   List<GrammarItem> data = [];
   List<GrammarItem> resultSearch = [];
+  List<int> listIndex = [];
   String textTyping = '';
 
   void resetData() {
@@ -25,10 +26,12 @@ class GrammarModel {
 
   void search() {
     resultSearch.clear();
-    for (GrammarItem item in data) {
-      if (textTyping.isEmpty || item.form.toLowerCase().contains(textTyping.toLowerCase())
-          || item.structure.toLowerCase().contains(textTyping.toLowerCase())) {
-        resultSearch.add(item);
+    listIndex.clear();
+    for (int i = 0; i < data.length; i++) {
+      if (textTyping.isEmpty || data[i].form.toLowerCase().contains(textTyping.toLowerCase())
+          || data[i].structure.toLowerCase().contains(textTyping.toLowerCase())) {
+        resultSearch.add(data[i]);
+        listIndex.add(i);
       }
     }
   }

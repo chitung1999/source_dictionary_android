@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:source_dictionary_mobile/common/enum.dart';
+import '../../common/action_app.dart';
+import 'search_result_item.dart';
 import '../../common/change_data.dart';
 import '../../models/database.dart';
 import '../../models/word_model.dart';
 
 class SearchResult extends StatefulWidget {
-  const SearchResult({Key? key}) : super(key: key);
+  const SearchResult({Key? key, required this.onBack}) : super(key: key);
+  final Function() onBack;
 
   @override
   State<SearchResult> createState() => _SearchResultState();
@@ -43,59 +47,55 @@ class _SearchResultState extends State<SearchResult> {
 
   @override
   Widget build(BuildContext context) {
-    if(_data.isEmpty) {
-      return Center(child: Text('0 results', style: TextStyle(fontSize: 25, color: Colors.deepPurple[800])));
-    }
     return Container(
+      color: Colors.white,
       padding: const EdgeInsets.all(20.0),
-      child: ListView.builder(
-        itemCount: _data.length,
-        itemBuilder: (context, index) {return Column( children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12.0),
-              border: Border.all(width: 2, color: Colors.blueGrey)
-            ),
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${query.textSearch}',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.deepPurple[800])
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () async {
-                        await showDialog(context: context, builder: (BuildContext context) {
-                          return ChangeData(isHome: true, isAddNew: false,
-                              wordItem: _data[index], index: _indexData[index], onSuccess: _onModifySuccess);
-                        });
-                        setState(() {});
-                      }
-                    ),
-                  ]
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 40,
+                child: GestureDetector(
+                  child: Icon(Icons.arrow_back, color: Colors.blueGrey[100]),
+                  onTap: (){widget.onBack();},
                 ),
-                Text(
-                  '• words: ${_data[index].keysToString()}',
-                  style: TextStyle(fontSize: 20, color: Colors.blueGrey[800])
-                ),
-                Text(
-                  '• means: ${_data[index].meansToString()}',
-                  style: TextStyle(fontSize: 20, color: Colors.blueGrey[800])
-                ),
-                Text(
-                  '• note: ${_data[index].note}',
-                  style: TextStyle(fontSize: 20, color: Colors.blueGrey[800])
-                ),
-              ],
+              ),
+              Text(
+                  _data.isEmpty ? 'Back' : '${query.textSearch}',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.deepPurple)
+              ),
+              SizedBox(width: 40)
+            ],
+          ),
+          SizedBox(height: 20),
+          _data.isEmpty ? Expanded(child: Center(child: Text('0 results', style: TextStyle(fontSize: 25)))) :
+          Expanded(
+            child: ListView.builder(
+              itemCount: _data.length,
+              itemBuilder: (context, index) {
+                return ResultItem(
+                  onModify: () async {
+                    await showDialog(context: context, builder: (BuildContext context) {
+                      return ChangeData(isHome: true, isAddNew: false,
+                        wordItem: _data[index], index: _indexData[index], onSuccess: _onModifySuccess);
+                    });
+                    setState(() {});
+                  },
+                  onDelete: () async {
+                    StatusApp ret = await database.removeGroup(_indexData[index]);
+                    ActionApp.showNotify(context, MessageType.SUCCESS, ret);
+                    _onModifySuccess();
+                  },
+                  eng: _data[index].keysToString(),
+                  vn: _data[index].meansToString(),
+                  note: _data[index].note
+                );
+              }
             ),
           ),
-          const SizedBox(height: 20)
-        ],);}
+        ],
       )
     );
   }

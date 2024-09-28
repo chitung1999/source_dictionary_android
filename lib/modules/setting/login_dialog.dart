@@ -65,84 +65,84 @@ class _LoginDialogState extends State<LoginDialog> {
       return Center(child: CircularProgressIndicator());
 
     return Dialog(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 20.0),
-          child: Column(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+                'Login',
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.blueGrey)
+            ),
+            const SizedBox(height: 25),
+            TextField(
+              controller: _username,
+              style:TextStyle(fontSize:20),
+              decoration: InputDecoration(
+                  hintText: 'User name',
+                  hintStyle: TextStyle(fontSize: 20, color: Colors.grey.withOpacity(0.3)),
+                  icon: Icon(Icons.person)
+              ),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _password,
+              obscureText: _isHidePassword,
+              style:TextStyle(fontSize:20),
+              decoration: InputDecoration(
+                  hintText: 'Password',
+                  hintStyle: TextStyle(fontSize: 20, color: Colors.grey.withOpacity(0.3)),
+                  icon: const Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                      icon: const Icon(Icons.visibility),
+                      onPressed: () {
+                        setState(() {_isHidePassword = !_isHidePassword;});
+                      }
+                  )
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+                widget.isDownload ? 'Get data from server!' : 'Push data to server!',
+                style: TextStyle(fontSize: 17, color: Colors.deepPurple)
+            ),
+            const SizedBox(height: 20),
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                    'Login',
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.blueGrey)
-                ),
-                const SizedBox(height: 25),
-                TextField(
-                  controller: _username,
-                  style:TextStyle(fontSize:20),
-                  decoration: InputDecoration(
-                      hintText: 'User name',
-                      hintStyle: TextStyle(fontSize: 20, color: Colors.grey.withOpacity(0.3)),
-                      icon: Icon(Icons.person)
+                Expanded (
+                  child: TextBoxBtn(
+                    title: 'Cancel',
+                    radius: 10,
+                    textColor: Colors.blueGrey,
+                    bgColor: Colors.white,
+                    onPressed: () async {Navigator.of(context).pop();},
                   ),
                 ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: _password,
-                  obscureText: _isHidePassword,
-                  style:TextStyle(fontSize:20),
-                  decoration: InputDecoration(
-                      hintText: 'Password',
-                      hintStyle: TextStyle(fontSize: 20, color: Colors.grey.withOpacity(0.3)),
-                      icon: const Icon(Icons.lock),
-                      suffixIcon: IconButton(
-                          icon: const Icon(Icons.visibility),
-                          onPressed: () {
-                            setState(() {_isHidePassword = !_isHidePassword;});
-                          }
-                      )
+                const SizedBox(width: 16),
+                Expanded (
+                  child: TextBoxBtn(
+                    title: 'OK',
+                    radius: 10,
+                    bgColor: Colors.blueGrey,
+                    onPressed: () async {
+                      setState(() {_isLoading = true;});
+                      StatusApp ret = widget.isDownload ? (await downloadData()) : (await uploadData());
+                      setState(() {_isLoading = false;});
+                      if(ret == StatusApp.UPLOAD_SUCCESS || ret == StatusApp.DOWNLOAD_SUCCESS) {
+                        ActionApp.showNotify(context, MessageType.SUCCESS, ret);
+                        Navigator.of(context).pop();
+                      } else {
+                        ActionApp.showNotify(context, MessageType.ERROR, ret);
+                      }
+                    },
                   ),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                    widget.isDownload ? 'Get data from server!' : 'Push data to server!',
-                    style: TextStyle(fontSize: 17, color: Colors.deepPurple)
-                ),
-                const SizedBox(height: 20),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded (
-                        child: TextBoxBtn(
-                          title: 'Cancel',
-                          radius: 10,
-                          textColor: Colors.blueGrey,
-                          bgColor: Colors.white,
-                          onPressed: () async {Navigator.of(context).pop();},
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded (
-                        child: TextBoxBtn(
-                          title: 'OK',
-                          radius: 10,
-                          bgColor: Colors.blueGrey,
-                          onPressed: () async {
-                            setState(() {_isLoading = true;});
-                            StatusApp ret = widget.isDownload ? (await downloadData()) : (await uploadData());
-                            setState(() {_isLoading = false;});
-                            if(ret == StatusApp.UPLOAD_SUCCESS || ret == StatusApp.DOWNLOAD_SUCCESS) {
-                              ActionApp.showNotify(context, MessageType.SUCCESS, ret);
-                              Navigator.of(context).pop();
-                            } else {
-                              ActionApp.showNotify(context, MessageType.ERROR, ret);
-                            }
-                          },
-                        ),
-                      )
-                    ]
                 )
               ]
-          ),
-        )
+            )
+          ]
+        ),
+      )
     );
   }
 }

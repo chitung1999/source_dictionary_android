@@ -2,7 +2,7 @@
 # See https://dart.dev/tools/pub/glossary#lockfile
 packages:
   alphabet_scroll_view:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: alphabet_scroll_view
       sha256: f8192b043bcae855566ed471c4bc61c98bec761fb5091ed79d4bdbfcc5846e3b
@@ -304,14 +304,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.8.0"
-  material_symbols_icons:
-    dependency: "direct main"
-    description:
-      name: material_symbols_icons
-      sha256: "66416c4e30bd363508e12669634fc4f3250b83b69e862de67f4f9c480cf42414"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.2785.1"
   meta:
     dependency: transitive
     description:
@@ -601,10 +593,10 @@ packages:
     dependency: transitive
     description:
       name: uuid
-      sha256: f33d6bb662f0e4f79dcd7ada2e6170f3b3a2530c28fc41f49a411ddedd576a77
+      sha256: a5be9ef6618a7ac1e964353ef476418026db906c4facdedaa299b7a2e71690ff
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.0"
+    version: "4.5.1"
   vector_math:
     dependency: transitive
     description:
