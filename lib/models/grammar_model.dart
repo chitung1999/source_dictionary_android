@@ -20,8 +20,9 @@ class GrammarModel {
       grammarItem.form = item["form"];
       grammarItem.structure = item["structure"];
       data.add(grammarItem);
-      resultSearch.add(grammarItem);
+      //resultSearch.add(grammarItem);
     }
+    search();
   }
 
   void search() {

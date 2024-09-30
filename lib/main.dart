@@ -24,46 +24,6 @@ class DictionaryApp extends StatefulWidget {
 class _DictionaryAppState extends State<DictionaryApp> {
   int _currentIndex = 0;
 
-  // void _onSelectWord() {setState(() {_isSearching = false;});}
-
-  // void _onSearch() {
-  //   if(_currentIndex == 0) {
-  //     database.wordModel.query.textTyping = '';
-  //     database.wordModel.search();
-  //   } else {
-  //     database.grammarModel.textTyping = '';
-  //     database.grammarModel.search();
-  //   }
-  //   setState(() {
-  //     _isSearching = !_isSearching;
-  //   });
-  // }
-
-  // void _onTyping(String str) {
-  //   if(_currentIndex == 0) {
-  //     database.wordModel.query.textTyping = str;
-  //     database.wordModel.search();
-  //   } else {
-  //     database.grammarModel.textTyping = str;
-  //     database.grammarModel.search();
-  //   }
-  //   setState(() {});
-  // }
-  //
-  // void _onChangedLanguage() {
-  //   database.wordModel.search();
-  //   setState(() {});
-  // }
-  //
-  // void _onAdd() {
-  //   if(_currentIndex == 0) {
-  //     database.wordModel.search();
-  //   } else {
-  //     database.grammarModel.search();
-  //   }
-  //   setState(() {});
-  // }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

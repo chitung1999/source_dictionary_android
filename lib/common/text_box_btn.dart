@@ -18,7 +18,7 @@ class TextBoxBtn extends StatefulWidget {
   final double? height;
   final double radius;
   final Color outlineColor;
-  final Color bgColor;
+  final Color? bgColor;
   final double textSize;
   final Color textColor;
   final Function() onPressed;

@@ -95,14 +95,20 @@ class _GrammarScreenState extends State<GrammarScreen> {
                     onModify: () async {
                       await showDialog(context: context, builder: (BuildContext context) {
                         return ChangeData(onSuccess: _onModifySuccess, isHome: false, isAddNew: false,
-                          grammarItem: database.grammarModel.data[database.grammarModel.listIndex[index]], index: index);
+                          grammarItem: database.grammarModel.data[database.grammarModel.listIndex[index]],
+                          index: database.grammarModel.listIndex[index]
+                        );
                       });
                       setState(() {});
                     },
                     onDelete: () async {
                       StatusApp ret = await database.removeGrammar(database.grammarModel.listIndex[index]);
-                      ActionApp.showNotify(context, MessageType.SUCCESS, ret);
-                      _onModifySuccess();
+                      if(ret == StatusApp.REMOVE_GRAMMAR_SUCCESS) {
+                        ActionApp.showNotify(context, MessageType.SUCCESS, ret);
+                        _onModifySuccess();
+                      } else {
+                        ActionApp.showNotify(context, MessageType.ERROR, ret);
+                      }
                     },
                     form: database.grammarModel.resultSearch[index].form,
                     structure: database.grammarModel.resultSearch[index].structure

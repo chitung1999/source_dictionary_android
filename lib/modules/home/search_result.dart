@@ -48,7 +48,7 @@ class _SearchResultState extends State<SearchResult> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.surface,
       padding: const EdgeInsets.all(20.0),
       child: Column(
         children: [
@@ -58,7 +58,7 @@ class _SearchResultState extends State<SearchResult> {
               SizedBox(
                 width: 40,
                 child: GestureDetector(
-                  child: Icon(Icons.arrow_back, color: Colors.blueGrey[100]),
+                  child: Icon(Icons.arrow_back, color: Colors.blueGrey.withOpacity(0.5), size: 25),
                   onTap: (){widget.onBack();},
                 ),
               ),
@@ -85,8 +85,12 @@ class _SearchResultState extends State<SearchResult> {
                   },
                   onDelete: () async {
                     StatusApp ret = await database.removeGroup(_indexData[index]);
-                    ActionApp.showNotify(context, MessageType.SUCCESS, ret);
-                    _onModifySuccess();
+                    if(ret == StatusApp.REMOVE_WORD_SUCCESS) {
+                      ActionApp.showNotify(context, MessageType.SUCCESS, ret);
+                      _onModifySuccess();
+                    } else {
+                      ActionApp.showNotify(context, MessageType.ERROR, ret);
+                    }
                   },
                   eng: _data[index].keysToString(),
                   vn: _data[index].meansToString(),

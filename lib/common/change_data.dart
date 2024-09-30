@@ -78,12 +78,12 @@ class _ChangeDataState extends State<ChangeData> {
             children: [
               TextField(
                 controller: _box1,
-                style: TextStyle(fontSize: 20, color: Colors.blueGrey[800]),
+                style: TextStyle(fontSize: 20),
                 decoration: InputDecoration(
                   labelText: widget.isHome ? 'English' : 'Form',
                   labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple, fontWeight: FontWeight.bold),
                   hintText: 'Enter here',
-                  hintStyle: TextStyle(fontSize: 20, color: Colors.blueGrey.withOpacity(0.4)),
+                  hintStyle: TextStyle(fontSize: 20),
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple)),
                   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple))
@@ -92,12 +92,12 @@ class _ChangeDataState extends State<ChangeData> {
               const SizedBox(height: 30),
               TextField(
                 controller: _box2,
-                style: TextStyle(fontSize: 20, color: Colors.blueGrey[800]),
+                style: TextStyle(fontSize: 20),
                 decoration: InputDecoration(
                   labelText: widget.isHome ? 'Vietnamese' : 'Structure',
                   labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple, fontWeight: FontWeight.bold),
                   hintText: 'Enter here',
-                  hintStyle: TextStyle(fontSize: 20, color: Colors.blueGrey.withOpacity(0.4)),
+                  hintStyle: TextStyle(fontSize: 20),
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple)),
                   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple))
@@ -106,14 +106,14 @@ class _ChangeDataState extends State<ChangeData> {
               if(widget.isHome) const SizedBox(height: 30),
               if(widget.isHome) TextField(
                 controller: _box3,
-                style: TextStyle(fontSize: 20, color: Colors.blueGrey[800]),
+                style: TextStyle(fontSize: 20),
                 minLines: 1,
                 maxLines: 3,
                 decoration: InputDecoration(
                   labelText: 'Note',
                   labelStyle: TextStyle(fontSize: 20, color: Colors.deepPurple, fontWeight: FontWeight.bold),
                   hintText: 'Enter here',
-                  hintStyle: TextStyle(fontSize: 20, color: Colors.blueGrey.withOpacity(0.4)),
+                  hintStyle: TextStyle(fontSize: 20),
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple)),
                   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurple))
